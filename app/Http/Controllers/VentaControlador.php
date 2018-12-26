@@ -1,0 +1,140 @@
+<?php
+
+namespace Allison\Http\Controllers;
+use Allison\Http\Controllers\ConversorImagenes;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Allison\Http\Requests\VentaPeticion;
+use Allison\Http\Request\VentaDetallePeticion;
+use Allison\Venta;
+use Allison\DetalleVenta;
+use Allison\Articulo;
+use Allison\Cliente;
+use Allison\Caja;
+use DB;
+
+class VentaControlador extends Controller
+{
+    public function __construct()
+	{
+		
+	}
+	
+	public function index(Request $peticion)
+	{	
+		if ($peticion)
+		{
+			$ventas = DB::table('venta')
+				->join('moneda', 'venta.id_moneda', '=', 'moneda.id_moneda')
+				->join('cliente', 'venta.id_cliente', '=', 'cliente.id_cliente')
+				->join('caja', 'venta.id_caja', '=', 'caja.id_caja')
+				->join('tipo_pago', 'venta.id_tipo_pago', '=', 'tipo_pago.id_tipo_pago')
+				->where('venta.estatus', '=', 'C')
+				->orderBy('venta.id_venta', 'asc')
+				->select('venta.id_venta as id_venta', 
+							'venta.fecha as fecha',  
+							'venta.costo_total as costo_total',
+							'venta.codigo_tarjeta_cheque as codigo_tarjeta_cheque',
+							'venta.descuento as descuento', 
+							'venta.estatus as estatus', 
+							'venta.id_moneda as id_moneda', 
+							'venta.id_cliente as id_cliente',
+							'venta.id_caja as id_caja', 
+							'venta.id_tipo_pago as id_tipo_pago', 
+							'moneda.nombre as moneda', 
+							'cliente.razon_social as cliente', 
+							'caja.nombre as caja', 
+							'tipo_pago.tipo_pago as tipo_pago')
+				->get();
+			return view('venta.index', compact('ventas'));
+		}
+	}
+	
+	public function create()
+	{
+		$paises = Pais::orderBy('nombre', 'asc')
+			->get();
+		return view('venta.create', compact('paises'));
+	}
+	
+	public function store(EmpleadoPeticion $peticion)
+	{
+		$conversor = new ConversorImagenes;
+		$venta = new Empleado;
+		$venta -> nombre = $peticion -> get('txtNombre');
+		$venta -> ci = $peticion -> get('txtCi');
+		$venta -> sexo = $peticion -> get('rbtSexo');
+		$venta -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
+		$venta -> telefono = $peticion -> get('txtTelefono');
+		$venta -> celular = $peticion -> get('txtCelular');
+		$venta -> correo = $peticion -> get('txtCorreo');
+		$venta -> direccion = $peticion -> get('txtDireccion');
+		$venta -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
+		$venta -> persona_referencia = $peticion -> get('txtPersonaReferencia');
+		$venta -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
+		$venta -> fecha_registro = date('Y-m-d', time());
+		$venta -> estatus = 'A';
+		$venta -> id_sucursal = $peticion -> get('cbxSucursal');
+		$venta -> save();
+		return Redirect :: to ('venta');
+	}
+	
+	public function show($id_empleado)
+	{
+		return view ('venta.show', ['venta' => Empleado :: findOrFail($id_empleado)]);
+	}
+	
+	public function edit($id_empleado)
+	{
+		$paises = Pais::orderBy('nombre', 'asc')
+			->get();
+		$venta = Empleado :: findOrFail($id_empleado);
+		$id_sucursal = $venta -> id_sucursal;
+		$sucursal = Sucursal :: findOrFail($id_sucursal);
+		$id_ciudad = $sucursal -> id_ciudad;
+		$ciudad = Ciudad :: findOrFail($id_ciudad);
+		$id_pais = $ciudad -> id_pais;
+		$pais = Pais :: findOrFail ($id_pais);
+		return view ('venta.edit', compact ('venta', 'paises', 'pais', 'ciudad', 'sucursal'));
+	}
+	
+	public function update(EmpleadoPeticion $peticion, $id_empleado)
+	{
+		$conversor = new ConversorImagenes;
+		$venta = Empleado :: findOrFail($id_empleado);
+		$venta -> nombre = $peticion -> get('txtNombre');
+		$venta -> ci = $peticion -> get('txtCi');
+		$venta -> sexo = $peticion -> get('rbtSexo');
+		$venta -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
+		$venta -> telefono = $peticion -> get('txtTelefono');
+		$venta -> celular = $peticion -> get('txtCelular');
+		$venta -> correo = $peticion -> get('txtCorreo');
+		$venta -> direccion = $peticion -> get('txtDireccion');
+		if ($peticion -> get('imgFoto') != null)
+			$venta -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
+		$venta -> persona_referencia = $peticion -> get('txtPersonaReferencia');
+		$venta -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
+		$venta -> id_sucursal = $peticion -> get('cbxSucursal');
+		$venta->update();
+		return Redirect :: to ('venta');
+	}
+	
+	public function destroy($id_empleado)
+	{
+		$venta = Empleado :: findOrFail($id_empleado);
+		$venta->estatus = 'X';
+		$venta->update();
+		return Redirect :: to ('venta');
+	}
+	
+	public function EmpleadosPorSucursal(Request $peticion, $id_sucursal)
+	{
+		if($peticion->ajax())
+		{
+			$empleados = Empleado::where('id_sucursal', '=', $id_sucursal)
+				->where('estatus', '=', 'A')
+				->get();
+			return response()->json($empleados);
+		}
+	}
+}
