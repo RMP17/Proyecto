@@ -22,6 +22,7 @@ var sharedVariables = new Vue({
         getAllFabricantes(){
             axios.get(urlGlobal.getAllFabricantes)
                 .then((response)=>{
+                    shared.fabricantes=response.data;
                     appArticulo.fabricante.allData=shared.fabricantes;
                 }).catch((errors)=>{
                 console.log(errors);

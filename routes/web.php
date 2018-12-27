@@ -58,6 +58,7 @@ Route::resources([
 
 // Rutas de control con peticiones ajax
 Route::get('fabricantes', 'FabricanteControlador@getAllFabricantes');
+Route::get('aritculo-codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloCodigoBarra');
 
 Route::get('categorias', 'CategoriaControlador@getAllCategorias');
 

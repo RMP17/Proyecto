@@ -21,11 +21,14 @@ class Articulo extends Model
 		'imagen',
 		'fecha_registro',
 		'divisible',
-		'id_subcategoria',
+		'id_categoria',
 		'id_fabricante',
 	];
 	
 	protected $guarded = [
 	
 	];
+    public function dimension(){
+        return $this->hasOne(Dimensiones::class,'id_articulo', 'id_articulo');
+    }
 }

@@ -2,6 +2,7 @@ const url = 'http://127.0.0.1:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesFabricante:url + 'fabricante',
+    resourcesArticulo:url + 'articulo',
     getAllFabricantes:url + 'fabricantes',
     getAllCategorias:url + 'categorias',
 };

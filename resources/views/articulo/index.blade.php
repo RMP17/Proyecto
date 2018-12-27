@@ -47,17 +47,48 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Artículos</h5>
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+                                        <div class="col-lg-3"><input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    name="search_producto" placeholder="Código" type="text"></div>
+                                        <div class="col-lg-3"><input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    name="search_producto" placeholder="Código" type="text"></div>
+                                        <div class="col-lg-3"><input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    name="search_producto" placeholder="Código" type="text"></div>
+                                        {{--<div class="col-lg-3">
+                                            <app-suggestions-local>
+                                                <div class="dropdown"><input
+                                                            class="form-control ng-valid ng-dirty ng-touched"
+                                                            type="text" placeholder="Descripción del Producto">
+                                                    <div aria-labelledby="dropdownMenuButton"
+                                                         class="dropdown-menu m-0 w-100 cursor"
+                                                         onmousedown="return false;"><!----><a
+                                                                class="dropdown-item ng-star-inserted active"><span>pro 2</span></a><a
+                                                                class="dropdown-item ng-star-inserted"><span>pro 3</span></a>
+                                                    </div>
+                                                </div>
+                                            </app-suggestions-local>
+                                        </div>--}}
+                                        <div class="col-lg-3">
+                                            <button class="btn btn-outline-info btn-block">Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
-                                <table id="zero_config" class="table table-striped table-bordered">
+                                <table id="zero_config" class="table table-striped table-sm table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>Nombre-</th>
+                                        <th>Nombre</th>
                                         <th>Codigo</th>
                                         <th>Codigo de barra</th>
                                         <th>Características</th>
                                         <th>Imagen</th>
-                                        <th>Subcategoría</th>
+                                        <th>Categoría</th>
                                         <th>Fabricante</th>
                                         <th>Registrado en fecha</th>
                                         <th>Acciones</th>

@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\ArticuloPeticion;
 use Allison\Articulo;
 use Allison\Categoria;
-use Allison\Subcategoria;
 use Allison\Fabricante;
 use Allison\Dimensiones;
 use Allison\Pieza;
-use DB;
+use Validator;
+use Carbon\Carbon;
 
 class ArticuloControlador extends Controller
 {
@@ -61,37 +61,49 @@ class ArticuloControlador extends Controller
 		return view('articulo.create', compact('categorias', 'fabricantes'));
 	}
 	
-	public function store(ArticuloPeticion $peticion)
+	public function store(/*ArticuloPeticion*/ Request $peticion)
 	{
-		$conversor = new ConversorImagenes;
-		$articulo = new Articulo;
-		$articulo -> nombre = $peticion -> get('txtNombre');
-		$articulo -> codigo = $peticion -> get('txtCodigo');
-		$articulo -> codigo_barra = $peticion -> get('txtCodigoBarra');
-		$articulo -> caracteristicas = $peticion -> get('txtCaracteristicas');
-		$articulo -> precio_compra = $peticion -> get('txtPrecioCompra');
-		$articulo -> precio_produccion = $peticion -> get('txtPrecioProduccion');
-		$articulo -> estatus = 'A';
-		$articulo -> imagen = $conversor->ImagenABinario($peticion -> get('imgImagen'));
-		$articulo -> fecha_registro = date('Y-m-d', time());
-		$articulo -> divisible = $peticion -> get('rbtDivisible');
-		$articulo -> id_subcategoria = $peticion -> get('cbxSubcategoria');
-		$articulo -> id_fabricante= $peticion -> get('cbxFabricante');
-		$articulo -> save();
-		if ($peticion -> get('rbtDimensionable'))
-		{
-			$id_articulo = Articulo::where('codigo', '=', $peticion -> get('txtCodigo'))
-				->first()
-				->id_articulo;
-			$dimensiones = new Dimensiones;
-			$dimensiones -> id_articulo = $id_articulo;
-			$dimensiones -> largo = $peticion -> get('txtLargo');
-			$dimensiones -> ancho = $peticion -> get('txtAncho');
-			$dimensiones -> espesor = $peticion -> get('txtEspesor');
-			$dimensiones -> volumen = $peticion -> get('txtVolumen');
-			$dimensiones -> save();
-		}
-		return Redirect :: to ('articulo');
+
+//        $conversor = new ConversorImagenes;
+        $data = json_decode($peticion->data, true);
+//        dd($peticion->allFiles());
+        $files = $peticion->allFiles();
+
+        $validator = Validator::make($data, [
+            'nombre' => 'required|max:50',
+            'codigo' => 'required|unique:articulo,codigo|max:50',
+            'codigo_barra' => 'required|max:50',
+            'precio_compra' => 'required',
+            'precio_produccion' => 'required'
+        ]);
+        $validator2 = Validator::make($files, [
+            'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        };
+        if($validator2->fails()) {
+            return response()->json($validator2->errors(), 400);
+        };
+        $imageTempName = $files['imagen']->getPathname();
+        $imageName = $files['imagen']->getClientOriginalName();
+//        $imageName = 'imagendata';
+        $path = public_path().'/images';
+        $files['imagen']->move($path, now()->timestamp.$imageName);
+
+        $articulo = new Articulo;
+        $articulo->fill($data);
+        $articulo->fecha_registro = Carbon::now();
+        $articulo->estatus = 1;
+        $articulo->imagen = 'images/'.now()->timestamp.$imageName;
+        $articulo->save();
+        if($articulo->divisible){
+            $dimensiones = new Dimensiones();
+            $dimensiones->fill($data['dimensiones']);
+            $articulo->dimension()->save($dimensiones);
+        }
+        return response()->json();
+
 	}
 	
 	public function show($id_articulo)
@@ -161,4 +173,12 @@ class ArticuloControlador extends Controller
 		$articulo->update();
 		return Redirect :: to ('articulo');
 	}
+	public function getArticuloCodigoBarra($codigo_barra){
+        $articulo = Articulo::where('codigo_barra',$codigo_barra)->first();
+        if(!is_null($articulo)){
+            $articulo->categoria = Categoria::find($articulo['id_categoria']);
+            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+        }
+        return response()->json($articulo);
+    }
 }
