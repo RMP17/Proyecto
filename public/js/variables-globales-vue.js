@@ -9,32 +9,47 @@ Vue.component('app-online-suggestions',{
         event:'input'
     },
     template: `
-    <div>
+<div class="dropdown" @keydown.down='down' @keydown.up='up'
+    @mouseenter="openSuggestions=true"
+    @mouseleave="openSuggestions=false"
+    >
+    <!--(mouseout)="mouseOverSuggestions = false;"-->
+    <input type="text" class="form-control" ref="suggestionInput"
+           @input='change($event.target.value)'
+           @keydown.enter='enter'
+           @keydown.tab='tab'
+           @blur="onBlur"
+           @keydown.esc='open=false'
+           :placeholder="config.placeholder || ''"
+    >
+    <div ref="listSeggestions" :class="{'show': open}" class="dropdown-menu  m-0 w-100 cursor" aria-labelledby="dropdownMenuButton"
+         onmousedown="return false;">
+        <a v-for="(suggestion,index) in suggestions"
+           :class="{'active': indexElement === index }"
+           class="dropdown-item"
+           @click="suggestionClick(suggestion)"
+           @mousedown="indexChange(index)"
+        >
+            <!--(mouseover)="indexChange(i)"-->
+            <span>{{suggestion.detalle }}</span>
+        </a>
+    </div>
+</div>
+    <!--<div>
         <div>
-            <div class="input-field" style="width: 100%">
-                <input :value="!inputValue ? '':inputvalue[variableForSuggestions]"
+            <div class="input-field">
+                <input
                        onkeypress="return event.keyCode!=13"
-                       ref="suggestionInput"
                        autocomplete="off"
-                       type="text"
-                       @keydown.enter='enter'
-                       @keydown.down='down'
-                       @keydown.up='up'
-                       @keydown.tab='tab'
-                       @input='change($event.target.value)'
-                       :placeholder="config.placeholder"
-                       @keydown.esc='open=false'
-                       @blur="onBlur"
-                       class="form-control"
+                       
                 >
-                <div v-if="open" class="collection collection-auto" style="z-index:2;"
-                     @mouseenter="openSuggestions=true"
-                     @mouseleave="openSuggestions=false"
+                <div v-if="open" class="collection collection-auto" style="z-index:1000;"
+                     
                      onselectstart='return false'
                 >
-                    <a v-for="(suggestion,index) in matches"
+                    <a v-for="(suggestion,index) in suggestions"
                        :class="{'focus': isActive(index)}"
-                       @click="suggestionClick(index)"
+                       
                        onclick='return false' class="collection-item collection-auto-item"
                     >
                         <span v-if="isPersona" class="badge">@{{ suggestion.ci  }}</span><span
@@ -43,7 +58,7 @@ Vue.component('app-online-suggestions',{
                 </div>
             </div>
         </div>
-        <!--<div :class="config.object=='nombre' ? 'col s2 padding-left':''" class="flex-container">
+        <div :class="config.object=='nombre' ? 'col s2 padding-left':''" class="flex-container">
             <div v-if="config.selection['ci'] && config.object=='nombre'" class="fex-child-text">
                 <div class="input-field">
                     <input disabled :value="config.selection['ci']" type="text"
@@ -55,8 +70,8 @@ Vue.component('app-online-suggestions',{
                     <input disabled type="text" class="validate input-autocompletes black-text">
                 </div>
             </div>
-        </div>-->
-    </div>`,
+        </div>
+    </div>-->`,
     props:{
         config:{
             url:'',
@@ -64,8 +79,10 @@ Vue.component('app-online-suggestions',{
             placeholder:{
                 defailt:null
             },
-            selection:'',
             variableForSuggestions:{
+                default: ''
+            },
+            variableForSuggestionsId:{
                 default: ''
             },
         },
@@ -85,7 +102,9 @@ Vue.component('app-online-suggestions',{
             idselection: '',
             inputObject: '',
             timeout:10,
-            loadinput:''
+            loadinput:'',
+            selection:'',
+            indexElement:0
         }
     },
     watch: {
@@ -101,15 +120,12 @@ Vue.component('app-online-suggestions',{
     },
     methods:{
         cargar:async function(){
-            function responseData(url,selection, variableForSuggestions) {
+            function responseData(url,selection, variableForSuggestions, variableForSuggestionsId) {
                 const promise = new Promise((resolve, reject) =>{
                     let datos = [];
                     clearTimeout(this.timeout);
                     this.timeout=setTimeout(function() {
-                        axios.get(url, {
-                            params: {
-                                search: selection
-                            },
+                        axios.get(url+selection, {
                             timeout: 2000,
                         }).then(response=> {
                             if(response.data.length > 0)
@@ -120,6 +136,7 @@ Vue.component('app-online-suggestions',{
                                     let textTemp = respoTemp[variableForSuggestions
                                         ].slice(textTempPosition, textTempPosition + selection.length);
                                     datos.push({
+                                        'id': respoTemp[variableForSuggestionsId],
                                         'detalle': respoTemp[variableForSuggestions],
                                         'detalleShow': respoTemp[variableForSuggestions
                                             ].replace(new RegExp(textTemp, 'g'), textTemp.bold().big())
@@ -136,8 +153,8 @@ Vue.component('app-online-suggestions',{
                 return promise;
             }
 
-            this.suggestions = await responseData(this.config.url, this.selection[this.config.variableForSuggestions],
-                this.config.variableForSuggestions);
+            this.suggestions = await responseData(this.config.url, this.selection,
+                this.config.variableForSuggestions, this.config.variableForSuggestionsId);
         },
         enter(){
             if(this.idselection=='') {
@@ -169,32 +186,35 @@ Vue.component('app-online-suggestions',{
             if(this.current < this.suggestions.length - 1)
                 this.current++;
         },
-
-        isActive(index) {
-            return index === this.current;
+        indexChange(index) {
+            this.indexElement = index;
         },
-
         change(valor){
-            if (this.open == false) {
+            if (this.open === false) {
                 this.open = true;
                 this.current = 0;
                 this.idselection ='';
             }
-            if (this.selection[this.config.variableForSuggestions] == ''){
-                responseTemp={};
-                this.$emit('input', responseTemp);
+            if (valor.length > 0){
+                console.log(valor);
+                this.selection=valor;
+                this.cargar();
+                //this.$emit('input', responseTemp);
             }
-            responseTemp={};
-            responseTemp=valor;
-            this.$emit('input', responseTemp);
-
+            //responseTemp={};
+            //responseTemp=valor;
+            //this.$emit('input', responseTemp);
         },
-        suggestionClick:function(index) {
-            let temp=this.suggestions[index];
-            this.idselection = temp.id;
-            this.$emit('input', temp);
+        suggestionClick:function(target) {
+            this.idselection = target.id;
+            this.selection = target.detalle;
+            this.$refs.suggestionInput.value=target.detalle;
+            this.$emit('selectedSuggestionEvent', target);
             this.open = false;
             this.openSuggestions=false;
+            this.indexElement = 0;
+            this.showSuggestions = false;
+            //corregir //this.selection = target[this.config.variableForSuggestions];
         },
         /*mouseEnterLeave:function() {
          console.log(this.openSuggestions);
@@ -212,20 +232,20 @@ Vue.component('app-online-suggestions',{
     },
     computed:{
         /*matches:function() {
-            let aux='';
-            if(this.selection[this.config.variableForSuggestions]!==undefined) {
-                let aux=this.selection[this.config.variableForSuggestions];
-            }
+            let aux=this.selection;
             let numero_suggestions=0;
             return this.suggestions.filter((str)=>{
-                let textTempPosition=str.detalle.toLowerCase().indexOf(aux.toLowerCase());
-                let textTemp = str.detalle.slice(textTempPosition, textTempPosition+aux.length);
-                str.detalleShow=str.detalle.replace(new RegExp(textTemp, 'g'),textTemp.bold().big());
+                let textTempPosition=str.detalle
+                    .toLowerCase().indexOf(aux.toLowerCase());
+                let textTemp = str.detalle
+                    .slice(textTempPosition, textTempPosition+aux.length);
+                str.detalleShow=str.detalle
+                    .replace(new RegExp(textTemp, 'g'),textTemp.bold().big());
                 return str.detalle.toLowerCase().indexOf(aux.toLowerCase()) >=0;
             });
         },*/
         openSuggestion:function() {
-            return this.selection[this.config.variableForSuggestions] !== ""
+            return !this.selection
                 && this.suggestions.length !== 0 && this.open === true;
         },
     },

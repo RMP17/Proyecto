@@ -65,8 +65,8 @@ var appArticulo = new Vue({
             config:{
                 url:urlGlobal.getArticuloForName,
                 placeholder:'Nombre del Artículo',
-                selection:'',
-                variableForSuggestions:''
+                variableForSuggestions:'nombre',
+                variableForSuggestionsId:'id_articulo'
             },
             modeCreate:false,
             errors: [],
