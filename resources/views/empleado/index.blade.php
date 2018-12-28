@@ -5,18 +5,16 @@
 			<div class="row">
 				<div class="col-12 d-flex no-block align-items-center">
 					<h4 class="page-title">Empleados</h4>
-				<div class="col-auto">
+				  <div class="col-auto">
+                        <a href="#" class="btn btn-outline-dark w-10em" @click="empleado.modeCreate=!empleado.modeCreate">
+                            <span v-if="!empleado.modeCreate">Nuevo empleado</span>
+                            <span v-else>Lista de empleado</span>
+                        </a>
+                   </div>
+			<!-- 	<div class="col-auto">
 						<a href="{{url ('empleado/create')}}"><button type="button" class="btn btn-outline-dark no-block">Agregar registro</button></a>
 					<a @click="toggleEmpleadoKardex=!toggleEmpleadoKardex" ><button type="button" class="btn btn-outline-dark no-block">Ver Kardex</button></a>
-				</div>
-					<div class="ml-auto text-right">
-						<nav aria-label="breadcrumb">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item"><a href="{{url('')}}">Inicio</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Retornar a la página principal</li>
-							</ol>
-						</nav>
-					</div>
+				</div> -->
 				</div>
 			</div>
 		</div>
@@ -30,7 +28,7 @@
 			<!-- ============================================================== -->
 			<!-- Start Page Content -->
 			<!-- ============================================================== -->
-			<div class="row" v-if="toggleEmpleadoKardex">
+			<div class="row" v-if="!empleado.modeCreate">
 				<div class="col-12">
 					<div class="card">
 						<div class="card-body">
@@ -101,14 +99,8 @@
 					</div>
 				</div>
 			</div>
-
-
 			<div v-else>
-
-
-				@include('kardex.index')
-
-
+				@include('empleado.create')
 			</div>
 
 			<!-- ============================================================== -->
@@ -122,10 +114,9 @@
 			<!-- End Right sidebar -->
 			<!-- ============================================================== -->
 		</div>
-	</div>
-
-
+	</div>	
 @endsection
 @section('scripts')
 	<script src="{{asset('js/empleado.js')}}"></script>
+	
 @endsection

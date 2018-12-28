@@ -1,6 +1,7 @@
 var shared = {
     categorias:{},
-    fabricantes:{}
+    fabricantes:{},
+    empleados:{}
 };
 
 Vue.component('app-online-suggestions',{
@@ -256,7 +257,9 @@ var sharedVariables = new Vue({
     created(){
         this.getAllCategorias();
         this.getAllFabricantes();
+        this.getAllEmpleados();
     },
+    
     methods: {
         getAllCategorias(){
             axios.get(urlGlobal.getAllCategorias)
@@ -272,6 +275,14 @@ var sharedVariables = new Vue({
                 .then((response)=>{
                     shared.fabricantes=response.data;
                     appArticulo.fabricante.allData=shared.fabricantes;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
+        getAllEmpleados(){
+            axios.get(urlGlobal.getAllEmpleados)
+                .then((response)=>{
+                    appEmpleado.empleado.allData=shared.empleados;
                 }).catch((errors)=>{
                 console.log(errors);
             });
