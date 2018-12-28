@@ -67,7 +67,8 @@ class ArticuloControlador extends Controller
 //        $conversor = new ConversorImagenes;
         $data = json_decode($peticion->data, true);
 //        dd($peticion->allFiles());
-        $files = $peticion->allFiles();
+
+
 
         $validator = Validator::make($data, [
             'nombre' => 'required|max:50',
@@ -76,26 +77,30 @@ class ArticuloControlador extends Controller
             'precio_compra' => 'required',
             'precio_produccion' => 'required'
         ]);
-        $validator2 = Validator::make($files, [
-            'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
         if($validator->fails()) {
             return response()->json($validator->errors(), 400);
         };
-        if($validator2->fails()) {
-            return response()->json($validator2->errors(), 400);
-        };
-        $imageTempName = $files['imagen']->getPathname();
-        $imageName = $files['imagen']->getClientOriginalName();
-//        $imageName = 'imagendata';
-        $path = public_path().'/images';
-        $files['imagen']->move($path, now()->timestamp.$imageName);
+        $urlImage = null;
+        if (count($peticion->allFiles()) > 0) {
+            $files = $peticion->allFiles();
+            $validator2 = Validator::make($files, [
+                'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+            if ($validator2->fails()) {
+                return response()->json($validator2->errors(), 400);
+            };
+            $imageTempName = $files['imagen']->getPathname();
+            $imageName = $files['imagen']->getClientOriginalName();
+            $path = public_path().'/images';
+            $files['imagen']->move($path, now()->timestamp.$imageName);
+            $urlImage = 'images/'.now()->timestamp.$imageName;
+        }
 
         $articulo = new Articulo;
         $articulo->fill($data);
         $articulo->fecha_registro = Carbon::now();
         $articulo->estatus = 1;
-        $articulo->imagen = 'images/'.now()->timestamp.$imageName;
+        $articulo->imagen = $urlImage;
         $articulo->save();
         if($articulo->divisible){
             $dimensiones = new Dimensiones();
@@ -173,12 +178,13 @@ class ArticuloControlador extends Controller
 		$articulo->update();
 		return Redirect :: to ('articulo');
 	}
-	public function getArticuloCodigoBarra($codigo_barra){
-        $articulo = Articulo::where('codigo_barra',$codigo_barra)->first();
-        if(!is_null($articulo)){
-            $articulo->categoria = Categoria::find($articulo['id_categoria']);
-            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
-        }
-        return response()->json($articulo);
+	public function getArticuloByCodigoBarra($codigo_barras){
+        return response()->json((new Articulo)->getArticuloBy('codigo-barras',$codigo_barras));
+    }
+    public function getArticuloByCodigo($codigo){
+        return response()->json((new Articulo)->getArticuloBy('codigo',$codigo));
+    }
+    public function getArticuloByName($nombre){
+        return response()->json((new Articulo)->getArticuloByName($nombre));
     }
 }

@@ -62,8 +62,15 @@ var appArticulo = new Vue({
 
         },
         articulo:{
+            config:{
+                url:urlGlobal.getArticuloForName,
+                placeholder:'Nombre del Artículo',
+                selection:'',
+                variableForSuggestions:''
+            },
             modeCreate:false,
             errors: [],
+            data: null,
             attributes: {
                 id_articulo:null,
                 nombre: '',
@@ -324,7 +331,7 @@ var appArticulo = new Vue({
                         'Content-Type': 'multipart/form-data'
                     }
                 }*/
-            ).then(function () {
+            ).then( () => {
                 this.articulo.attributes = {
                     id_articulo:null,
                     nombre: '',
@@ -346,11 +353,45 @@ var appArticulo = new Vue({
                     id_fabricante:null,
                     id_categoria:null
                 };
+                this.articulo.errors = [];
+                this.$refs.inputCategoria.value = '';
+                this.$refs.inputFabricante.value = '';
             }).catch( errors => {
                 console.log('FAILURE!!');
+                console.log(errors);
                 this.articulo.errors = this.formatErrors2(errors);
             });
         },
+
+        getArticuloByCodigoBarras: function(codigoBarras) {
+            if (!codigoBarras.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
+                ).then(response => {
+                    if( Object.keys(response.data).length === 0){
+                        this.articulo.data = null;
+                    } else {
+                        this.articulo.data = response.data;
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+        getArticuloByCodigo: function(codigo) {
+            if (!codigo.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigo + codigo.target.value
+                ).then(response => {
+                    if( Object.keys(response.data).length === 0){
+                        this.articulo.data = null;
+                    } else {
+                        this.articulo.data = response.data;
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+
         //</editor-fold>
 
         //<editor-fold desc="Manejadores">

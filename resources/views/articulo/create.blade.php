@@ -69,7 +69,7 @@
                                     id="cbxCategoria" name="cbxCategoria">
                                 <option></option>
                             </select>--}}
-                            <input type="text" class="custom-select" list="categoriasNames"
+                            <input type="text" class="custom-select" list="categoriasNames" ref="inputCategoria"
                                    @change="handleDatalistCategoria($event)">
                             <datalist id="categoriasNames">
                                 <option v-for="categoria in categoria.allData" :value="categoria.categoria">
@@ -90,7 +90,7 @@
                         <label for="cbxFabricante" class="col-sm-3 text-right control-label col-form-label">
                             Fabricante:</label>
                         <div class="col-sm-9">
-                            <input type="text" class="custom-select" list="FabricantesNames"
+                            <input type="text" class="custom-select" list="FabricantesNames" ref="inputFabricante"
                                    @change="handleDatalistFabricante($event)">
                             <datalist id="FabricantesNames">
                                 <option v-for="fabricante in fabricante.allData" :value="fabricante.nombre">

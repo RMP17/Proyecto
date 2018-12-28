@@ -5,6 +5,9 @@ var urlGlobal={
     resourcesArticulo:url + 'articulo',
     getAllFabricantes:url + 'fabricantes',
     getAllCategorias:url + 'categorias',
+    getArticuloForCodigo:url + 'articulo/codigo/',
+    getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
+    getArticuloForName:url + 'articulo/query/',
 };
 
 $("#cbxPais").change(function(event){
