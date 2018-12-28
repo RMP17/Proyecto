@@ -59,7 +59,6 @@ var appArticulo = new Vue({
                 sitio_web: '',
             }
 
-
         },
         articulo:{
             modeCreate:false,

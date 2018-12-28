@@ -1,5 +1,4 @@
 <?php
-
 namespace Allison\Http\Controllers;
 use Allison\Http\Controllers\ConversorImagenes;
 use Illuminate\Http\Request;
@@ -9,15 +8,17 @@ use Allison\Empleado;
 use Allison\Pais;
 use Allison\Ciudad;
 use Allison\Sucursal;
+use Allison\Kardex;
+use Allison\Salario;
+use Allison\Moneda;
+use Allison\Cargo;
 use DB;
 
 class EmpleadoControlador extends Controller
 {
     public function __construct()
-	{
-		
+	{	
 	}
-	
 	public function index(Request $peticion)
 	{	
 		if ($peticion)
@@ -45,15 +46,23 @@ class EmpleadoControlador extends Controller
 							'sucursal.nombre as sucursal',
 							DB::raw('DATEDIFF(curdate(), empleado.fecha_nacimiento) as edad'))
 				->get();
-			return view('empleado.index', compact('empleados', 'consulta'));
+			$paises = Pais::orderBy('nombre', 'asc')
+			->get();
+			$cargos = Cargo ::orderBy('nombre','asc')
+			->get();
+			$monedas= Moneda ::orderBy('nombre', 'asc')->get();
+			return view('empleado.index', compact('empleados', 'consulta', 'paises','cargos','monedas'));
 		}
 	}
-	
 	public function create()
 	{
 		$paises = Pais::orderBy('nombre', 'asc')
 			->get();
-		return view('empleado.create', compact('paises'));
+		$cargos = Cargo ::orderBy('nombre','asc')
+			->get();
+		$monedas= Moneda ::orderBy('nombre', 'asc')->get();
+		
+		return view('empleado.create', compact('paises','cargos', 'monedas'));
 	}
 	
 	public function store(EmpleadoPeticion $peticion)
@@ -75,14 +84,40 @@ class EmpleadoControlador extends Controller
 		$empleado -> estatus = 'A';
 		$empleado -> id_sucursal = $peticion -> get('cbxSucursal');
 		$empleado -> save();
+		$id_empleado = Empleado :: where('ci', '=', $peticion -> get('txtCi'))
+		         		->first()
+						->id_empleado;
+
+		$kardexActiva = Kardex ::where('id_empleado', '=',$id_empleado)
+			->where('fecha_baja', '=', null)
+			->get();
+
+		if(sizeof($kardexActiva) == 0)
+		{
+
+		$kardex = new Kardex;
+		$kardex -> fecha_inicio = date("Y-m-d", strtotime($peticion -> get('dtmFecha_inicio')));
+		$kardex -> fecha_registro= date("Y-m-d", time());
+		$kardex -> id_empleado= $id_empleado;
+		$kardex -> id_cargo= $peticion -> get('cbxCargo');
+		$kardex->save();
+
+		$id_kardex = Kardex ::where('id_empleado', '=', $id_empleado)
+				->where('kardex.fecha_baja','=', null)
+				->first()
+				->id_kardex;
+		$salarios = new Salario;
+		$salarios-> id_kardex = $id_kardex;
+		$salarios -> monto = $peticion -> get('txtMonto');
+		$salarios -> id_moneda = $peticion -> get('cbxMoneda');
+		$salarios -> save();
+		}
 		return Redirect :: to ('empleado');
 	}
-	
 	public function show($id_empleado)
 	{
 		return view ('empleado.show', ['empleado' => Empleado :: findOrFail($id_empleado)]);
 	}
-	
 	public function edit($id_empleado)
 	{
 		$paises = Pais::orderBy('nombre', 'asc')
@@ -94,6 +129,8 @@ class EmpleadoControlador extends Controller
 		$ciudad = Ciudad :: findOrFail($id_ciudad);
 		$id_pais = $ciudad -> id_pais;
 		$pais = Pais :: findOrFail ($id_pais);
+
+
 		return view ('empleado.edit', compact ('empleado', 'paises', 'pais', 'ciudad', 'sucursal'));
 	}
 	

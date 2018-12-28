@@ -6,9 +6,7 @@
 				<select @change="getCategorias($event.target.value)" class="custom-select mr-sm-2" id="inlineFormCustomSelect" style="width: 100px">
 					{{--<option selected></option>--}}
 					<option v-for="page in pagesNumberCategoria" :selected="categoria.pagination.current_page==page" >@{{ page }}</option>
-
 				</select>
-
 				{{--<select class="custom-select mr-sm-2" id="inlineFormCustomSelect" style="width: 100px">
 					--}}{{--<option selected></option>--}}{{--
 					<option>-</option>

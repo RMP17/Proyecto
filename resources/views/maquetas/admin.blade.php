@@ -365,6 +365,7 @@
     <script src="{{asset('nihil/js/desplegable_pais_ciudad.js')}}"></script> {{--aqui esta la urlGlobal--}}
     <script src="{{asset('nihil/js/desplegable_ciudad_sucursal.js')}}"></script>
     <script src="{{asset('nihil/js/validadores.js')}}"></script>
+    <script src="{{asset('nihil/js/datepicker.js')}}"></script>
     <script>
         //***********************************//
         // For select 2

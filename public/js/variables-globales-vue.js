@@ -1,6 +1,7 @@
 var shared = {
     categorias:{},
-    fabricantes:{}
+    fabricantes:{},
+    empleados:{}
 };
 
 var sharedVariables = new Vue({
@@ -8,7 +9,9 @@ var sharedVariables = new Vue({
     created(){
         this.getAllCategorias();
         this.getAllFabricantes();
+        this.getAllEmpleados();
     },
+    
     methods: {
         getAllCategorias(){
             axios.get(urlGlobal.getAllCategorias)
@@ -23,6 +26,14 @@ var sharedVariables = new Vue({
             axios.get(urlGlobal.getAllFabricantes)
                 .then((response)=>{
                     appArticulo.fabricante.allData=shared.fabricantes;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
+        getAllEmpleados(){
+            axios.get(urlGlobal.getAllEmpleados)
+                .then((response)=>{
+                    appEmpleado.empleado.allData=shared.empleados;
                 }).catch((errors)=>{
                 console.log(errors);
             });
