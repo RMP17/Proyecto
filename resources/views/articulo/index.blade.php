@@ -47,35 +47,81 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Artículos</h5>
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="col-lg-12">
+                                    <div class="input-group">
+                                        <div class="col-lg-4"><input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    @keydown.enter="getArticuloByCodigo($event)"
+                                                    placeholder="Código" type="text"></div>
+                                        <div class="col-lg-4"><input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    @keydown.enter="getArticuloByCodigoBarras($event)"
+                                                    placeholder="Código de Barras" type="text"></div>
+                                        <div class="col-lg-4">{{--<input
+                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    name="search_producto" placeholder="Nombre del Artículo" type="text">--}}
+                                            <app-online-suggestions :config="articulo.config"></app-online-suggestions>
+                                            {{--<autocomplete-search
+                                                    v-model="entregaDevolucionInputs.persona"
+                                                    url="{{$urlPersona}}"
+                                                    object="nombre"
+                                                    objectid="id"
+                                                    id="InputPersona"
+                                                    name="persona"
+                                                    --}}{{--placeholder="Nombre"--}}{{--
+                                                    :error="formErrors.persona ? formErrors.persona[0]:' '"
+                                                    :inputvalue="entregaDevolucionInputs.persona"
+                                            >Persona:
+                                            </autocomplete-search>--}}
+                                        </div>
+                                        {{--<div class="col-lg-3">
+                                            <app-suggestions-local>
+                                                <div class="dropdown"><input
+                                                            class="form-control ng-valid ng-dirty ng-touched"
+                                                            type="text" placeholder="Descripción del Producto">
+                                                    <div aria-labelledby="dropdownMenuButton"
+                                                         class="dropdown-menu m-0 w-100 cursor"
+                                                         onmousedown="return false;"><!----><a
+                                                                class="dropdown-item ng-star-inserted active"><span>pro 2</span></a><a
+                                                                class="dropdown-item ng-star-inserted"><span>pro 3</span></a>
+                                                    </div>
+                                                </div>
+                                            </app-suggestions-local>
+                                        </div>--}}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
-                                <table id="zero_config" class="table table-striped table-bordered">
+                                <table id="zero_config" class="table table-striped table-sm table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>Nombre-</th>
+                                        <th>Nombre</th>
                                         <th>Codigo</th>
                                         <th>Codigo de barra</th>
                                         <th>Características</th>
-                                        <th>Imagen</th>
-                                        <th>Subcategoría</th>
+                                        <th>Precio Compra</th>
+                                        <th>Precio Producción</th>
+                                        <th>Categoría</th>
                                         <th>Fabricante</th>
                                         <th>Registrado en fecha</th>
                                         <th>Acciones</th>
                                     </tr>
                                     </thead>
-                                    {{--<tbody>
-                                    @foreach($articulos as $a)
-                                        <tr>
-                                            <td>{{ $a -> nombre }}</td>
-                                            <td>{{ $a -> codigo }}</td>
-                                            <td>{{ $a -> codigo_barra }}</td>
-                                            <td>{{ $a -> caracteristicas}}</td>
-                                            <td>{{ $a -> imagen }}</td>
-                                            <td>{{ $a -> subcategoria }}</td>
-                                            <td>{{ $a -> fabricante }}</td>
-                                            <td>{{ $a -> fecha_registro }}</td>
+                                    <tbody>
+                                        <tr v-if="articulo.data">
+                                            {{--articulo.data.estatus: Verde => Respresnta articulo activo; Gris => Respresnta articulo inactivo --}}
+                                            <td :class="articulo.data.estatus>0 ? 'bg-success text-white': 'bg-secondary text-white'" >@{{ articulo.data.nombre }}</td>
+                                            <td>@{{ articulo.data.codigo }}</td>
+                                            <td>@{{ articulo.data.codigo_barra }}</td>
+                                            <td>@{{ articulo.data.caracteristicas}}</td>
+                                            <td>@{{ articulo.data.precio_compra }}</td>
+                                            <td>@{{ articulo.data.precio_produccion }}</td>
+                                            <td>@{{ articulo.data.categoria.categoria }}</td>
+                                            <td>@{{ articulo.data.fabricante.nombre }}</td>
+                                            <td>@{{ articulo.data.fecha_registro }}</td>
                                             <td>
-                                                <a href="{{URL::action('ArticuloControlador@edit', $a -> id_articulo)}}"
+                                                {{--<a href="{{URL::action('ArticuloControlador@edit', $a -> id_articulo)}}"
                                                    title="Editar">
                                                     <button type="button" class="btn btn-warning btn-sm"><i
                                                                 class="mdi mdi-pencil"></i></button>
@@ -84,12 +130,10 @@
                                                    data-toggle="modal" title="Eliminar">
                                                     <button type="button" class="btn btn-danger btn-sm"><i
                                                                 class="mdi mdi-thumb-down"></i></button>
-                                                </a>
+                                                </a>--}}
                                             </td>
                                         </tr>
-                                        @include('articulo.destroy')
-                                    @endforeach
-                                    </tbody>--}}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

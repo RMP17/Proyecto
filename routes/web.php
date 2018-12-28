@@ -26,6 +26,13 @@ Route::get('/', function () {
 
 /*Controladores*/
 
+Route::prefix('articulo')->group(function () {
+    Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
+    Route::get('codigo/{codigo}', 'ArticuloControlador@getArticuloByCodigo');
+    Route::get('codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloByCodigoBarra');
+});
+
+
 Route::resources([
 	'almacen' => 'AlmacenControlador',
 	'articulo' => 'ArticuloControlador',

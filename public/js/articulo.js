@@ -61,7 +61,15 @@ var appArticulo = new Vue({
 
         },
         articulo:{
+            config:{
+                url:urlGlobal.getArticuloForName,
+                placeholder:'Nombre del Artículo',
+                selection:'',
+                variableForSuggestions:''
+            },
             modeCreate:false,
+            errors: [],
+            data: null,
             attributes: {
                 id_articulo:null,
                 nombre: '',
@@ -74,8 +82,14 @@ var appArticulo = new Vue({
                 imagen:'',
                 fecha_registro:'',
                 divisible:0,
-                dimensiones:[],
-                id_fabricante:null
+                dimensiones:{
+                    largo:null,
+                    ancho:null,
+                    espesor:null,
+                    volumen:null
+                },
+                id_fabricante:null,
+                id_categoria:null
             },
         }
         // ============================
@@ -300,14 +314,123 @@ var appArticulo = new Vue({
         },
         //</editor-fold>
 
-        // test
-        filter(event){
-            console.dir(event);
+        //<editor-fold desc="Methods of Articulos">
+        submitArticulo(){
+
+            let inputs = Object.assign({}, this.articulo.attributes);
+            let formData = new FormData();
+            formData.append('imagen', inputs.imagen);
+            delete inputs.imagen;
+            formData.append('data', JSON.stringify(inputs) );
+
+            axios.post( urlGlobal.resourcesArticulo, formData/*,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }*/
+            ).then( () => {
+                this.articulo.attributes = {
+                    id_articulo:null,
+                    nombre: '',
+                    codigo: '',
+                    codigo_barra:'',
+                    caracteristicas:'',
+                    precio_compra:null,
+                    precio_produccion:null,
+                    estatus:'',
+                    imagen:'',
+                    fecha_registro:'',
+                    divisible:0,
+                    dimensiones:{
+                        largo:null,
+                        ancho:null,
+                        espesor:null,
+                        volumen:null
+                    },
+                    id_fabricante:null,
+                    id_categoria:null
+                };
+                this.articulo.errors = [];
+                this.$refs.inputCategoria.value = '';
+                this.$refs.inputFabricante.value = '';
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                console.log(errors);
+                this.articulo.errors = this.formatErrors2(errors);
+            });
         },
+
+        getArticuloByCodigoBarras: function(codigoBarras) {
+            if (!codigoBarras.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
+                ).then(response => {
+                    if( Object.keys(response.data).length === 0){
+                        this.articulo.data = null;
+                    } else {
+                        this.articulo.data = response.data;
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+        getArticuloByCodigo: function(codigo) {
+            if (!codigo.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigo + codigo.target.value
+                ).then(response => {
+                    if( Object.keys(response.data).length === 0){
+                        this.articulo.data = null;
+                    } else {
+                        this.articulo.data = response.data;
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+
+        //</editor-fold>
+
+        //<editor-fold desc="Manejadores">
+        handleFileUpload(event){
+            this.articulo.attributes.imagen = event.target.files[0];
+        },
+        handleDatalistFabricante(event){
+            for (let fabricante in this.fabricante.allData ){
+                if(this.fabricante.allData[fabricante].nombre === event.target.value.toString()) {
+                    this.articulo.attributes.id_fabricante = this.fabricante.allData[fabricante].id_fabricante;
+                    break;
+                } else {
+                    this.articulo.attributes.id_fabricante = null;
+                }
+            }
+        },
+        handleDatalistCategoria(event){
+            for (let categoria in this.categoria.allData ){
+                if(this.categoria.allData[categoria].categoria === event.target.value.toString()) {
+                    this.articulo.attributes.id_categoria = this.categoria.allData[categoria].id_categoria;
+                    break;
+                } else {
+                    this.articulo.attributes.id_categoria = null;
+                }
+            }
+
+        },
+        //</editor-fold>
         formatErrors: function (errors) {
             let _errors = errors.response.data.errors;
             let response = [];
             Object.keys(errors.response.data.errors).forEach(value => {
+                response.push(_errors[value][0]);
+            });
+            return response
+        },
+        formatErrors2: function (errors) {
+            let _errors = errors.response.data;
+            let response = [];
+            Object.keys(errors.response.data).forEach(value => {
                 response.push(_errors[value][0]);
             });
             return response

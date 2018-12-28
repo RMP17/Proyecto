@@ -3,11 +3,15 @@ var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesFabricante:url + 'fabricante',
     resourcesEmpleados:url + 'empleado',
-    getAllFabricantes:url + 'fabricantes',
-    getAllCategorias:url + 'categorias',
     getAllCiudades:url + 'ciudades',
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
+    resourcesArticulo:url + 'articulo',
+    getAllFabricantes:url + 'fabricantes',
+    getAllCategorias:url + 'categorias',
+    getArticuloForCodigo:url + 'articulo/codigo/',
+    getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
+    getArticuloForName:url + 'articulo/query/',
 };
 
 $("#cbxPais").change(function(event){
