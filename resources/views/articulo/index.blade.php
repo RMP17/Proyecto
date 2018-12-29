@@ -58,37 +58,11 @@
                                                     class="form-control ng-untouched ng-pristine ng-valid"
                                                     @keydown.enter="getArticuloByCodigoBarras($event)"
                                                     placeholder="Código de Barras" type="text"></div>
-                                        <div class="col-lg-4">{{--<input
-                                                    class="form-control ng-untouched ng-pristine ng-valid"
-                                                    name="search_producto" placeholder="Nombre del Artículo" type="text">--}}
-                                            <app-online-suggestions :config="articulo.config"></app-online-suggestions>
-                                            {{--<autocomplete-search
-                                                    v-model="entregaDevolucionInputs.persona"
-                                                    url="{{$urlPersona}}"
-                                                    object="nombre"
-                                                    objectid="id"
-                                                    id="InputPersona"
-                                                    name="persona"
-                                                    --}}{{--placeholder="Nombre"--}}{{--
-                                                    :error="formErrors.persona ? formErrors.persona[0]:' '"
-                                                    :inputvalue="entregaDevolucionInputs.persona"
-                                            >Persona:
-                                            </autocomplete-search>--}}
+                                        <div class="col-lg-4">
+                                            <app-online-suggestions :config="articulo.config"
+                                                                    @selected-suggestion-event="getArticuloByNombre">
+                                            </app-online-suggestions>
                                         </div>
-                                        {{--<div class="col-lg-3">
-                                            <app-suggestions-local>
-                                                <div class="dropdown"><input
-                                                            class="form-control ng-valid ng-dirty ng-touched"
-                                                            type="text" placeholder="Descripción del Producto">
-                                                    <div aria-labelledby="dropdownMenuButton"
-                                                         class="dropdown-menu m-0 w-100 cursor"
-                                                         onmousedown="return false;"><!----><a
-                                                                class="dropdown-item ng-star-inserted active"><span>pro 2</span></a><a
-                                                                class="dropdown-item ng-star-inserted"><span>pro 3</span></a>
-                                                    </div>
-                                                </div>
-                                            </app-suggestions-local>
-                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -117,15 +91,14 @@
                                             <td>@{{ articulo.data.caracteristicas}}</td>
                                             <td>@{{ articulo.data.precio_compra }}</td>
                                             <td>@{{ articulo.data.precio_produccion }}</td>
-                                            <td>@{{ articulo.data.categoria.categoria }}</td>
-                                            <td>@{{ articulo.data.fabricante.nombre }}</td>
+                                            <td><span v-if="articulo.data.categoria">@{{ articulo.data.categoria.categoria }}</span></td>
+                                            <td><span v-if="articulo.data.fabricante">@{{ articulo.data.fabricante.nombre }}</span></td>
                                             <td>@{{ articulo.data.fecha_registro }}</td>
                                             <td>
-                                                {{--<a href="{{URL::action('ArticuloControlador@edit', $a -> id_articulo)}}"
-                                                   title="Editar">
-                                                    <button type="button" class="btn btn-warning btn-sm"><i
-                                                                class="mdi mdi-pencil"></i></button>
+                                                <a type="button" href="#" title="Editar" class="btn btn-warning btn-sm">
+                                                    <i class="mdi mdi-pencil"></i>
                                                 </a>
+                                                {{--
                                                 <a href="" data-target="#modal-delete-articulo-{{$a -> id_articulo}}"
                                                    data-toggle="modal" title="Eliminar">
                                                     <button type="button" class="btn btn-danger btn-sm"><i

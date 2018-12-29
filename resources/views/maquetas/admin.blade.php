@@ -314,6 +314,9 @@
             <footer class="footer text-center">
                 OpenRed Bolivia © 2018. Todos los derechos reservados por Xcseter.
             </footer>
+
+
+
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

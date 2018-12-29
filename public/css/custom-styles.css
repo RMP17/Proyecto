@@ -4,3 +4,37 @@
 input::-webkit-calendar-picker-indicator {
     display: none;
 }
+.active>span{
+    color: white;
+}
+.cursor{
+    cursor: pointer;
+}
+
+html, body {
+    height: 100vh;
+}
+#main-wrapper{
+    height: 100vh;
+    overflow: visible!important;
+}
+.left-sidebar{
+    position: fixed;
+    overflow: auto;
+}
+.left-sidebar::-webkit-scrollbar {
+    display: none;
+}
+.page-wrapper>div{
+    height: 100vh;
+}
+fieldset {
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    border: 2px groove (internal value);
+}

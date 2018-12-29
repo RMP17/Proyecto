@@ -390,7 +390,18 @@ var appArticulo = new Vue({
                 });
             }
         },
-
+        getArticuloByNombre(result){
+            console.log(result);
+            if (result && result.id) {
+                axios.get(urlGlobal.getArticuloForId + result.id
+                ).then(response => {
+                    console.log(response);
+                    this.articulo.data = response.data;
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
         //</editor-fold>
 
         //<editor-fold desc="Manejadores">

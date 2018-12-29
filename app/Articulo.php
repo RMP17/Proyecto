@@ -41,6 +41,13 @@ class Articulo extends Model
         if(!is_null($articulo)){
             $articulo->categoria = Categoria::find($articulo['id_categoria']);
             $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            unset($articulo->id_categoria);
+            unset($articulo->id_fabricante);
+        } else {
+            unset($articulo->id_categoria);
+            unset($articulo->id_fabricante);
+            $articulo->categoria = null;
+            $articulo->fabricante = null;
         }
         return $articulo;
     }
@@ -48,6 +55,15 @@ class Articulo extends Model
 
         $articulo = Articulo::where('nombre', 'like','%'.$codigo.'%')
             ->select('id_articulo','nombre','codigo','codigo_barra')->orderBy('nombre','desc')->take(10)->get();
+        return $articulo;
+    }
+    public function getArticuloById($id){
+
+        $articulo = Articulo::find($id);
+        if(!is_null($articulo)){
+            $articulo->categoria = Categoria::find($articulo['id_categoria']);
+            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+        }
         return $articulo;
     }
 }

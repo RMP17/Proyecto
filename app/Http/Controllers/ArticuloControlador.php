@@ -187,4 +187,7 @@ class ArticuloControlador extends Controller
     public function getArticuloByName($nombre){
         return response()->json((new Articulo)->getArticuloByName($nombre));
     }
+    public function getArticuloById($id){
+        return response()->json((new Articulo)->getArticuloById($id));
+    }
 }

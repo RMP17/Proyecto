@@ -1,4 +1,4 @@
-const url = 'http://127.0.0.1:8000/';
+const url = 'http://127.0.0.1:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesFabricante:url + 'fabricante',
@@ -10,6 +10,7 @@ var urlGlobal={
     getAllFabricantes:url + 'fabricantes',
     getAllCategorias:url + 'categorias',
     getArticuloForCodigo:url + 'articulo/codigo/',
+    getArticuloForId:url + 'articulo/id/',
     getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
     getArticuloForName:url + 'articulo/query/',
 };

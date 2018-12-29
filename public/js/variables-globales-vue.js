@@ -5,14 +5,14 @@ var shared = {
 };
 
 Vue.component('app-online-suggestions',{
-    model:{
+    /*model:{
         prop:'selection',
         event:'input'
-    },
+    },*/
     template: `
 <div class="dropdown" @keydown.down='down' @keydown.up='up'
-    @mouseenter="openSuggestions=true"
-    @mouseleave="openSuggestions=false"
+    @mouseenter="mouseOverSuggestions=true"
+    @mouseleave="mouseOverSuggestions=false"
     >
     <!--(mouseout)="mouseOverSuggestions = false;"-->
     <input type="text" class="form-control" ref="suggestionInput"
@@ -20,59 +20,21 @@ Vue.component('app-online-suggestions',{
            @keydown.enter='enter'
            @keydown.tab='tab'
            @blur="onBlur"
-           @keydown.esc='open=false'
+           @keydown.esc='openSuggestions=false'
            :placeholder="config.placeholder || ''"
     >
-    <div ref="listSeggestions" :class="{'show': open}" class="dropdown-menu  m-0 w-100 cursor" aria-labelledby="dropdownMenuButton"
+    <div ref="listSeggestions" :class="{'show': openSuggestions}" class="dropdown-menu  m-0 w-100 cursor" aria-labelledby="dropdownMenuButton"
          onmousedown="return false;">
         <a v-for="(suggestion,index) in suggestions"
-           :class="{'active': indexElement === index }"
+           :class="{'active': current === index }"
            class="dropdown-item"
-           @click="suggestionClick(suggestion)"
+           @click="suggestionClick(index)"
            @mousedown="indexChange(index)"
         >
-            <!--(mouseover)="indexChange(i)"-->
-            <span>{{suggestion.detalle }}</span>
+            <span v-html="suggestion.detalleShow"></span>
         </a>
     </div>
-</div>
-    <!--<div>
-        <div>
-            <div class="input-field">
-                <input
-                       onkeypress="return event.keyCode!=13"
-                       autocomplete="off"
-                       
-                >
-                <div v-if="open" class="collection collection-auto" style="z-index:1000;"
-                     
-                     onselectstart='return false'
-                >
-                    <a v-for="(suggestion,index) in suggestions"
-                       :class="{'focus': isActive(index)}"
-                       
-                       onclick='return false' class="collection-item collection-auto-item"
-                    >
-                        <span v-if="isPersona" class="badge">@{{ suggestion.ci  }}</span><span
-                                v-html="suggestion.detalleShow">@{{ suggestion.detalleShow }}</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div :class="config.object=='nombre' ? 'col s2 padding-left':''" class="flex-container">
-            <div v-if="config.selection['ci'] && config.object=='nombre'" class="fex-child-text">
-                <div class="input-field">
-                    <input disabled :value="config.selection['ci']" type="text"
-                           class="validate input-autocompletes black-text center-align">
-                </div>
-            </div>
-            <div v-else class="fex-child-text">
-                <div class="input-field">
-                    <input disabled type="text" class="validate input-autocompletes black-text">
-                </div>
-            </div>
-        </div>
-    </div>-->`,
+</div>`,
     props:{
         config:{
             url:'',
@@ -96,16 +58,16 @@ Vue.component('app-online-suggestions',{
     },
     data(){
         return{
-            open: false,
             openSuggestions: false,
             current: 0,
             suggestions: [],
+            suggestionsTemp: [],
             idselection: '',
             inputObject: '',
             timeout:10,
             loadinput:'',
             selection:'',
-            indexElement:0
+            mouseOverSuggestions:false
         }
     },
     watch: {
@@ -121,7 +83,7 @@ Vue.component('app-online-suggestions',{
     },
     methods:{
         cargar:async function(){
-            function responseData(url,selection, variableForSuggestions, variableForSuggestionsId) {
+            /*function responseData(url,selection, variableForSuggestions, variableForSuggestionsId) {
                 const promise = new Promise((resolve, reject) =>{
                     let datos = [];
                     clearTimeout(this.timeout);
@@ -152,83 +114,132 @@ Vue.component('app-online-suggestions',{
                     },0);
                 });
                 return promise;
+            }*/
+
+            let _suggestions=this.matches();
+            if(_suggestions.length>0){
+                this.suggestions = _suggestions;
+            } else {
+                axios.get(this.config.url+this.selection, {
+                    timeout: 2000,
+                }).then(response=> {
+
+                    if(response.data.length > 0)
+                    {
+                        let datos = [];
+                        response.data.forEach(respoTemp => {
+                            let textTempPosition = respoTemp[this.config.variableForSuggestions
+                                ].toLowerCase().indexOf(this.selection.toLowerCase());
+                            let textTemp = respoTemp[this.config.variableForSuggestions
+                                ].slice(textTempPosition, textTempPosition + this.selection.length);
+                            datos.push({
+                                'id': respoTemp[this.config.variableForSuggestionsId],
+                                'detalle': respoTemp[this.config.variableForSuggestions],
+                                'detalleShow': respoTemp[this.config.variableForSuggestions
+                                    ].replace(new RegExp(textTemp, 'g'), textTemp.bold().big())
+                            });
+                        });
+                        this.suggestionsTemp = datos;
+                        this.suggestions = datos;
+                    }
+                })/*.catch(()=>{
+
+            })*/;
             }
 
-            this.suggestions = await responseData(this.config.url, this.selection,
-                this.config.variableForSuggestions, this.config.variableForSuggestionsId);
+            /*this.suggestions = await responseData(this.config.url, this.selection,
+                this.config.variableForSuggestions, this.config.variableForSuggestionsId);*/
         },
         enter(){
-            if(this.idselection=='') {
-                if(this.suggestions.length!=0){
-                    var temp = this.suggestions[this.current];
-                    this.idselection=temp.id;
-                    responseTemp={};
-                    responseTemp[this.objectid]=temp.id;
-                    responseTemp[this.object]=temp.detalle;
-                    responseTemp['ci']=temp.ci;
-                    this.$emit('input', responseTemp);
-                    this.open = false;
-                    this.current=0;
-                }
+            if (this.suggestions.length !== 0) {
+                let temp = this.suggestions[this.current];
+                this.idselection = temp.id;
+                // responseTemp['ci'] = temp.ci;
+                this.$emit('selected-suggestion-event', temp);
+                this.current = 0;
+                this.selection = temp.detalle;
+                this.$refs.suggestionInput.value=temp.detalle;
+                this.openSuggestions=false;
             }
+
         },
         tab() {
-            if(this.idselection=='') {
-                this.open = false;
-                this.enter();
+            if(this.idselection==='') {
+                this.openSuggestions=false;
+                // this.enter();
             }
         },
         up() {
+            event.preventDefault();
             if(this.current > 0)
                 this.current--;
+            else
+                this.current = this.suggestions.length - 1;
         },
-
         down() {
+            event.preventDefault();
+
             if(this.current < this.suggestions.length - 1)
                 this.current++;
+            else
+                this.current=0;
         },
         indexChange(index) {
-            this.indexElement = index;
+            this.current = index;
         },
         change(valor){
-            if (this.open === false) {
-                this.open = true;
+            if (this.openSuggestions === false) {
+                this.openSuggestions = true;
                 this.current = 0;
                 this.idselection ='';
             }
             if (valor.length > 0){
-                console.log(valor);
                 this.selection=valor;
                 this.cargar();
-                //this.$emit('input', responseTemp);
+            } else {
+                this.openSuggestions= false;
             }
-            //responseTemp={};
-            //responseTemp=valor;
-            //this.$emit('input', responseTemp);
         },
-        suggestionClick:function(target) {
-            this.idselection = target.id;
-            this.selection = target.detalle;
-            this.$refs.suggestionInput.value=target.detalle;
-            this.$emit('selectedSuggestionEvent', target);
-            this.open = false;
+        suggestionClick:function(index) {
+            let temp = this.suggestions[index];
+            this.idselection = temp.id;
+            this.selection = temp.detalle;
+            this.$refs.suggestionInput.value=temp.detalle;
+            this.$emit('selected-suggestion-event', temp);
             this.openSuggestions=false;
-            this.indexElement = 0;
-            this.showSuggestions = false;
+            this.current = 0;
             //corregir //this.selection = target[this.config.variableForSuggestions];
         },
-        /*mouseEnterLeave:function() {
-         console.log(this.openSuggestions);
-         },*/
         onBlur:function() {
-            if(this.idselection=='') {
-                if (this.openSuggestions == true) {
-                    this.$refs.suggestionInput.focus();
-                }
-                else {
-                    this.open = false;
-                }
+            if (!this.mouseOverSuggestions) {
+                this.openSuggestions = false;
             }
+        },
+        getCleanedString(string) {
+            string = string.replace(/á/gi, 'a');
+            string = string.replace(/é/gi, 'e');
+            string = string.replace(/í/gi, 'i');
+            string = string.replace(/ó/gi, 'o');
+            string = string.replace(/ú/gi, 'u');
+            string = string.replace(/ñ/gi, 'n');
+            return string;
+        },
+        matches:function() {
+            let aux = this.selection;
+            let numero_suggestions=0;
+            return this.suggestionsTemp.filter((str)=>{
+
+                let textTempPosition=str.detalle
+                    .toLowerCase().indexOf(aux.toLowerCase());
+
+                let textTemp = str.detalle
+                    .slice(textTempPosition, textTempPosition+aux.length);
+
+                str.detalleShow=str.detalle
+                    .replace(new RegExp(textTemp, 'g'),textTemp.bold().big());
+
+                return this.getCleanedString(str.detalle).toLowerCase().indexOf(this.getCleanedString(aux).toLowerCase()) >=0;
+            });
         },
     },
     computed:{
@@ -245,10 +256,10 @@ Vue.component('app-online-suggestions',{
                 return str.detalle.toLowerCase().indexOf(aux.toLowerCase()) >=0;
             });
         },*/
-        openSuggestion:function() {
+        /*openSuggestion:function() {
             return !this.selection
                 && this.suggestions.length !== 0 && this.open === true;
-        },
+        },*/
     },
 });
 
@@ -257,7 +268,7 @@ var sharedVariables = new Vue({
     created(){
         this.getAllCategorias();
         this.getAllFabricantes();
-        this.getAllEmpleados();
+        // this.getAllEmpleados();
     },
     
     methods: {
