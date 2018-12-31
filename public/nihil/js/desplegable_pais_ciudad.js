@@ -13,6 +13,7 @@ var urlGlobal={
     getArticuloForId:url + 'articulo/id/',
     getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
     getArticuloForName:url + 'articulo/query/',
+    changeStatusOfArticulo:url + 'articulo/status/',
 };
 
 $("#cbxPais").change(function(event){

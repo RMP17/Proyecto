@@ -27,10 +27,12 @@ Route::get('/', function () {
 /*Controladores*/
 
 Route::prefix('articulo')->group(function () {
+    Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
     Route::get('codigo/{codigo}', 'ArticuloControlador@getArticuloByCodigo');
     Route::get('id/{id}', 'ArticuloControlador@getArticuloById');
     Route::get('codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloByCodigoBarra');
+    Route::put('status/{id_articulo}', 'ArticuloControlador@changeStatusOfArticulo');
 });
 
 

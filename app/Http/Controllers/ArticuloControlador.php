@@ -3,6 +3,7 @@
 namespace Allison\Http\Controllers;
 use Allison\Http\Controllers\ConversorImagenes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\ArticuloPeticion;
 use Allison\Articulo;
@@ -10,7 +11,8 @@ use Allison\Categoria;
 use Allison\Fabricante;
 use Allison\Dimensiones;
 use Allison\Pieza;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class ArticuloControlador extends Controller
@@ -81,6 +83,7 @@ class ArticuloControlador extends Controller
             return response()->json($validator->errors(), 400);
         };
         $urlImage = null;
+        $path = public_path().'/images';
         if (count($peticion->allFiles()) > 0) {
             $files = $peticion->allFiles();
             $validator2 = Validator::make($files, [
@@ -91,9 +94,8 @@ class ArticuloControlador extends Controller
             };
             $imageTempName = $files['imagen']->getPathname();
             $imageName = $files['imagen']->getClientOriginalName();
-            $path = public_path().'/images';
             $files['imagen']->move($path, now()->timestamp.$imageName);
-            $urlImage = 'images/'.now()->timestamp.$imageName;
+            $urlImage = now()->timestamp.$imageName;
         }
 
         $articulo = new Articulo;
@@ -140,35 +142,58 @@ class ArticuloControlador extends Controller
 		return view ('articulo.edit', compact ('articulo', 'categorias', 'subcategorias', 'fabricantes', 'categoria', 'subcategoria', 'fabricante', 'dimensiones'));
 	}
 	
-	public function update(ArticuloPeticion $peticion, $id_articulo)
+	public function updateArticulo(/*ArticuloPeticion*/ Request $peticion, $id_articulo)
 	{
-		$conversor = new ConversorImagenes;
-		$articulo = Articulo :: findOrFail($id_articulo);
-		$articulo -> nombre = $peticion -> get('txtNombre');
-		$articulo -> codigo = $peticion -> get('txtCodigo');
-		$articulo -> codigo_barra = $peticion -> get('txtCodigoBarra');
-		$articulo -> caracteristicas = $peticion -> get('txtCaracteristicas');
-		$articulo -> precio_compra = $peticion -> get('txtPrecioCompra');
-		$articulo -> precio_produccion = $peticion -> get('txtPrecioProduccion');
-		if ($peticion -> get('imgImagen') != null)
-			$articulo -> imagen = $conversor->ImagenABinario($peticion -> get('imgImagen'));
-		$articulo -> divisible = $peticion -> get('rbtDivisible');
-		$articulo -> id_subcategoria = $peticion -> get('cbxSubcategoria');
-		$articulo -> id_fabricante= $peticion -> get('cbxFabricante');
-		$articulo->update();
-		if ($peticion -> get('rbtDimensionable'))
-		{
-			$id_articulo = Articulo::where('codigo', '=', $peticion -> get('txtCodigo'))
-				->first()
-				->id_articulo;
-			$dimensiones = Dimensiones::findOrFail($id_articulo);
-			$dimensiones -> largo = $peticion -> get('txtLargo');
-			$dimensiones -> ancho = $peticion -> get('txtAncho');
-			$dimensiones -> espesor = $peticion -> get('txtEspesor');
-			$dimensiones -> volumen = $peticion -> get('txtVolumen');
-			$dimensiones -> update();
-		}
-		return Redirect :: to ('articulo');
+
+        $data = json_decode($peticion->data, true);
+        $articulo = Articulo::findOrFail($id_articulo);
+        if(is_null($articulo)){
+            return response()->json('No Existe el Artículo', 400);
+        }
+
+        $validator = Validator::make($data, [
+            'nombre' => 'required|max:50',
+            'codigo' => ['required','max:50', Rule::unique('articulo')->ignore($articulo->codigo, 'codigo')],
+            'codigo_barra' => 'required|max:50',
+            'precio_compra' => 'required',
+            'precio_produccion' => 'required'
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        };
+
+        $urlImage = null;
+        $path = public_path().'/images/';
+        if (count($peticion->allFiles()) > 0 ) {
+            if (!is_null($articulo->imagen)) {
+                $_temPath = $path.$articulo->imagen;
+                if (File::exists($_temPath)) {
+                    File::delete($_temPath);
+                }
+            }
+            $files = $peticion->allFiles();
+            $validator2 = Validator::make($files, [
+                'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+            if ($validator2->fails()) {
+                return response()->json($validator2->errors(), 400);
+            };
+            $imageTempName = $files['imagen']->getPathname();
+            $imageName = $files['imagen']->getClientOriginalName();
+            $files['imagen']->move($path, now()->timestamp.$imageName);
+            $urlImage = now()->timestamp.$imageName;
+        }
+
+        $articulo->fill($data);
+        unset($data['fecha_registro']);
+        unset($data['estatus']);
+        $articulo->imagen = $urlImage;
+        $articulo->update();
+
+        if($articulo->divisible){
+            $articulo->dimension()->update($data['dimensiones']);
+        }
+        return response()->json();
 	}
 	
 	public function destroy($id_articulo)
@@ -189,5 +214,11 @@ class ArticuloControlador extends Controller
     }
     public function getArticuloById($id){
         return response()->json((new Articulo)->getArticuloById($id));
+    }
+    public function changeStatusOfArticulo(Request $request, $id_articulo){
+        $articulo = Articulo::findOrFail($id_articulo);
+        $articulo->estatus = !$request->status;
+        $articulo->update();
+        return response()->json();
     }
 }

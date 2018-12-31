@@ -68,6 +68,7 @@ var appArticulo = new Vue({
                 variableForSuggestionsId:'id_articulo'
             },
             modeCreate:false,
+            modeEdit:false,
             errors: [],
             data: null,
             attributes: {
@@ -91,6 +92,27 @@ var appArticulo = new Vue({
                 id_fabricante:null,
                 id_categoria:null
             },
+            tempAttributes:{
+                id_articulo:null,
+                nombre: '',
+                codigo: '',
+                codigo_barra:'',
+                caracteristicas:'',
+                precio_compra:null,
+                precio_produccion:null,
+                estatus:'',
+                imagen:'',
+                fecha_registro:'',
+                divisible:0,
+                dimensiones:{
+                    largo:null,
+                    ancho:null,
+                    espesor:null,
+                    volumen:null
+                },
+                id_fabricante:null,
+                id_categoria:null
+            }
         }
         // ============================
 
@@ -132,7 +154,7 @@ var appArticulo = new Vue({
         registerCategoria: function() {
             let input = this.categoria.attributes;
             axios.post( urlGlobal.resourcesCategorias, input)
-                .then((response)=>{
+                .then( response =>{
                     this.categoria.attributes = {
                         id_categoria: null,
                         categoria: '',
@@ -149,7 +171,7 @@ var appArticulo = new Vue({
         },
         getCategorias: function(page) {
             axios.get(urlGlobal.resourcesCategorias+'?page='+page)
-                .then((response)=>{
+                .then( response =>{
                     this.categoria.data = response.data.data;
                     this.categoria.pagination = response.data.pagination;
                 }).catch((errors)=>{
@@ -161,7 +183,7 @@ var appArticulo = new Vue({
             let r = confirm("Está seguro que desea eliminar");
             if (r === true) {
                 axios.delete(urlGlobal.resourcesCategorias+'/'+id)
-                    .then((response)=>{
+                    .then( response =>{
                         this.categoria.data.splice(index,1);
                         this.categoria.pagination.total -= 1;
                         this.categoria.pagination.last_page = Math.ceil(this.categoria.pagination.total/10);
@@ -195,7 +217,7 @@ var appArticulo = new Vue({
         updateCategorias: function() {
             let input = this.categoria.attributes;
             axios.put(urlGlobal.resourcesCategorias+'/'+input.id_categoria, input)
-                .then((response)=>{
+                .then( response =>{
                     this.categoria.modeCreate = false;
                     this.categoria.modeEdit = false;
                     this.categoria.attributes = new Object({
@@ -226,7 +248,7 @@ var appArticulo = new Vue({
         registerFabricante: function() {
             let input = this.fabricante.attributes;
             axios.post( urlGlobal.resourcesFabricante, input)
-                .then((response)=>{
+                .then( response =>{
                     this.fabricante.attributes = {
                         id_fabricante:null,
                         nombre: '',
@@ -244,7 +266,7 @@ var appArticulo = new Vue({
         },
         getFabricantes: function(page) {
             axios.get(urlGlobal.resourcesFabricante+'?page='+page)
-                .then((response)=>{
+                .then( response =>{
                     this.fabricante.data = response.data.data;
                     this.fabricante.pagination = response.data.pagination;
                 }).catch((errors)=>{
@@ -275,11 +297,20 @@ var appArticulo = new Vue({
                 sitio_web: '',
             });
         },
+        changeStatusOfArticulo(articulo){
+            axios.put(urlGlobal.changeStatusOfArticulo+articulo.id_articulo,{status:articulo.estatus})
+                .then( response =>{
+                    articulo.estatus = articulo.estatus===0 ? 1:0;
+                }).catch((errors)=>{
+                console.log(errors);
+                this.fabricante.errors = this.formatErrors(errors);
+            });
+        },
         deleteFabricante: function(id, index) {
             let r = confirm("Está seguro que desea eliminar");
             if (r === true) {
                 axios.delete(urlGlobal.resourcesFabricante+'/'+id)
-                    .then((response)=>{
+                    .then( response =>{
                         this.fabricante.data.splice(index,1);
                         this.fabricante.pagination.total -= 1;
                         this.fabricante.pagination.last_page = Math.ceil(this.fabricante.pagination.total/10);
@@ -292,7 +323,7 @@ var appArticulo = new Vue({
         updateFabricante: function() {
             let input = this.fabricante.attributes;
             axios.put(urlGlobal.resourcesFabricante+'/'+input.id_fabricante, input)
-                .then((response)=>{
+                .then( response =>{
                     this.fabricante.modeCreate = false;
                     this.fabricante.modeEdit = false;
                     this.fabricante.attributes = new Object({
@@ -315,7 +346,15 @@ var appArticulo = new Vue({
         //</editor-fold>
 
         //<editor-fold desc="Methods of Articulos">
+
         submitArticulo(){
+            if(this.articulo.attributes.id_articulo){
+                this.updateArticulo();
+            } else {
+                this.registerArticulo();
+            }
+        },
+        registerArticulo(){
 
             let inputs = Object.assign({}, this.articulo.attributes);
             let formData = new FormData();
@@ -330,7 +369,7 @@ var appArticulo = new Vue({
                         'Content-Type': 'multipart/form-data'
                     }
                 }*/
-            ).then( () => {
+            ).then( response => {
                 this.articulo.attributes = {
                     id_articulo:null,
                     nombre: '',
@@ -361,7 +400,73 @@ var appArticulo = new Vue({
                 this.articulo.errors = this.formatErrors2(errors);
             });
         },
-
+        updateArticulo(){
+            let inputs = Object.assign({}, this.articulo.attributes);
+            let formData = new FormData();
+            formData.append('imagen', inputs.imagen);
+            delete inputs.imagen;
+            formData.append('data', JSON.stringify(inputs) );
+            formData.append('_method', 'PUT');
+            axios.post( urlGlobal.resourcesArticulo+'/update'+'/'+inputs.id_articulo, formData,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            ).then( response => {
+                this.articulo.modeCreate = false;
+                this.articulo.modeEdit = false;
+                this.articulo.tempAttributes = new Object({
+                    id_articulo:null,
+                    nombre: '',
+                    codigo: '',
+                    codigo_barra:'',
+                    caracteristicas:'',
+                    precio_compra:null,
+                    precio_produccion:null,
+                    estatus:'',
+                    imagen:'',
+                    fecha_registro:'',
+                    divisible:0,
+                    dimensiones:{
+                        largo:null,
+                        ancho:null,
+                        espesor:null,
+                        volumen:null
+                    },
+                    id_fabricante:null,
+                    id_categoria:null
+                });
+                this.articulo.attributes = {
+                    id_articulo:null,
+                    nombre: '',
+                    codigo: '',
+                    codigo_barra:'',
+                    caracteristicas:'',
+                    precio_compra:null,
+                    precio_produccion:null,
+                    estatus:'',
+                    imagen:'',
+                    fecha_registro:'',
+                    divisible:0,
+                    dimensiones:{
+                        largo:null,
+                        ancho:null,
+                        espesor:null,
+                        volumen:null
+                    },
+                    id_fabricante:null,
+                    id_categoria:null
+                };
+                this.articulo.errors = [];
+                this.$refs.inputCategoria.value = '';
+                this.$refs.inputFabricante.value = '';
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                this.articulo.errors = this.formatErrors2(errors);
+            });
+        },
         getArticuloByCodigoBarras: function(codigoBarras) {
             if (!codigoBarras.target.value.length <= 0) {
                 axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
@@ -391,16 +496,79 @@ var appArticulo = new Vue({
             }
         },
         getArticuloByNombre(result){
-            console.log(result);
             if (result && result.id) {
                 axios.get(urlGlobal.getArticuloForId + result.id
                 ).then(response => {
-                    console.log(response);
                     this.articulo.data = response.data;
                 }).catch(errors => {
                     console.log(errors);
                 });
             }
+        },
+        changeToEditModeArticulo(articulo){
+            this.articulo.modeCreate = true;
+            this.articulo.modeEdit = true;
+            this.articulo.attributes = articulo;
+            if(articulo.categoria) {
+                setTimeout(() => {
+                    this.$refs.inputCategoria.value = articulo.categoria.categoria;
+                }, 500);
+                this.articulo.attributes.id_categoria = articulo.categoria.id_categoria;
+            }
+            if(articulo.fabricante){
+                setTimeout(() => {
+                    this.$refs.inputFabricante.value = articulo.fabricante.nombre;;
+                }, 500);
+                this.articulo.attributes.id_fabricante = articulo.fabricante.id_fabricante;
+            }
+            this.articulo.tempAttributes = JSON.parse(JSON.stringify(articulo));
+        },
+        cancelEditModeAriculo(){
+            this.articulo.modeCreate = false;
+            this.articulo.modeEdit = false;
+            Object.assign(this.fabricante.attributes, this.articulo.tempAttributes);
+            this.articulo.attributes = new Object({
+                id_articulo:null,
+                nombre: '',
+                codigo: '',
+                codigo_barra:'',
+                caracteristicas:'',
+                precio_compra:null,
+                precio_produccion:null,
+                estatus:'',
+                imagen:'',
+                fecha_registro:'',
+                divisible:0,
+                dimensiones:{
+                    largo:null,
+                    ancho:null,
+                    espesor:null,
+                    volumen:null
+                },
+                id_fabricante:null,
+                id_categoria:null
+            });
+            this.articulo.tempAttributes = new Object({
+                id_articulo:null,
+                nombre: '',
+                codigo: '',
+                codigo_barra:'',
+                caracteristicas:'',
+                precio_compra:null,
+                precio_produccion:null,
+                estatus:'',
+                imagen:'',
+                fecha_registro:'',
+                divisible:0,
+                dimensiones:{
+                    largo:null,
+                    ancho:null,
+                    espesor:null,
+                    volumen:null
+                },
+                id_fabricante:null,
+                id_categoria:null
+            });
         },
         //</editor-fold>
 

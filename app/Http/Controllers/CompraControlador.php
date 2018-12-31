@@ -23,9 +23,9 @@ class CompraControlador extends Controller
 	public function __construct()
 	{	
 	}
-	public function index(Request $peticion)
+	public function index()
 	{
-		if ($peticion)
+		/*if ($peticion)
 		{
 			$consulta = trim($peticion->get('txtBuscar'));
 			$compras = DB::table('compra as c')
@@ -35,11 +35,11 @@ class CompraControlador extends Controller
 			->join('sucursal as s', 'a.id_sucursal', '=', 's.id_sucursal')
 			->join('contacto as cont', 'c.id_contacto', '=', 'cont.id_contacto')
 			->join('proveedor as p', 'cont.id_proveedor', '=', 'p.id_proveedor')
-			/*->join('moneda as m', 'c.id_compra', '=', 'm.id_compra')*/
+			->join('moneda as m', 'c.id_compra', '=', 'm.id_compra')
 			->select('c.id_compra as codigo','c.fecha as fecha_compra','c.costo_total as costo_total','t.id_tipo_pago as id_tipo_pago','t.tipo_pago as tipo_pago','s.id_sucursal','s.nombre as nombre_sucursal','a.id_almacen','a.direccion as direccion_almacen', 'cont.id_contacto', 'p.id_proveedor','p.razon_social as razon_social_proveedor')
 			->paginate(10);
-			return view('compra.index', compact('compras', 'consulta'));
-		}
+		}*/
+        return view('compra.index');
 
 	}
 	public function create(Request $peticion)

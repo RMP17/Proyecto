@@ -28,7 +28,7 @@ html, body {
 .page-wrapper>div{
     height: 100vh;
 }
-fieldset {
+/*fieldset {
     display: block;
     margin-left: 2px;
     margin-right: 2px;
@@ -37,4 +37,29 @@ fieldset {
     padding-left: 0.75em;
     padding-right: 0.75em;
     border: 2px groove (internal value);
+}*/
+
+/*Estilos para los navtabs*/
+.nav-tabs{
+    /*border-bottom: 1px solid #dee2e6;*/
+    /*background: #1F262D;*/
+
+    background: white;
+
+    /*background: #3e5569;*/
+}
+.nav-tabs>.nav-item{
+    color: #1F262D;
+    /*opacity: 0.9;*/
+    text-align: center;
+    border: 1px solid #1F262D;
+}
+.nav-tabs>.nav-item.active{
+    color: white;
+    background: #1F262D;
+}
+.nav-tabs>.nav-item.nav-link:hover:not(.active){
+    color: white;
+    background: #1F262D;
+    border: 1px solid transparent;
 }

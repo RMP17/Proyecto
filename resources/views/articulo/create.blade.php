@@ -227,8 +227,14 @@
         </div>
         <div class="card border-top border-bottom border-right">
             <div class="card-body text-center m-0 p-0">
-                <button type="submit" class="btn btn-primary">Registrar</button>
-                <button type="reset" class="btn btn-danger">Cancelar</button>
+                <div v-if="!articulo.modeEdit" >
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                    <button type="reset" class="btn btn-danger">Cancelar</button>
+                </div>
+                <div v-else>
+                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                    <button type="button" class="btn btn-danger" @click="cancelEditModeAriculo">Cancelar</button>
+                </div>
             </div>
         </div>
     </form>

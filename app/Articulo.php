@@ -43,13 +43,36 @@ class Articulo extends Model
             $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
             unset($articulo->id_categoria);
             unset($articulo->id_fabricante);
+            if(is_null($articulo->dimension)) {
+                $articulo->dimensiones=[
+                    'largo' => null,
+                    'ancho' => null,
+                    'espesor' => null,
+                    'volumen' => null
+                ];
+            } else {
+                $articulo->dimensiones=$articulo->dimension;
+                unset($articulo->dimension);
+            }
         } else {
             unset($articulo->id_categoria);
             unset($articulo->id_fabricante);
             $articulo->categoria = null;
             $articulo->fabricante = null;
+            if(is_null($articulo->dimension)) {
+                $articulo->dimensiones=[
+                    'largo' => null,
+                    'ancho' => null,
+                    'espesor' => null,
+                    'volumen' => null
+                ];
+            } else {
+                $articulo->dimensiones=$articulo->dimension;
+                unset($articulo->dimension);
+            }
         }
-        return $articulo;
+        $array[]=$articulo;
+        return  $array;
     }
     public function getArticuloByName($codigo){
 
@@ -63,7 +86,19 @@ class Articulo extends Model
         if(!is_null($articulo)){
             $articulo->categoria = Categoria::find($articulo['id_categoria']);
             $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(is_null($articulo->dimension)) {
+                $articulo->dimensiones=[
+                    'largo' => null,
+                    'ancho' => null,
+                    'espesor' => null,
+                    'volumen' => null
+                ];
+            } else {
+                $articulo->dimensiones=$articulo->dimension;
+                unset($articulo->dimension);
+            }
         }
-        return $articulo;
+        $array[]=$articulo;
+        return  $array;
     }
 }

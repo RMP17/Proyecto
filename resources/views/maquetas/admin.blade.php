@@ -235,15 +235,10 @@
                                                     href="{{ url('empresa')  }}" aria-expanded="false"><i
                                         class="fas fa-building"></i><span class="hide-menu">Empresa</span></a>
                         </li>
-
-                        <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"  href="javascript:void(0)" aria-expanded="false"><i class="fas fa-shopping-cart"></i><span class="hide-menu">Compras</span></a>
-                          <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item d-flex justify-content-center">  <a href="{{ url('compra')  }}" class="sidebar-link"><span class="hide-menu "> Registrar compra </span></a>
-                                </li>
-                                <li class="sidebar-item d-flex justify-content-center"><a href="{{ url('proveedor')  }}" class="sidebar-link"><span class="hide-menu"> Proveedores </span></a>
-                                </li>
-                            </ul>
-
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                               href="{{ url('compra')  }}" aria-expanded="false">
+                                <i class="fas fa-shopping-cart"></i><span class="hide-menu">Compras</span></a>
                         </li>
 
                         <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"

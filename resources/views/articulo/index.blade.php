@@ -10,14 +10,14 @@
                 <div class="col-12 d-flex no-block align-items-center">
                     <h4 class="page-title">Artículos</h4>
                     <div class="col-auto">
-                        <a href="#" class="btn btn-outline-dark w-10em" @click="articulo.modeCreate=!articulo.modeCreate">
+                        <a href="#" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" @click="articulo.modeCreate=!articulo.modeCreate">
                             <span  v-if="!articulo.modeCreate">Nuevo Artículo</span>
                             <span v-else>Lista de Artículos</span>
                         </a>
-                        <a href data-target="#modal-articulo" data-toggle="modal" class="btn btn-outline-dark w-10em">
+                        <a v-if="!articulo.modeEdit" href data-target="#modal-articulo" data-toggle="modal" class="btn btn-outline-dark w-10em">
                             Categorías
                         </a>
-                        <a href data-target="#modal-fabricante" data-toggle="modal" class="btn btn-outline-dark w-10em">
+                        <a v-if="!articulo.modeEdit" href data-target="#modal-fabricante" data-toggle="modal" class="btn btn-outline-dark w-10em">
                             Fabricantes
                         </a>
                     </div>
@@ -79,24 +79,52 @@
                                         <th>Categoría</th>
                                         <th>Fabricante</th>
                                         <th>Registrado en fecha</th>
+                                        <th>Dimensiones</th>
                                         <th>Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-if="articulo.data">
+                                        <tr v-for="articulo in articulo.data">
                                             {{--articulo.data.estatus: Verde => Respresnta articulo activo; Gris => Respresnta articulo inactivo --}}
-                                            <td :class="articulo.data.estatus>0 ? 'bg-success text-white': 'bg-secondary text-white'" >@{{ articulo.data.nombre }}</td>
-                                            <td>@{{ articulo.data.codigo }}</td>
-                                            <td>@{{ articulo.data.codigo_barra }}</td>
-                                            <td>@{{ articulo.data.caracteristicas}}</td>
-                                            <td>@{{ articulo.data.precio_compra }}</td>
-                                            <td>@{{ articulo.data.precio_produccion }}</td>
-                                            <td><span v-if="articulo.data.categoria">@{{ articulo.data.categoria.categoria }}</span></td>
-                                            <td><span v-if="articulo.data.fabricante">@{{ articulo.data.fabricante.nombre }}</span></td>
-                                            <td>@{{ articulo.data.fecha_registro }}</td>
+                                            {{--<td :class="articulo.data.estatus>0 ? 'bg-success text-white': 'bg-secondary text-white'" >--}}
                                             <td>
-                                                <a type="button" href="#" title="Editar" class="btn btn-warning btn-sm">
+                                                @{{ articulo.nombre }}
+                                                <br>
+                                                <span v-if="!!articulo.estatus" class="badge badge-success">Disponible</span>
+                                                <span v-else class="badge badge-secondary">No Disponible</span>
+                                            </td>
+                                            <td>@{{ articulo.codigo }}</td>
+                                            <td>@{{ articulo.codigo_barra }}</td>
+                                            <td>@{{ articulo.caracteristicas}}</td>
+                                            <td>@{{ articulo.precio_compra }}</td>
+                                            <td>@{{ articulo.precio_produccion }}</td>
+                                            <td><span v-if="articulo.categoria">@{{ articulo.categoria.categoria }}</span></td>
+                                            <td><span v-if="articulo.fabricante">@{{ articulo.fabricante.nombre }}</span></td>
+                                            <td>@{{ articulo.fecha_registro }}</td>
+                                            <td>
+                                                Largo:@{{ articulo.dimensiones.largo }}<br>
+                                                Ancho:@{{ articulo.dimensiones.ancho }} <br>
+                                                Espesor:@{{ articulo.dimensiones.espesor }} <br>
+                                                Volumen:@{{ articulo.dimensiones.volumen }} <br>
+                                            </td>
+                                            <td>
+                                                <a type="button" href="#"
+                                                   title="Editar"
+                                                   @click="changeToEditModeArticulo(articulo)"
+                                                   class="btn btn-warning btn-sm">
                                                     <i class="mdi mdi-pencil"></i>
+                                                </a>
+                                                <a v-if="!!articulo.estatus" type="button" href="#"
+                                                   title="Dar de baja"
+                                                   @click="changeStatusOfArticulo(articulo)"
+                                                   class="btn btn-secondary btn-sm">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </a>
+                                                <a v-else type="button" href="#"
+                                                   title="Habilitar artículo"
+                                                   @click="changeStatusOfArticulo(articulo)"
+                                                   class="btn btn-success btn-sm">
+                                                    <i class="fas fa-chevron-up"></i>
                                                 </a>
                                                 {{--
                                                 <a href="" data-target="#modal-delete-articulo-{{$a -> id_articulo}}"
