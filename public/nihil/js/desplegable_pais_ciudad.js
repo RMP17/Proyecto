@@ -1,6 +1,9 @@
-const url = 'http://127.0.0.1:3000/Proyecto/public/';
+const url = 'http://192.168.1.4:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
+    resourcesPais:url + 'pais',
+    resourcesCargo:url + 'cargo',
+    resourcesMoneda:url + 'moneda',
     resourcesFabricante:url + 'fabricante',
     resourcesEmpleados:url + 'empleado',
     getAllCiudades:url + 'ciudades',
@@ -14,6 +17,9 @@ var urlGlobal={
     getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
     getArticuloForName:url + 'articulo/query/',
     changeStatusOfArticulo:url + 'articulo/status/',
+    getPaisesByName:url + 'pais/query/',
+    getPaisesById:url + 'pais/id/',
+    addCiudadToPais:url + 'pais/add-ciudad/',
 };
 
 $("#cbxPais").change(function(event){

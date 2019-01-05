@@ -3,37 +3,32 @@
     <!-- ============================================================== -->
     <!-- Bread crumb and right sidebar toggle -->
     <!-- ============================================================== -->
-    <div id="app-compra">
+    <div id="app-config">
         <div class="page-breadcrumb mb-2">
             <div class="row">
                 <div class="col-12 d-flex no-block align-items-center">
-                    <h4 class="page-title">Compras</h4>
+                    <h4 class="page-title">Configuraciones</h4>
                     <div class="col-auto">
                         {{--<a type="button" class="btn btn-outline-purple" href="{{url ('compra/create')}}">Registrar nuevo</a>
                         <a href="#" type="button" class="btn btn-outline-dark w-10em">
                             <span>Proveedores</span>
                         </a>--}}
                         <nav>
-                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <div class="nav nav-tabs show active" id="nav-tab" role="tablist">
                                 <a class="nav-item nav-link w-10em active"
-                                   id="nav-home-tab" data-toggle="tab"
-                                   href="#nav-home" role="tab"
-                                   aria-controls="nav-home"
-                                   aria-selected="true">Comprar</a>
+                                   id="nav-profile-tab"
+                                   data-toggle="tab"
+                                   href="#nav-config"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Datos Iniciales</a>
                                 <a class="nav-item nav-link w-10em"
                                    id="nav-profile-tab"
                                    data-toggle="tab"
-                                   href="#nav-proveedores"
+                                   href="#nav-paises"
                                    role="tab"
                                    aria-controls="nav-profile"
-                                   aria-selected="false">Proveedores</a>
-                                <a class="nav-item nav-link w-10em"
-                                   id="nav-contact-tab"
-                                   data-toggle="tab"
-                                   href="#nav-contact"
-                                   role="tab"
-                                   aria-controls="nav-contact"
-                                   aria-selected="false">Contact</a>
+                                   aria-selected="false">Países</a>
                             </div>
                         </nav>
 
@@ -61,50 +56,32 @@
                         <div class="card-body">
                             <div class="tab-content" id="nav-tabContent">
                                 {{--=================================================NAV TABCONTENT==================================--}}
-                                        {{--=========================================NAV TABCONTENT==========================--}}
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    <div class="table-responsive">
-                                        <table id="zero_config" class="table table-striped table-bordered">
-
-                                            <thead>
-                                            <tr>
-                                                <th>Tipo de pago</th>
-                                                <th>Codigo</th>
-                                                <th>Fecha</th>
-                                                <th>Sucursal</th>
-                                                <th>Almacen</th>
-                                                <th>Proveedor</th>
-                                                <th>Costo Total</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {{--@foreach($compras as $c)
-                                                <tr>
-                                                    <td>{{ $c -> tipo_pago }}</td>
-                                                    <td>{{ $c -> codigo }}</td>
-                                                    <td>{{ $c -> fecha_compra }}</td>
-                                                    <td>{{ $c -> nombre_sucursal }}</td>
-                                                    <td>{{ $c -> direccion_almacen }}</td>
-                                                    <td>{{ $c -> razon_social_proveedor }}</td>
-                                                    <td>{{ $c -> costo_total}}</td>
-
-                                                    <td>
-
-                                                    </td>
-                                                </tr>
-                                            @endforeach--}}
-                                            </tbody>
-                                        </table>
+                                        {{--=========================================TAP CONFIG==========================--}}
+                                <div class="tab-pane fade show active" id="nav-config" role="tabpanel"
+                                     aria-labelledby="nav-profile-tab">
+                                    <div class="container-fluid">
+                                        <div class="card-group mb-0 ">
+                                            <div class="card">
+                                                <div class="card-body pl-0">
+                                                    <h5 class="card-title text-center">Registro de Monedas</h5>
+                                                    @include('moneda.index')
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-body pr-0">
+                                                    <h5 class="card-title text-center">Registro de Cargos</h5>
+                                                    @include('cargo.index')
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                        {{--=========================================NAV TABCONTENT==========================--}}
-                                        {{--=========================================TAP PROVEEDORES=========================--}}
-                                <div class="tab-pane fade" id="nav-proveedores" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    @include('proveedor.index')
-                                </div>
-                                        {{--=========================================END TAP PROVEEDORES=====================--}}
+                                        {{--=========================================END TAP CONFIG==========================--}}
                                         {{--=========================================END TAP PAISES==========================--}}
+                                <div class="tab-pane fade" id="nav-paises" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    @include('pais.index')
+                                </div>
+                                        {{--=================================================END NAV PAISES==================================--}}
                                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     ...dddddddddddddd
                                     ...dddddddddddddd
@@ -135,7 +112,11 @@
         <!-- End Container fluid  -->
         <!-- ============================================================== -->
     </div>
+
+
+
+
 @endsection
 @section('scripts')
-    <script src="{{asset('js/compra.js')}}"></script>
+    <script src="{{asset('js/config.js')}}"></script>
 @endsection

@@ -33,14 +33,14 @@ class PaisPeticion extends FormRequest
 			case 'POST':
 			{
 				return [
-					'txtNombre' => 'required|unique:pais,nombre|max:50',
+					'nombre' => 'required|unique:pais,nombre|max:50',
 				];
 			}
 			case 'PUT':
 			case 'PATCH':
 			{
 				return [
-					'txtNombre' => 'required|unique:pais,nombre,'.$this->pais.',id_pais|max:50',
+					'nombre' => 'required|unique:pais,nombre,'.$this->pais.',id_pais|max:50',
 				];
 			}
 			default:break;

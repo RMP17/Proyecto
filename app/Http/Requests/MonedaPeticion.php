@@ -24,9 +24,9 @@ class MonedaPeticion extends FormRequest
     public function rules()
     {
 		return [
-			'txtNombre' => 'required|max:50',
-			'txtCodigo' => 'required|max:16',
-			'cbxPais' => 'required',
+			'nombre' => 'required|max:50',
+			'codigo' => 'required|max:16',
+			'id_pais' => 'required',
 		];
    
     }
@@ -34,9 +34,9 @@ class MonedaPeticion extends FormRequest
 	public function messages()
     {
         return [
-            'txtNombre.required' => 'El nombre de la moneda que desea registrar es obligatorio',
-			'txtCodigo.required' => 'El codigo de la moneda es obligatorio',
-			'cbxPais.required' => 'Elija a que país pertenece esta moneda',
+            'nombre.required' => 'El nombre de la moneda que desea registrar es obligatorio',
+			'codigo.required' => 'El codigo de la moneda es obligatorio',
+			'pais.required' => 'Elija a que país pertenece esta moneda',
         ];
     }
 }

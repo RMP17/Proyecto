@@ -33,14 +33,14 @@ class CargoPeticion extends FormRequest
             case 'POST':
             {
                 return [
-                    'txtNombre' => 'required|unique:cargo,nombre|max:50',
+                    'nombre' => 'required|unique:cargo,nombre|max:50',
                 ];
             }
             case 'PUT':
             case 'PATCH':
             {
                 return [
-                    'txtNombre' => 'required|unique:cargo,nombre,'.$this->cargo.',id_cargo|max:50',
+                    'nombre' => 'required|unique:cargo,nombre',
                 ];
             }
             default:break;
@@ -49,8 +49,8 @@ class CargoPeticion extends FormRequest
     public function messages()
     {
         return [
-            'txtNombre.required' => 'Debe ingresar el nombre del cargo que desea registrar',
-            'txtNombre.unique' => 'El nombre del cargo ya existe en el registro',
+            'nombre.required' => 'Debe ingresar el nombre del cargo que desea registrar',
+            'nombre.unique' => 'El nombre del cargo ya existe en el registro',
         ];
     }
 }

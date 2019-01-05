@@ -19,6 +19,7 @@
     <link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">
     <link href="{{asset('dist/css/style.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('css/custom-styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/toastr.min.css')}}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -194,14 +195,14 @@
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{asset('assets/images/users/1.jpg')}}" alt="user" class="rounded-circle" width="31"></a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated">
                                 <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> Mi perfil</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> Mi Balance</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Mail</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Configuracion de cuenta</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off m-r-5 m-l-5"></i> Cerrar Sesión</a>
                                 <div class="dropdown-divider"></div>
-                                <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
+                                <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded"> Ver Perfil</a></div>
                             </div>
                         </li>
                         <!-- ============================================================== -->
@@ -223,13 +224,16 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="p-t-30">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark" href="{{ url('config')  }}"
+                               aria-expanded="false"><i
+                                        class="mdi mdi-move-resize-variant"></i><span
+                                        class="hide-menu">Configuraciones </span></a>
+
+                        </li>
                         <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
                                                     href="{{ url('venta')  }}" aria-expanded="false"><i
                                         class="mdi mdi-view-dashboard"></i><span class="hide-menu">Ventas</span></a>
-                        </li>
-                        <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                    href="{{ url('pais')  }}" aria-expanded="false"><i
-                                        class="fas fa-globe"></i><span class="hide-menu">Países y ciudades</span></a>
                         </li>
                         <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
                                                     href="{{ url('empresa')  }}" aria-expanded="false"><i
@@ -327,6 +331,7 @@
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
+    <script src="{{asset('js/toastr.min.js')}}"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
     <script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>

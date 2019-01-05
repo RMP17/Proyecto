@@ -9,30 +9,18 @@ use DB;
 
 class CargoControlador extends Controller
 {
-    public function index(Request $peticion)
+    public function index()
 	{
-		
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$cargos = Cargo::where('nombre','like', '%'.$consulta.'%')
-				->orderBy('nombre', 'asc')
-				->paginate(10);
-			return view('cargo.index', compact('cargos', 'consulta'));
-		}
+		$cargo = Cargo::select('*')->orderBy('nombre', 'asc')->get();
+		return response()->json($cargo);
 	}
-	
-	public function create()
-	{
-		return view('cargo.create');
-	}
-	
+
 	public function store(CargoPeticion $peticion)
 	{
 		$cargo = new Cargo;
-		$cargo -> nombre= $peticion -> get('txtNombre');
+		$cargo->fill($peticion->all());
 		$cargo -> save();
-		return Redirect :: to ('cargo');
+		return response()->json();
 	}
 	
 	public function show($id_cargo)
@@ -48,9 +36,9 @@ class CargoControlador extends Controller
 	public function update(CargoPeticion $peticion, $id_cargo)
 	{
 		$cargo = Cargo :: findOrFail($id_cargo);
-		$cargo -> nombre = $peticion -> get('txtNombre');
+		$cargo->fill($peticion->all());
 		$cargo->update();
-		return Redirect :: to ('cargo');
+		return response()->json();
 	}
 	
 	public function destroy($id_cargo)

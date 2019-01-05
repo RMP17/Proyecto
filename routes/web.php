@@ -26,6 +26,16 @@ Route::get('/', function () {
 
 /*Controladores*/
 
+Route::get('config', 'ConfigController@index');
+
+
+
+Route::prefix('pais')->group(function () {
+    Route::get('query/{query}', 'PaisControlador@searchPais');
+    Route::get('id/{id}', 'PaisControlador@getPaisById');
+    Route::post('add-ciudad/{id}', 'PaisControlador@addCiudadToPais');
+});
+
 Route::prefix('articulo')->group(function () {
     Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');

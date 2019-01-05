@@ -2,12 +2,11 @@
 
 namespace Allison\Http\Controllers;
 
+use Allison\Http\Resources\MonedaResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\MonedaPeticion;
 use Allison\Moneda;
-use Allison\Pais;
-use DB;
 
 
 class MonedaControlador extends Controller
@@ -16,22 +15,10 @@ class MonedaControlador extends Controller
 	{
 		
 	}
-	
-	public function index(Request $peticion)
+	public function index()
 	{
-		
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$monedas = DB::table('moneda')
-				->join('pais', 'moneda.id_pais', '=', 'pais.id_pais')
-				->where('moneda.nombre', 'like', '%'.$consulta.'%')
-				->select('moneda.id_moneda as id_moneda', 'moneda.nombre as nombre', 'moneda.codigo as codigo', 'moneda.id_pais as id_pais', 'pais.nombre as pais')
-				->paginate(10);
-			$paises = Pais::orderBy('nombre', 'asc')
-				->get();
-			return view('moneda.index', compact('monedas', 'consulta', 'paises'));
-		}
+	    $monedas= Moneda::select()->orderBy('nombre','asc')->get();
+	    return MonedaResource::collection($monedas);
 	}
 	
 	public function create()
@@ -42,11 +29,9 @@ class MonedaControlador extends Controller
 	public function store(MonedaPeticion $peticion)
 	{
 		$moneda = new Moneda;
-		$moneda -> nombre = $peticion -> get('txtNombre');
-		$moneda -> codigo = $peticion -> get('txtCodigo');
-		$moneda -> id_pais = $peticion -> get('cbxPais');
+		$moneda = $moneda->fill($peticion->all());
 		$moneda -> save();
-		return Redirect :: to ('moneda');
+		return response()->json();
 	}
 	
 	public function show($id_moneda)
@@ -62,11 +47,9 @@ class MonedaControlador extends Controller
 	public function update(MonedaPeticion $peticion, $id_moneda)
 	{
 		$moneda = Moneda :: findOrFail($id_moneda);
-		$moneda -> nombre = $peticion -> get('txtNombre');
-		$moneda -> codigo = $peticion -> get('txtCodigo');
-		$moneda -> id_pais = $peticion -> get('cbxPais');
+		$moneda->fill($peticion->all());
 		$moneda -> update();
-		return Redirect :: to ('moneda');
+		return response()->json();
 	}
 	
 	public function destroy($id_moneda)
