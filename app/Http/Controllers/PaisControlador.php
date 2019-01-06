@@ -33,7 +33,7 @@ class PaisControlador extends Controller
 	public function store(Request $peticion)
 	{
         $validator = Validator::make($peticion->all(), [
-            'nombre' => 'required|max:50',
+            'nombre' => 'required|max:50|unique:pais,nombre',
         ]);
         if($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -56,10 +56,10 @@ class PaisControlador extends Controller
 	
 	public function update(PaisPeticion $peticion, $id_pais)
 	{
-		$pais = Pais :: findOrFail($id_pais);
-		$pais -> nombre = $peticion -> get('nombre');
-		$pais -> update();
-		return response()->json();
+        $pais = Pais:: findOrFail($id_pais);
+        $pais->nombre = $peticion->get('nombre');
+        $pais->update();
+        return response()->json();
 	}
 	
 	public function destroy($id_pais)

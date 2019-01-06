@@ -19,7 +19,6 @@ class Articulo extends Model
 		'precio_produccion',
 		'estatus',
 		'imagen',
-		'fecha_registro',
 		'divisible',
 		'id_categoria',
 		'id_fabricante',

@@ -34,16 +34,16 @@ class CuentaProveedorPeticion extends FormRequest
             case 'POST':
             {
                 return [
-                    'txtEntidad' => 'required|max:200',
-                    'txtNroCuenta' => 'required|unique:cuenta,nro_cuenta|max:50'
+                    'entidad' => 'required|max:200',
+                    'nro_cuenta' => 'required|unique:cuenta,nro_cuenta|max:50'
                 ];
             }
             case 'PUT':
             case 'PATCH':
             {
                 return [
-                    'txtEntidad' => 'required|max:200',
-                    'txtNroCuenta' => 'required|max:50',
+                    'entidad' => 'required|max:200',
+                    'nro_cuenta' => 'required|unique:cuenta,nro_cuenta|max:50'
                 ];
             }
             default:break;
@@ -52,9 +52,9 @@ class CuentaProveedorPeticion extends FormRequest
 
      public function messages(){
         return[
-            'txtEntidad.required'=>'Debe ingresar el nombre de la Entidad Financiera',
-            'txtNroCuenta.unique'=>'Este Nro. de Cuenta ya ha sido registrado',
-            'txtNroCuenta.required'=>'Debe ingresar el Nro. de la cuenta ',
+            'entidad.required'=>'Debe ingresar el nombre de la Entidad Financiera',
+            'nro_cuenta.unique'=>'Este Nro. de Cuenta ya ha sido registrado',
+            'nro_cuenta.required'=>'Debe ingresar el Nro. de la cuenta ',
         ];
     }
 }

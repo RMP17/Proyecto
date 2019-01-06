@@ -47,7 +47,7 @@ class ArticuloPeticion extends FormRequest
 			{
 				return [
 					'txtNombre' => 'required|max:50',
-					'txtCodigo' => 'required|unique:articulo,codigo,'.$this->articulo.',id_articulo|max:50',
+					'txtCodigo' => 'required|unique:articulo,codigo|max:50',
 					'txtCodigoBarra' => 'required|max:50',
 					'txtPrecioCompra' => 'required',
 					'txtPrecioProduccion' => 'required',

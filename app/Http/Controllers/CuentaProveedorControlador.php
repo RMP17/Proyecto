@@ -36,14 +36,11 @@ class CuentaProveedorControlador extends Controller
 	
 	public function store(CuentaProveedorPeticion $peticion)
 	{
-		$cuenta = new CuentaProveedor;
-		$cuenta -> entidad= $peticion -> get('txtEntidad');
-		$cuenta -> nro_cuenta= $peticion -> get('txtNroCuenta');
-		$cuenta -> id_moneda= $peticion -> get('cbxMoneda');
-		$cuenta -> id_proveedor= $peticion -> get('cbxProveedor');
-		$cuenta -> save();
-		$id_proveedor= $peticion -> get('cbxProveedor');
-		return Redirect :: to ('cuentaproveedor/'.$id_proveedor);
+        $isRegistered = (new CuentaProveedor())->newCuenta($peticion->all());
+        if(!$isRegistered) {
+            return response()->json(['proveedor'=>'El proveedor no existe'], 422);
+        };
+        return response()->json();
 	}
 	
 	

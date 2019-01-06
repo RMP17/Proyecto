@@ -3,6 +3,7 @@
 namespace Allison\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProveedorPeticion extends FormRequest
 {
@@ -34,29 +35,30 @@ class ProveedorPeticion extends FormRequest
             case 'POST':
             {
                 return [
-                    'txtRazonSocial' => 'required|max:50',
-                    'txtNit' => 'required|unique:proveedor,nit|max:15',
-                    'txtTelefono' =>'max:15',
+                    'razon_social' => 'required|max:50',
+                    'nit' => 'required|unique:proveedor,nit|max:15',
+                    'telefono' =>'max:15',
                     'fax'=>'max:15',
-                    'txtCelular' =>'max:15',
-                    'txtCorreo' =>'unique:proveedor,correo|max:50',
-                    'txtSitioWeb' =>'max:50',
-                    'txtDireccion' =>'max:200',
-                    'cbxCiudad' => 'required',
+                    'celular' =>'max:15',
+                    'correo' =>'unique:proveedor,correo|max:50',
+                    'sitio_web' =>'max:50',
+                    'direccion' =>'max:200',
+                    'id_ciudad' => 'required',
                 ];
             }
             case 'PUT':
             case 'PATCH':
             {
                 return [
-                    'txtRazonSocial' => 'required|max:50',
-                    'txtNit' => 'required|unique:proveedor,nit,'.$this->proveedor.',id_proveedor|max:15',
-                    'txtTelefono' =>'max:15',
-                    'txtCelular' =>'max:15',
-                    'txtCorreo' =>'unique:proveedor,correo,'.$this->proveedor.',id_proveedor|max:50',
-                    'txtSitioWeb' =>'max:50',
-                    'txtDireccion' =>'max:200',
-                    'cbxCiudad' => 'required',
+                    'razon_social' => 'required|max:50',
+                    'nit' => 'required|unique:proveedor,nit,'.$this->id_proveedor.',id_proveedor',
+                    'telefono' =>'max:15',
+                    'fax' =>'max:15',
+                    'celular' =>'max:15',
+                    'correo' => 'unique:proveedor,correo,'.$this->id_proveedor.',id_proveedor',
+                    'sitio_web' =>'max:50',
+                    'direccion' =>'max:200',
+                    'id_ciudad' => 'required',
                 ];
             }
             default:break;
@@ -66,11 +68,11 @@ class ProveedorPeticion extends FormRequest
     public function messages()
     {
         return [
-            'txtRazonSocial.required' => 'Debe ingresar la Razón Social del Proveedor que desea registrar.',
-            'txtNit.required' => 'Debe ingresar el NIT del proveedor.',
-            'txtNit.unique' => 'El NIT ingresado pertenece a otro proveedor registrado.',
-            'txtCorreo.unique' => 'Este correo pertenece a otro proveedor registrado.',
-            'cbxCiudad.required' => 'Elija una ciudad para el proveedor',
+            'razon_social.required' => 'Debe ingresar la Razón Social del Proveedor que desea registrar.',
+            'nit.required' => 'Debe ingresar el NIT del proveedor.',
+            'nit.unique' => 'El NIT ingresado pertenece a otro proveedor registrado.',
+            'correo.unique' => 'Este correo pertenece a otro proveedor registrado.',
+            'id_ciudad.required' => 'Elija una ciudad para el proveedor',
         ];
     }
  }

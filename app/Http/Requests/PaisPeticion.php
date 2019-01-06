@@ -40,7 +40,7 @@ class PaisPeticion extends FormRequest
 			case 'PATCH':
 			{
 				return [
-					'nombre' => 'required|unique:pais,nombre,'.$this->pais.',id_pais|max:50',
+					'nombre' => 'required|unique:pais,nombre|max:50',
 				];
 			}
 			default:break;
@@ -51,8 +51,8 @@ class PaisPeticion extends FormRequest
 	public function messages()
     {
         return [
-            'txtNombre.required' => 'Debe ingresar el nombre del país que desea registrar',
-			'txtNombre.unique' => 'El nombre de este país ya existe en el registro',
+            'nombre.required' => 'Debe ingresar el nombre del país que desea registrar',
+			'nombre.unique' => 'El nombre de este país ya existe en el registro',
         ];
     }
 }

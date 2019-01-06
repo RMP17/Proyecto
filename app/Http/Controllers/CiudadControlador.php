@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\CiudadPeticion;
 use Allison\Ciudad;
-use DB;
 
 class CiudadControlador extends Controller
 {
@@ -26,7 +25,6 @@ class CiudadControlador extends Controller
 			return view('pais.ciudad.show', compact('ciudades', 'consulta', 'id_pais'));
 		}
 	}
-	
 	public function create($id_pais)
 	{
 		return view('pais.ciudad.create', compact('id_pais'));
@@ -58,23 +56,17 @@ class CiudadControlador extends Controller
 	{
 		//$peticion= new CiudadPeticion;
 		$ciudad = Ciudad :: findOrFail($id_ciudad);
-		DB::table('ciudad')->where('id_ciudad', '=', $id_ciudad)->delete();
+		\DB::table('ciudad')->where('id_ciudad', '=', $id_ciudad)->delete();
 		//$id_pais=$peticion -> get('txtIdPais');
 		return Redirect :: to ('pais');
 	}
 	
-	public function CiudadesPorPais(Request $peticion, $id_pais)
+	public function suggestionsOfCiudades($query)
 	{
-		if($peticion->ajax())
-		{
-			$ciudades = Ciudad::where('id_pais', '=', $id_pais)
-				->get();
-			return response()->json($ciudades);
-		}
+		return response()->json((new Ciudad())->suggestionsOfCiudades($query));
 	}
-
-	public function getPais()
+	/*public function getPais()
 	{
         return response()->json(Pais::orderBy('pais','asc')->get());
-	}
+	}*/
 }

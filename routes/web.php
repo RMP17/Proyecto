@@ -30,6 +30,9 @@ Route::get('config', 'ConfigController@index');
 
 
 
+
+Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
+
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');
     Route::get('id/{id}', 'PaisControlador@getPaisById');
@@ -57,7 +60,7 @@ Route::resources([
 	'cliente' => 'ClienteControlador',
 	'contacto' => 'ContactoControlador',
 	'cuenta' => 'CuentaControlador',
-	'cuentaproveedor' => 'CuentaProveedorControlador',
+	'cuenta-proveedor' => 'CuentaProveedorControlador',
 	'empleado' => 'EmpleadoControlador',
 	'tipoempleado' => 'TipoEmpleadoControlador',
 	'empresa' => 'EmpresaControlador',
@@ -82,7 +85,6 @@ Route::get('fabricantes', 'FabricanteControlador@getAllFabricantes');
 Route::get('categorias', 'CategoriaControlador@getAllCategorias');
 
 Route::get('almacenes/{id_sucursal}', 'AlmacenControlador@AlmacenesPorSucursal');
-Route::get('ciudades/{id_pais}', 'CiudadControlador@CiudadesPorPais');
 Route::get('empleados/{id_sucursal}', 'EmpleadoControlador@EmpleadosPorSucursal');
 Route::get('subcategorias/{id_categoria}', 'SubcategoriaControlador@SubcategoriasPorCategoria');
 Route::get('sucursales/{id_ciudad}', 'SucursalControlador@SucursalesPorCiudad');

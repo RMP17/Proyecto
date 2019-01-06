@@ -65,3 +65,8 @@ legend {
     background: #1F262D;
     border: 1px solid transparent;
 }
+
+/*input suggestions*/
+.dropdown-menu{
+    box-shadow: 0 5px 3px darkgray;
+}

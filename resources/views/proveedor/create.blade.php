@@ -24,6 +24,22 @@
         </div>
     </div>
     <div class="form-group row mb-2">
+        <label for="cbxCiudad" class="col-sm-3 text-right control-label col-form-label">Ciudad : </label>
+        <div class="col-sm-8">
+            <div v-if="!proveedor.attributes.id_proveedor">
+                <app-online-suggestions-objects v-if="!proveedor.hideSuggestions" :config="proveedor.config"
+                                                @selected-suggestion-event="assignAnIdentificationToTheProvider">
+                </app-online-suggestions-objects>
+            </div>
+            <div v-else>
+                <app-online-suggestions-objects v-if="!proveedor.hideSuggestions" :config="proveedor.config"
+                                                :input-value="proveedor.tempAttributes.ciudad.pais_ciudad"
+                                                @selected-suggestion-event="assignAnIdentificationToTheProvider">
+                </app-online-suggestions-objects>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row mb-2">
         <label for="txtTelefono" class="col-sm-3 text-right control-label col-form-label">Teléfono : </label>
         <div class="col-sm-8">
             <input type="text" class="form-control"
@@ -32,6 +48,16 @@
                    name="txtTelefono"
                    v-model="proveedor.attributes.telefono"
                    onkeypress="return ValidarNumeroTecleado(event)" onblur="ValidarNumeroPegado(event, this.id)">
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label for="txtFax" class="col-sm-3 text-right control-label col-form-label">Fax : </label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control"
+                   id="txtFax"
+                   placeholder="El fax del proveedor aquí"
+                   name="txtfax"
+                   v-model="proveedor.attributes.fax">
         </div>
     </div>
     <div class="form-group row mb-2">
@@ -90,15 +116,8 @@
             </select>
         </div>
     </div>--}}
-    <div class="form-group row mb-2">
-        <label for="cbxCiudad" class="col-sm-3 text-right control-label col-form-label">Ciudad : </label>
-        <div class="col-sm-8">
-            <app-online-suggestions-objects :config="proveedor.config"
-                                    @selected-suggestion-event="getProveedor">
-            </app-online-suggestions-objects>
-        </div>
-    </div>
     <div class="form-group text-center m-0 p-0">
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <button v-if="!proveedor.attributes.id_proveedor" type="submit" class="btn btn-primary">Registrar</button>
+        <button v-else type="submit" class="btn btn-primary">Actualizar</button>
     </div>
 </form>

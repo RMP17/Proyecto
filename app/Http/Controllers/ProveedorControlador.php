@@ -2,27 +2,21 @@
 
 namespace Allison\Http\Controllers;
 
+use Allison\Http\Resources\ProveedorResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\ProveedorPeticion;
 use Allison\Proveedor;
 use Allison\Pais;
 use Allison\Ciudad;
-use DB;
 
 
 class ProveedorControlador extends Controller
 {
-    public function index(Request $peticion)
-	{	
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$proveedores = Proveedor::where('razon_social', 'like', '%'.$consulta.'%')
-				->orderBy('razon_social', 'asc')
-				->get();
-			return view('proveedor.index', compact('proveedores', 'consulta'));
-		}
+    public function index()
+	{
+        $proveedores = (new Proveedor())->getProveedores();
+        return ProveedorResource::collection($proveedores);
 	}
 	
 	public function create()
@@ -34,20 +28,8 @@ class ProveedorControlador extends Controller
 	
 	public function store(ProveedorPeticion $peticion)
 	{
-		$proveedor = new Proveedor;
-		$proveedor -> razon_social = $peticion -> get('txtRazonSocial');
-		$proveedor -> nit = $peticion -> get('txtNit');
-		$proveedor -> telefono = $peticion -> get('txtTelefono');
-		$proveedor -> fax = $peticion -> get('txtFax');
-		$proveedor -> celular = $peticion -> get('txtCelular');
-		$proveedor -> correo = $peticion -> get('txtCorreo');
-		$proveedor -> sitio_web = $peticion -> get('txtSitioWeb');
-		$proveedor -> direccion = $peticion -> get('txtDireccion');
-		$proveedor -> fecha_registro = date('Y-m-d', time());
-		$proveedor -> rubro = $peticion -> get('txtRubro');
-		$proveedor -> id_ciudad = $peticion -> get('cbxCiudad');
-		$proveedor -> save();
-		return Redirect :: to ('proveedor');
+        (new Proveedor())->newProveedor($peticion->all());
+		return response()->json();
 	}
 	
 	public function show($id_proveedor)
@@ -69,19 +51,8 @@ class ProveedorControlador extends Controller
 	
 	public function update(ProveedorPeticion $peticion, $id_proveedor)
 	{
-		$proveedor = Proveedor :: findOrFail($id_proveedor);
-		$proveedor -> razon_social = $peticion -> get('txtRazonSocial');
-		$proveedor -> nit = $peticion -> get('txtNit');
-		$proveedor -> telefono = $peticion -> get('txtTelefono');
-		$proveedor -> fax = $peticion -> get('txtFax');
-		$proveedor -> celular = $peticion -> get('txtCelular');
-		$proveedor -> correo = $peticion -> get('txtCorreo');
-		$proveedor -> sitio_web = $peticion -> get('txtSitioWeb');
-		$proveedor -> direccion = $peticion -> get('txtDireccion');
-		$proveedor -> rubro = $peticion -> get('txtRubro');
-		$proveedor -> id_ciudad = $peticion -> get('cbxCiudad');
-		$proveedor->update();
-		return Redirect :: to ('proveedor');
+        (new Proveedor())->updateProveedor($peticion->all(),$id_proveedor);
+		return response()->json();
 	}
 	
 	public function destroy(ProveedorPeticion $peticion,$id_proveedor)

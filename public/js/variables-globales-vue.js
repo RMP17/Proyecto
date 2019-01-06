@@ -1,3 +1,31 @@
+const url = 'http://127.0.0.1:3000/Proyecto/public/';
+var urlGlobal={
+    resourcesCategorias:url + 'categoria',
+    resourcesPais:url + 'pais',
+    resourcesCargo:url + 'cargo',
+    resourcesMoneda:url + 'moneda',
+    resourcesCuenta:url + 'cuenta',
+    resourcesCuentaProveedor:url + 'cuenta-proveedor',
+    resourcesProveedor:url + 'proveedor',
+    resourcesFabricante:url + 'fabricante',
+    resourcesEmpleados:url + 'empleado',
+    getAllCiudades:url + 'ciudades',
+    getAllSucursales:url + 'sucursales',
+    getAllEmpleados:url + 'empleados',
+    resourcesArticulo:url + 'articulo',
+    getAllFabricantes:url + 'fabricantes',
+    getAllCategorias:url + 'categorias',
+    getArticuloForCodigo:url + 'articulo/codigo/',
+    getArticuloForId:url + 'articulo/id/',
+    getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
+    getArticuloForName:url + 'articulo/query/',
+    changeStatusOfArticulo:url + 'articulo/status/',
+    getPaisesByName:url + 'pais/query/',
+    getPaisesById:url + 'pais/id/',
+    suggestionsOfCiudades:url + 'ciudades/',
+    addCiudadToPais:url + 'pais/add-ciudad/',
+};
+
 var shared = {
     categorias:{},
     fabricantes:{},
@@ -125,7 +153,6 @@ Vue.component('app-online-suggestions',{
                 axios.get(this.config.url+this.selection, {
                     timeout: 2000,
                 }).then(response=> {
-
                     if(response.data.length > 0)
                     {
                         let datos = [];
@@ -143,6 +170,9 @@ Vue.component('app-online-suggestions',{
                         });
                         this.suggestionsTemp = datos;
                         this.suggestions = datos;
+                    } else {
+                        this.suggestions = [];
+                        this.suggestionsTemp = [];
                     }
                 })/*.catch(()=>{
 
@@ -384,14 +414,13 @@ Vue.component('app-online-suggestions-objects',{
                 return promise;
             }*/
 
-            let _suggestions=this.matches();
+            let _suggestions=await this.matches();
             if(_suggestions.length>0){
                 this.suggestions = _suggestions;
             } else {
                 axios.get(this.config.url+this.selection, {
                     timeout: 2000,
                 }).then(response=> {
-
                     if(response.data.length > 0)
                     {
                         let datos = [];
@@ -410,6 +439,9 @@ Vue.component('app-online-suggestions-objects',{
                         });
                         this.suggestionsTemp = datos;
                         this.suggestions = datos;
+                    } else {
+                        this.suggestions = [];
+                        this.suggestionsTemp = [];
                     }
                 })/*.catch(()=>{
 
@@ -498,21 +530,25 @@ Vue.component('app-online-suggestions-objects',{
             return string;
         },
         matches:function() {
-            let aux = this.selection;
-            let numero_suggestions=0;
-            return this.suggestionsTemp.filter((str)=>{
+            return new Promise((resolve, reject)=>{
+                let aux = this.selection;
+                let numero_suggestions=0;
+                let suggestion = this.suggestionsTemp.filter((str)=>{
 
-                let textTempPosition=str.detalle
-                    .toLowerCase().indexOf(aux.toLowerCase());
+                    let textTempPosition=str.detalle
+                        .toLowerCase().indexOf(aux.toLowerCase());
 
-                let textTemp = str.detalle
-                    .slice(textTempPosition, textTempPosition+aux.length);
+                    let textTemp = str.detalle
+                        .slice(textTempPosition, textTempPosition+aux.length);
 
-                str.detalleShow=str.detalle
-                    .replace(new RegExp(textTemp, 'g'),textTemp.bold().big());
+                    str.detalleShow=str.detalle
+                        .replace(new RegExp(textTemp, 'g'),textTemp.bold().big());
 
-                return this.getCleanedString(str.detalle).toLowerCase().indexOf(this.getCleanedString(aux).toLowerCase()) >=0;
-            });
+                    return this.getCleanedString(str.detalle).toLowerCase().indexOf(this.getCleanedString(aux).toLowerCase()) >=0;
+                });
+                resolve(suggestion);
+                }
+            );
         },
     },
     computed:{

@@ -50,14 +50,11 @@ class CuentaControlador extends Controller
 	
 	public function store(CuentaPeticion $peticion)
 	{
-		$cuenta = new Cuenta;
-		$cuenta -> entidad= $peticion -> get('txtEntidad');
-		$cuenta -> nro_cuenta= $peticion -> get('txtNroCuenta');
-		$cuenta -> id_moneda= $peticion -> get('cbxMoneda');
-		$cuenta -> id_empresa= $peticion -> get('cbxEmpresa');
-		$cuenta -> save();
-		$id_empresa= $peticion -> get('cbxEmpresa');
-		return Redirect :: to ('cuenta/'.$id_empresa);
+	    /*$isRegistered = (new Cuenta())->newCuenta($peticion->all());
+        if($isRegistered) {
+            return response()->json(['proveedor'=>'El proveedor no existe'], 422);
+        };
+		return response()->json();*/
 	}
 	
 	public function edit($id_cuenta)

@@ -67,7 +67,7 @@
                                                     @include('moneda.index')
                                                 </div>
                                             </div>
-                                            <div class="card">
+                                            <div class="card border-0">
                                                 <div class="card-body pr-0">
                                                     <h5 class="card-title text-center">Registro de Cargos</h5>
                                                     @include('cargo.index')

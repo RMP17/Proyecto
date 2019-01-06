@@ -37,7 +37,7 @@
 		</div>
 		<div class="col-12 text-center">
 			<button v-if="!moneda.attributes.id_moneda" type="submit" class="btn btn-primary">Registrar</button>
-			<button v-else type="submit" class="btn btn-primary">Actualizaar</button>
+			<button v-else type="submit" class="btn btn-primary">Actualizar</button>
 		</div>
 </form>
 
