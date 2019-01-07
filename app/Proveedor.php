@@ -69,4 +69,26 @@ class Proveedor extends Model
         }
         return $_proveedores;
     }
+    public function suggestionsProveedor($query){
+        $_proveedores = Proveedor::select('*')->orderBy('razon_social','asc')->get();
+        foreach ($_proveedores as $proveedor) {
+            $pias = null;
+            if(!is_null($proveedor->ciudad)) {
+                $pias = Ciudad::findOrFail($proveedor->ciudad->id_ciudad)->pais;
+                $proveedor->ciudad->pais_ciudad=$pias->nombre.'-'.$proveedor->ciudad->nombre;
+            }
+
+            if (!is_null($proveedor->cuentasProveedor)) {
+                foreach ($proveedor->cuentasProveedor as $cuentaProveedor) {
+                    if (!is_null($cuentaProveedor->id_moneda)) {
+                        $_cuentaProveedor = CuentaProveedor::findOrFail($cuentaProveedor->id_cuenta)->moneda;
+                        $cuentaProveedor->moneda = $_cuentaProveedor->nombre . ' - ' .$_cuentaProveedor->codigo;
+                    } else {
+                        $cuentaProveedor->moneda = null;
+                    }
+                }
+            }
+        }
+        return $_proveedores;
+    }
 }

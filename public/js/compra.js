@@ -62,11 +62,49 @@ var appCompra = new Vue({
                 id_moneda: null,
                 id_proveedor: null,
             }
+        },
+        contacto: {
+            configProveedor:{
+                url:urlGlobal.resourcesProveedor+'/',
+                placeholder:'Buscar por nombre de proveedor',
+                variableForSuggestions:'nombre',
+                variableForSuggestionsId:'id_proveedor'
+            },
+            hideSuggestions:false,
+            data: [],
+            cargos:[],
+            attributes: {
+                id_contacto: null,
+                nombre: '',
+                telefono: '',
+                interno: '',
+                celular: '',
+                correo: '',
+                fecha_registro: '',
+                estatus: '',
+                id_proveedor: null,
+                id_cargo: null,
+                proveedor:'',
+            },
+            tempAttributes: {
+                id_contacto: null,
+                nombre: '',
+                telefono: '',
+                interno: '',
+                celular: '',
+                correo: '',
+                fecha_registro: '',
+                estatus: '',
+                id_proveedor: null,
+                id_cargo: null,
+                proveedor:'',
+            }
         }
     },
     mounted() {
         this.getProveedores();
         this.getMonedas();
+        this.getCargos();
     },
     methods: {
         //<editor-fold desc="Methods Proveedor">
@@ -242,10 +280,24 @@ var appCompra = new Vue({
         },
         //</editor-fold>
 
+        //<editor-fold desc="Methods CuentaProveedor">
         submitFormCuentaProveedor: function(){
             if(!this.cuenta_proveedor.attributes.id_cuenta){
                 this.registerCuentaBanco();
+            } else {
+                this.updateCuentaBanco();
             }
+        },
+        updateCuentaBanco:function () {
+            let inputs = Object.assign({},this.cuenta_proveedor.attributes);
+            axios.put(urlGlobal.resourcesCuentaProveedor + '/' + inputs.id_cuenta, inputs)
+                .then(response => {
+                    Object.assign(this.cuenta_proveedor.tempAttributes ,this.cuenta_proveedor.attributes);
+                    this.cancelModeEditProveedor();
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
         },
         registerCuentaBanco: function() {
             let input = this.cuenta_proveedor.attributes;
@@ -272,13 +324,20 @@ var appCompra = new Vue({
             this.cuenta_proveedor.attributes.id_proveedor = proveedor.id_proveedor;
             this.cuenta_proveedor.cuentas = proveedor.cuentasProveedor;
         },
+        assignMonedaCuenta: function(moneda){
+            if(moneda.target.options.selectedIndex > -1) {
+                let index = moneda.target.options.selectedIndex;
+                console.dir(moneda.target.options[index]);
+                this.cuenta_proveedor.attributes.moneda = moneda.target.options[index].text;
+            }
 
-
-
-
-
-
-
+        },
+        changeModeEditCuentaProveedor: function(cuenta_proveedor){
+            this.cuenta_proveedor.tempAttributes = cuenta_proveedor;
+            this.cuenta_proveedor.attributes = Object.assign({}, cuenta_proveedor);
+            this.cuenta_proveedor.modeEdit = true;
+            this.cuenta_proveedor.modeCreate = true;
+        },
         getMonedas: function() {
             axios.get(urlGlobal.resourcesMoneda)
                 .then(response => {
@@ -287,7 +346,49 @@ var appCompra = new Vue({
                 console.log('errors');
             });
         },
+        // Todo: aqui te quedaste
+        cancelModeEditProveedor: function() {
+            this.cuenta_proveedor.attributes = new Object({
+                id_cuenta: null,
+                entidad: '',
+                nro_cuenta: null,
+                id_moneda: null,
+                id_proveedor: null,
+            });
+            this.cuenta_proveedor.tempAttributes = new Object({
+                id_cuenta: null,
+                entidad: '',
+                nro_cuenta: null,
+                id_moneda: null,
+                id_proveedor: null,
+            });
+            this.cuenta_proveedor.modeEdit = false;
+            this.cuenta_proveedor.modeCreate = false;
+        },
+        deleteCuentaProveedor: function(id, index) {
+            let r = confirm("ESTÁ SEGURO");
+            if (r === true) {
+                axios.delete(urlGlobal.resourcesFabricante+'/'+id)
+                    .then( response =>{
+                        this.fabricante.data.splice(index,1);
+                        this.fabricante.pagination.total -= 1;
+                        this.fabricante.pagination.last_page = Math.ceil(this.fabricante.pagination.total/10);
+                    }).catch((errors)=>{
+                    console.log(errors);
+                    this.categoria.errors = this.formatErrors(errors);
+                });
+            }
+        },
+        //</editor-fold>
 
+        getCargos: function(){
+            axios.get(urlGlobal.resourcesCargo)
+                .then(response => {
+                    this.contacto.cargos = response.data;
+                }).catch(errors => {
+                console.log('errors');
+            });
+        },
 
 
 

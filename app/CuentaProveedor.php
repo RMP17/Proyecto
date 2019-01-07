@@ -22,6 +22,7 @@ class CuentaProveedor extends Model
     public function moneda(){
         return $this->belongsTo(Moneda::class,'id_moneda');
     }
+    // registra new cuenta en proveedor
     public function newCuenta($parameters_cuenta) {
         $proveedor = Proveedor::findOrFail($parameters_cuenta['id_proveedor']);
 
@@ -29,6 +30,16 @@ class CuentaProveedor extends Model
             $cuentaProveedor = new CuentaProveedor();
             $cuentaProveedor->fill($parameters_cuenta);
             $proveedor->cuentasProveedor()->save($cuentaProveedor);
+            return true;
+        }
+        return false;
+    }
+    public function updateCuentaProveedor($parameters_cuenta, $id_cuentaProveedor) {
+        $cuenta_proveedor = CuentaProveedor::findOrFail($id_cuentaProveedor);
+
+        if(!is_null($cuenta_proveedor)) {
+            $cuenta_proveedor->fill($parameters_cuenta);
+            $cuenta_proveedor->update();
             return true;
         }
         return false;

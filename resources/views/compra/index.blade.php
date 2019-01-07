@@ -33,15 +33,16 @@
                                    href="#nav-contact"
                                    role="tab"
                                    aria-controls="nav-contact"
-                                   aria-selected="false">Contact</a>
+                                   aria-selected="false">Contactos</a>
                             </div>
                         </nav>
-
                         {{--<a href="#" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" --}}{{--@click="articulo.modeCreate=!articulo.modeCreate"--}}{{-->
                             <span  v-if="!articulo.modeCreate">Nuevo Artículo</span>
                             <span v-else>Lista de Artículos</span>
                         </a>--}}
                     </div>
+                    {{--TODO: hola --}}
+                    {{--todo: hola --}}
                 </div>
             </div>
         </div>
@@ -106,12 +107,7 @@
                                         {{--=========================================END TAP PROVEEDORES=====================--}}
                                         {{--=========================================END TAP PAISES==========================--}}
                                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
+                                    @include('contacto.index')
                                 </div>
                             </div>
                         </div>

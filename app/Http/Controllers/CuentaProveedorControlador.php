@@ -53,13 +53,8 @@ class CuentaProveedorControlador extends Controller
 	
 	public function update(CuentaProveedorPeticion $peticion, $id_cuenta)
 	{
-		$cuenta = CuentaProveedor :: findOrFail($id_cuenta);
-		$cuenta -> entidad= $peticion -> get('txtEntidad');
-		$cuenta -> nro_cuenta= $peticion -> get('txtNroCuenta');
-		$cuenta -> id_moneda= $peticion -> get('cbxMoneda');
-		$cuenta->update();
-		$id_proveedor=$peticion -> get('cbxProveedor');
-		return Redirect :: to ('cuentaproveedor/'.$id_proveedor);
+        (new CuentaProveedor())->updateCuentaProveedor($peticion->all(), $id_cuenta);
+		return response()->json();
 	}
 	
 	public function destroy(CuentaProveedorPeticion $peticion,$id_cuenta)

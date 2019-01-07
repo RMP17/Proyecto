@@ -26,6 +26,7 @@
         <label for="cbxMoneda" class="col-sm-2 text-right control-label col-form-label">Moneda : </label>
         <div class="col-sm-9">
             <select class="custom-select"
+                    @change="assignMonedaCuenta($event)"
                     v-model="cuenta_proveedor.attributes.id_moneda"
                     name="cbxMoneda">
                 <option v-for="_moneda in cuenta_proveedor.monedas" :value="_moneda.id_moneda">
@@ -34,8 +35,11 @@
             </select>
         </div>
     </div>
-    <div class="col-12 text-center">
-        <button v-if="!cuenta_proveedor.attributes.id_cuenta" type="submit" class="btn btn-primary">Registrar</button>
-        <button v-else type="submit" class="btn btn-primary">Actualizaar</button>
+    <div class="form-group text-center" >
+        <button v-if="!cuenta_proveedor.attributes.id_cuenta" type="submit" class="btn btn-primary w-25">Registrar</button>
+        <div v-else>
+            <button type="submit" class="btn btn-primary w-25">Actualizaar</button>
+            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditProveedor" >Cancelar</button>
+        </div>
     </div>
 </form>

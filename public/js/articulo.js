@@ -307,7 +307,7 @@ var appArticulo = new Vue({
             });
         },
         deleteFabricante: function(id, index) {
-            let r = confirm("Está seguro que desea eliminar");
+            let r = confirm("ESTÁ SEGURO");
             if (r === true) {
                 axios.delete(urlGlobal.resourcesFabricante+'/'+id)
                     .then( response =>{

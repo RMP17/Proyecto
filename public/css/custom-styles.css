@@ -70,3 +70,11 @@ legend {
 .dropdown-menu{
     box-shadow: 0 5px 3px darkgray;
 }
+
+.btn-sm-icon{
+    height: 1.75rem;
+    padding: 0;
+    width: 1.8rem;
+    font-size: 0.75rem;
+    line-height: 3;
+}
