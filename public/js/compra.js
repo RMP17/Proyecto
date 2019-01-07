@@ -65,9 +65,9 @@ var appCompra = new Vue({
         },
         contacto: {
             configProveedor:{
-                url:urlGlobal.resourcesProveedor+'/',
+                url:urlGlobal.suggestionsOfProveedores,
                 placeholder:'Buscar por nombre de proveedor',
-                variableForSuggestions:'nombre',
+                variableForSuggestions:'razon_social',
                 variableForSuggestionsId:'id_proveedor'
             },
             hideSuggestions:false,
@@ -84,7 +84,11 @@ var appCompra = new Vue({
                 estatus: '',
                 id_proveedor: null,
                 id_cargo: null,
-                proveedor:'',
+                proveedor:{
+                    id_proveedor: null,
+                    razon_social: '',
+                    nit: ''
+                },
             },
             tempAttributes: {
                 id_contacto: null,
@@ -97,7 +101,11 @@ var appCompra = new Vue({
                 estatus: '',
                 id_proveedor: null,
                 id_cargo: null,
-                proveedor:'',
+                proveedor:{
+                    id_proveedor: null,
+                    razon_social: '',
+                    nit: ''
+                },
             }
         }
     },
@@ -281,7 +289,7 @@ var appCompra = new Vue({
         //</editor-fold>
 
         //<editor-fold desc="Methods CuentaProveedor">
-        submitFormCuentaProveedor: function(){
+        submitmormCuentaProveedor: function(){
             if(!this.cuenta_proveedor.attributes.id_cuenta){
                 this.registerCuentaBanco();
             } else {
@@ -389,8 +397,74 @@ var appCompra = new Vue({
                 console.log('errors');
             });
         },
+        assignAnIdentificationToContactOfProveedor(response) {
+            if (response && response.id_proveedor) {
+                this.contacto.attributes.id_proveedor = response.id_proveedor;
+                this.contacto.attributes.proveedor = response;
+            } else {
+                this.contacto.attributes.id_proveedor = null;
+                this.contacto.attributes.proveedor = {
+                    id_proveedor: null,
+                    razon_social: '',
+                    nit: ''
+                };
+            }
+        },
 
+        submitFormContacto() {
+            if (!this.proveedor.attributes.id_proveedor) {
+                this.registerContacto();
+            } else {
+                this.updateProveedor();
+            }
+        },
 
+        registerContacto: function() {
+            let input = this.contacto.attributes;
+            axios.post(urlGlobal.resourcesContacto, input)
+                .then(response => {
+                    this.contacto.attributes = {
+                        id_contacto: null,
+                        nombre: '',
+                        telefono: '',
+                        interno: '',
+                        celular: '',
+                        correo: '',
+                        fecha_registro: '',
+                        estatus: '',
+                        id_proveedor: null,
+                        id_cargo: null,
+                        proveedor:{
+                            id_proveedor: null,
+                            razon_social: '',
+                            nit: ''
+                        },
+                    };
+                    //this.getProveedores();
+                    this.contacto.hideSuggestions= true;
+                    // $("#myModal").modal('hide');
+                    setTimeout(()=>{
+                        this.contacto.hideSuggestions = false;
+                    },1);
+                    this.notificationSuccess();
+                }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors(errors);
+            });
+
+        },
+        getContactosDeProveedor(response){
+            if (response && response.id_proveedor) {
+                axios.get(urlGlobal.getContactoOfProveedor+response.id_proveedor
+                ).then(response => {
+                    this.contacto.data = response.data;
+                }).catch(errors => {
+                    console.log('errors');
+                });
+            } else {
+                this.contacto.data = [];
+            }
+        },
 
 
 

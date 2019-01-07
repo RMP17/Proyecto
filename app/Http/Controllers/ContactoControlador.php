@@ -36,18 +36,8 @@ class ContactoControlador extends Controller
 	
 	public function store(ContactoPeticion $peticion)
 	{
-		$contacto = new Contacto;
-		$contacto -> nombre = $peticion -> get('txtNombre');
-		$contacto -> telefono = $peticion -> get('txtTelefono');
-		$contacto -> celular = $peticion -> get('txtCelular');
-		$contacto -> interno = $peticion -> get('txtInterno');
-		$contacto -> correo = $peticion -> get('txtCorreo');
-		$contacto -> fecha_registro = date('Y-m-d', time());
-		$contacto -> estatus = 'A';
-		$contacto -> id_cargo = $peticion -> get('cbxCargo');
-		$contacto -> id_proveedor = $peticion -> get('cbxProveedor');
-		$contacto -> save();
-		return Redirect :: to ('contacto');
+	    Contacto::newContacto($peticion->all());
+		return response()->json();
 	}
 	
 	public function show($id_contacto)

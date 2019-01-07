@@ -28,10 +28,9 @@ Route::get('/', function () {
 
 Route::get('config', 'ConfigController@index');
 
-
-
-
 Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
+Route::get('proveedor/contactos/{id_proveedor}', 'ProveedorControlador@getContactosOfProveedor');
+Route::get('proveedores/{query}', 'ProveedorControlador@suggestionsProveedores');
 
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');
@@ -69,7 +68,7 @@ Route::resources([
 	'moneda' => 'MonedaControlador',
 	'pais' => 'PaisControlador',
 	'precio' => 'PrecioControlador',
-	'produccion' => 'ProduccionControlador',
+	//'produccion' => 'ProduccionControlador',
 	'proveedor' => 'ProveedorControlador',
 	'subcategoria' => 'SubcategoriaControlador',
 	'sucursal' => 'SucursalControlador',

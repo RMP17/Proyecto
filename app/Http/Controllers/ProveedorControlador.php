@@ -3,6 +3,7 @@
 namespace Allison\Http\Controllers;
 
 use Allison\Http\Resources\ProveedorResource;
+use Allison\Http\Resources\ProveedorSuggestionResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\ProveedorPeticion;
@@ -61,4 +62,15 @@ class ProveedorControlador extends Controller
 		DB::table('proveedor')->where('id_proveedor', '=', $id_proveedor)->delete();
 		return Redirect :: to ('proveedor');
 	}
+	public function suggestionsProveedores($query)
+	{
+		$proveedor = Proveedor::suggestionsProveedor($query);
+		return ProveedorSuggestionResource::collection($proveedor);
+	}
+	public function getContactosOfProveedor($id_proveedor)
+	{
+		$contactos = Proveedor::getContactosOfProveedor($id_proveedor);
+		return response()->json($contactos);
+	}
+
 }

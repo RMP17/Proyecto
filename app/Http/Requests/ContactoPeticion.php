@@ -32,24 +32,24 @@ class ContactoPeticion extends FormRequest
             case 'POST':
             {
                 return [
-                    'txtNombre' => 'required|max:200',
-                    'txtTelefono' =>'max:15',
-                    'txtCelular' =>'max:15',
-                    'txtCorreo' =>'unique:contacto,correo|max:50',
-                    'cbxProveedor' => 'required',
-                    'cbxCargo' => 'required',
+                    'nombre' => 'required|max:200',
+                    'telefono' =>'max:15',
+                    'celular' =>'max:15',
+                    'correo' =>'unique:contacto,correo|max:50',
+                    'proveedor' => 'required',
+                    'id_cargo' => 'required',
                 ];
             }
             case 'PUT':
             case 'PATCH':
             {
                 return [
-                    'txtNombre' => 'required|max:200',
-                    'txtTelefono' =>'max:15',
-                    'txtCelular' =>'max:15',
-                    'txtCorreo' =>'unique:contacto,correo,'.$this->contacto.',id_contacto|max:50',
-                    'cbxProveedor' => 'required',
-                    'cbxCargo' => 'required',
+                    'nombre' => 'required|max:200',
+                    'telefono' =>'max:15',
+                    'celular' =>'max:15',
+                    'correo' =>'unique:contacto,correo|max:50',
+                    'proveedor' => 'required',
+                    'id_cargo' => 'required',
                 ];
             }
             default:break;
@@ -59,10 +59,10 @@ class ContactoPeticion extends FormRequest
     public function messages()
     {
         return [
-            'txtNombre.required' => 'Debe ingresar el nombre del contacto que desea registrar.',
-            'txtCorreo.unique' => 'Este correo pertenece a otro contacto registrado.',
-			'cbxProveedor.required' => 'Elija un proveedor para el contacto',
-            'cbxCiudad.required' => 'Elija una ciudad para el contacto',
+            'nombre.required' => 'Debe ingresar el nombre del contacto que desea registrar.',
+            'correo.unique' => 'Este correo pertenece a otro contacto registrado.',
+			'proveedor.required' => 'Elija un proveedor para el contacto',
+            'ciudad.required' => 'Elija una ciudad para el contacto',
         ];
     }
 }

@@ -33,6 +33,9 @@ class Proveedor extends Model
     public function cuentasProveedor(){
         return $this->hasMany(CuentaProveedor::class,'id_proveedor', 'id_proveedor');
     }
+    public function contactos(){
+        return $this->hasMany(Contacto::class,'id_proveedor', 'id_proveedor');
+    }
 
     public function newProveedor($proveedor){
         $_proveedor = new Proveedor();
@@ -69,26 +72,23 @@ class Proveedor extends Model
         }
         return $_proveedores;
     }
-    public function suggestionsProveedor($query){
-        $_proveedores = Proveedor::select('*')->orderBy('razon_social','asc')->get();
-        foreach ($_proveedores as $proveedor) {
-            $pias = null;
-            if(!is_null($proveedor->ciudad)) {
-                $pias = Ciudad::findOrFail($proveedor->ciudad->id_ciudad)->pais;
-                $proveedor->ciudad->pais_ciudad=$pias->nombre.'-'.$proveedor->ciudad->nombre;
-            }
+    public static function suggestionsProveedor($query){
+        $proveedores = Proveedor::where('razon_social', 'like','%'.$query.'%')->orderBy('razon_social','desc')->take(10)->get();
+        return $proveedores;
+    }
+    public static function getContactosOfProveedor($id_proveedor){
+        $_proveedor = Proveedor::findOrFail($id_proveedor);
 
-            if (!is_null($proveedor->cuentasProveedor)) {
-                foreach ($proveedor->cuentasProveedor as $cuentaProveedor) {
-                    if (!is_null($cuentaProveedor->id_moneda)) {
-                        $_cuentaProveedor = CuentaProveedor::findOrFail($cuentaProveedor->id_cuenta)->moneda;
-                        $cuentaProveedor->moneda = $_cuentaProveedor->nombre . ' - ' .$_cuentaProveedor->codigo;
-                    } else {
-                        $cuentaProveedor->moneda = null;
-                    }
-                }
-            }
+        $contactos = $_proveedor->contactos;
+
+        foreach ($contactos as $contacto) {
+            $contacto->proveedor = [
+                'id_proveedor' =>$_proveedor->id_proveedor,
+                'razon_social' =>$_proveedor->razon_social,
+                ];
+            $contacto->cargo = Cargo::find($contacto->id_cargo);
         }
-        return $_proveedores;
+
+        return $_proveedor->contactos;
     }
 }

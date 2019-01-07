@@ -144,7 +144,6 @@ class ArticuloControlador extends Controller
 	
 	public function updateArticulo(/*ArticuloPeticion*/ Request $peticion, $id_articulo)
 	{
-
         $data = json_decode($peticion->data, true);
         $articulo = Articulo::findOrFail($id_articulo);
         if(is_null($articulo)){

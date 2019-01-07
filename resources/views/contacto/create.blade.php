@@ -1,4 +1,4 @@
-﻿<form>
+﻿<form @submit.prevent="registerContacto">
     <div class="form-group row mb-2">
         <label for="txtNombre" class="col-sm-3 text-right control-label col-form-label">Nombre (*): </label>
         <div class="col-md-7">
@@ -45,7 +45,7 @@
             <input type="text" class="form-control" id="txtCorreo"
                    placeholder="e-mail del contacto aquí"
                    v-model="contacto.attributes.correo"
-                   name="txtCorreo" onblur="ValidarCorreo(event, 'txtCorreo')">
+                   name="txtCorreo">
         </div>
     </div>
     <div class="form-group row mb-2">
@@ -53,13 +53,13 @@
         <div class="col-md-7">
             <div v-if="!contacto.attributes.id_contacto">
                 <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contacto.configProveedor"
-                                                @selected-suggestion-event="assignAnIdentificationToTheProvider">
+                                                @selected-suggestion-event="assignAnIdentificationToContactOfProveedor">
                 </app-online-suggestions-objects>
             </div>
             <div v-else>
                 <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contact.config"
                                                 :input-value="contacto.tempAttributes.proveedor.nombre"
-                                                @selected-suggestion-event="assignAnIdentificationToTheProvider">
+                                                @selected-suggestion-event="assignAnIdentificationToContactOfProveedor">
                 </app-online-suggestions-objects>
             </div>
         </div>
@@ -70,7 +70,7 @@
             <select class="custom-select" id="cbxCargo"
                     v-model="contacto.attributes.id_cargo"
                     name="cbxCargo">
-                <option v-for="cargo in contacto.cargos">
+                <option v-for="cargo in contacto.cargos" :value="cargo.id_cargo">
                     @{{ cargo.nombre }}
                 </option>
                 {{--@foreach($cargos as $ca)

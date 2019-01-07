@@ -9,6 +9,7 @@ var urlGlobal={
     resourcesProveedor:url + 'proveedor',
     resourcesFabricante:url + 'fabricante',
     resourcesEmpleados:url + 'empleado',
+    resourcesContacto:url + 'contacto',
     getAllCiudades:url + 'ciudades',
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
@@ -22,7 +23,9 @@ var urlGlobal={
     changeStatusOfArticulo:url + 'articulo/status/',
     getPaisesByName:url + 'pais/query/',
     getPaisesById:url + 'pais/id/',
+    getContactoOfProveedor:url + 'proveedor/contactos/',
     suggestionsOfCiudades:url + 'ciudades/',
+    suggestionsOfProveedores:url + 'proveedores/',
     addCiudadToPais:url + 'pais/add-ciudad/',
 };
 
@@ -510,7 +513,7 @@ Vue.component('app-online-suggestions-objects',{
             this.idselection = temp.id;
             this.selection = temp.detalle;
             this.$refs.suggestionInput.value=temp.detalle;
-            this.$emit('selected-suggestion-event', temp);
+            this.$emit('selected-suggestion-event', temp.object);
             this.openSuggestions=false;
             this.current = 0;
             //corregir //this.selection = target[this.config.variableForSuggestions];

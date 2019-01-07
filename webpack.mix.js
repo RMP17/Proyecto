@@ -14,4 +14,11 @@ let mix = require('laravel-mix');
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
 
-mix.browserSync('127.0.0.1/Proyecto/public');
+mix.browserSync({
+    proxy:'127.0.0.1/Proyecto/public',
+    files: [
+        'resources/views/**/*.php',
+        'public/js/**/*.js',
+        'public/css/**/*.css'
+    ],
+});

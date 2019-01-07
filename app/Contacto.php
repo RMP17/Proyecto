@@ -3,6 +3,7 @@
 namespace Allison;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Contacto extends Model
 {
@@ -16,8 +17,6 @@ class Contacto extends Model
 		'interno',
 		'celular',
 		'correo',
-		'fecha_registro',
-		'estatus',
 		'id_proveedor',
 		'id_cargo'
 	];
@@ -25,4 +24,16 @@ class Contacto extends Model
 	protected $guarded = [
 	
 	];
+
+    public function proveedor(){
+        return $this->belongsTo(Proveedor::class,'id_proveedor');
+    }
+
+    public static function newContacto($parameters_contacto){
+        $_contacto = new Contacto();
+        $_contacto->fill($parameters_contacto);
+        $_contacto->fecha_registro = Carbon::now();
+        $_contacto->save();
+        return true;
+    }
 }
