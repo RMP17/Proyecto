@@ -1,4 +1,4 @@
-﻿<form @submit.prevent="registerContacto">
+﻿<form @submit.prevent="submitFormContacto">
     <div class="form-group row mb-2">
         <label for="txtNombre" class="col-sm-3 text-right control-label col-form-label">Nombre (*): </label>
         <div class="col-md-7">
@@ -57,8 +57,8 @@
                 </app-online-suggestions-objects>
             </div>
             <div v-else>
-                <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contact.config"
-                                                :input-value="contacto.tempAttributes.proveedor.nombre"
+                <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contacto.configProveedor"
+                                                :input-value="contacto.tempAttributes.proveedor.razon_social"
                                                 @selected-suggestion-event="assignAnIdentificationToContactOfProveedor">
                 </app-online-suggestions-objects>
             </div>
@@ -84,7 +84,7 @@
         </button>
         <div v-else>
             <button type="submit" class="btn btn-primary w-25">Actualizaar</button>
-            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditProveedor">Cancelar</button>
+            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditContacto">Cancelar</button>
         </div>
     </div>
 </form>

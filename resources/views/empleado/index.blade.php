@@ -1,5 +1,8 @@
-@extends('maquetas.admin')
-@section('page_wrapper')
+{{--<a href data-target="#modal-registro-monedas" data-toggle="modal"
+   title="Nueva Sucursal">
+	<button type="button" class="btn btn-outline-success btn-sm"><i
+				class="fas fa-plus"></i></button>
+</a>--}}
 	<div id="app-empleado">
 		<div class="page-breadcrumb pb-2">
 			<div class="row">
@@ -53,7 +56,7 @@
 									</tr>
 									</thead>
 									<tbody>
-									@foreach($empleados as $e)
+									{{--@foreach($empleados as $e)
 										<tr>
 											<td>{{ $e -> nombre }}
 
@@ -91,7 +94,7 @@
 											</td>
 										</tr>
 										@include('empleado.destroy')
-									@endforeach
+									@endforeach--}}
 									</tbody>
 								</table>
 							</div>
@@ -100,7 +103,7 @@
 				</div>
 			</div>
 			<div v-else>
-				@include('empleado.create')
+				{{--@include('empleado.create')--}}
 			</div>
 
 			<!-- ============================================================== -->
@@ -114,9 +117,29 @@
 			<!-- End Right sidebar -->
 			<!-- ============================================================== -->
 		</div>
-	</div>	
-@endsection
+	</div>
+{{--
 @section('scripts')
 	<script src="{{asset('js/empleado.js')}}"></script>
 	
-@endsection
+@endsection--}}
+
+{{--===============================================Modal New Empleado======================================--}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-moneda">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title pt-1 pr-1">Actualizar Moneda</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+					<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+				</button>
+			</div>
+			<div class="modal-body pb-0">
+				@include('moneda.create')
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditMoneda"> Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

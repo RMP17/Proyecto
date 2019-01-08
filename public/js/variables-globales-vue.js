@@ -9,7 +9,9 @@ var urlGlobal={
     resourcesProveedor:url + 'proveedor',
     resourcesFabricante:url + 'fabricante',
     resourcesEmpleados:url + 'empleado',
+    resourcesEmpresa:url + 'empresa',
     resourcesContacto:url + 'contacto',
+    resourcesSucursal:url + 'sucursal',
     getAllCiudades:url + 'ciudades',
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
@@ -27,6 +29,7 @@ var urlGlobal={
     suggestionsOfCiudades:url + 'ciudades/',
     suggestionsOfProveedores:url + 'proveedores/',
     addCiudadToPais:url + 'pais/add-ciudad/',
+    addSucursalToEmpresa:url + 'empresa/add-suscursal/',
 };
 
 var shared = {

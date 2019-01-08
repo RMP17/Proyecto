@@ -36,4 +36,10 @@ class Contacto extends Model
         $_contacto->save();
         return true;
     }
+    public static function updateContacto($parameters_contacto, $id_contacto){
+        $_contacto = Contacto::findOrFail($id_contacto);
+        $_contacto->fill($parameters_contacto);
+        $_contacto->update();
+        return true;
+    }
 }

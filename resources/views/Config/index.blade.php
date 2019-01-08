@@ -25,6 +25,20 @@
                                 <a class="nav-item nav-link w-10em"
                                    id="nav-profile-tab"
                                    data-toggle="tab"
+                                   href="#nav-empleados"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Empleados</a>
+                                <a class="nav-item nav-link w-10em"
+                                   id="nav-profile-tab"
+                                   data-toggle="tab"
+                                   href="#nav-empresa"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Empresa</a>
+                                <a class="nav-item nav-link w-10em"
+                                   id="nav-profile-tab"
+                                   data-toggle="tab"
                                    href="#nav-paises"
                                    role="tab"
                                    aria-controls="nav-profile"
@@ -82,13 +96,11 @@
                                     @include('pais.index')
                                 </div>
                                         {{--=================================================END NAV PAISES==================================--}}
-                                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
-                                    ...dddddddddddddd
+                                <div class="tab-pane fade" id="nav-empleados" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    {{--@include('empleado.index')--}}
+                                </div>
+                                <div class="tab-pane fade" id="nav-empresa" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    @include('empresa.index')
                                 </div>
                             </div>
                         </div>

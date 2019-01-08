@@ -289,7 +289,7 @@ var appCompra = new Vue({
         //</editor-fold>
 
         //<editor-fold desc="Methods CuentaProveedor">
-        submitmormCuentaProveedor: function(){
+        submitFormCuentaProveedor: function(){
             if(!this.cuenta_proveedor.attributes.id_cuenta){
                 this.registerCuentaBanco();
             } else {
@@ -301,7 +301,7 @@ var appCompra = new Vue({
             axios.put(urlGlobal.resourcesCuentaProveedor + '/' + inputs.id_cuenta, inputs)
                 .then(response => {
                     Object.assign(this.cuenta_proveedor.tempAttributes ,this.cuenta_proveedor.attributes);
-                    this.cancelModeEditProveedor();
+                    this.cancelModeEditCuentaProveedor();
                     this.notificationSuccess();
                 }).catch(errors => {
                 this.notificationErrors(errors);
@@ -354,8 +354,7 @@ var appCompra = new Vue({
                 console.log('errors');
             });
         },
-        // Todo: aqui te quedaste
-        cancelModeEditProveedor: function() {
+        cancelModeEditCuentaProveedor: function() {
             this.cuenta_proveedor.attributes = new Object({
                 id_cuenta: null,
                 entidad: '',
@@ -376,14 +375,11 @@ var appCompra = new Vue({
         deleteCuentaProveedor: function(id, index) {
             let r = confirm("ESTÁ SEGURO");
             if (r === true) {
-                axios.delete(urlGlobal.resourcesFabricante+'/'+id)
-                    .then( response =>{
-                        this.fabricante.data.splice(index,1);
-                        this.fabricante.pagination.total -= 1;
-                        this.fabricante.pagination.last_page = Math.ceil(this.fabricante.pagination.total/10);
-                    }).catch((errors)=>{
+                axios.delete(urlGlobal.resourcesCuentaProveedor + '/' + id
+                ).then(response => {
+                    this.cuenta_proveedor.cuentas.splice(index, 1);
+                }).catch((errors) => {
                     console.log(errors);
-                    this.categoria.errors = this.formatErrors(errors);
                 });
             }
         },
@@ -412,10 +408,10 @@ var appCompra = new Vue({
         },
 
         submitFormContacto() {
-            if (!this.proveedor.attributes.id_proveedor) {
+            if (!this.contacto.attributes.id_contacto) {
                 this.registerContacto();
             } else {
-                this.updateProveedor();
+                this.updateContacto();
             }
         },
 
@@ -453,6 +449,17 @@ var appCompra = new Vue({
             });
 
         },
+        updateContacto:function () {
+            let inputs = Object.assign({},this.contacto.attributes);
+            axios.put(urlGlobal.resourcesContacto + '/' + inputs.id_contacto, inputs)
+                .then(response => {
+                    Object.assign(this.contacto.tempAttributes ,this.contacto.attributes);
+                    this.cancelModeEditContacto();
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
         getContactosDeProveedor(response){
             if (response && response.id_proveedor) {
                 axios.get(urlGlobal.getContactoOfProveedor+response.id_proveedor
@@ -466,7 +473,51 @@ var appCompra = new Vue({
             }
         },
 
-
+        modeEditContactoProveedor: function(contacto) {
+            this.contacto.tempAttributes = contacto;
+            this.contacto.attributes = Object.assign({}, contacto);
+        },
+        cancelModeEditContacto: function() {
+            this.contacto.attributes = new Object({
+                id_contacto: null,
+                nombre: '',
+                telefono: '',
+                interno: '',
+                celular: '',
+                correo: '',
+                fecha_registro: '',
+                estatus: '',
+                id_proveedor: null,
+                id_cargo: null,
+                proveedor:{
+                    id_proveedor: null,
+                    razon_social: '',
+                    nit: ''
+                },
+            });
+            this.contacto.tempAttributes = new Object({
+                id_contacto: null,
+                nombre: '',
+                telefono: '',
+                interno: '',
+                celular: '',
+                correo: '',
+                fecha_registro: '',
+                estatus: '',
+                id_proveedor: null,
+                id_cargo: null,
+                proveedor:{
+                    id_proveedor: null,
+                    razon_social: '',
+                    nit: ''
+                },
+            });
+            this.contacto.hideSuggestions = true;
+            setTimeout(()=>{
+                this.contacto.hideSuggestions = false;
+            },1);
+            $('#modal-edit-contacto').modal('hide');
+        },
 
 
 

@@ -41,8 +41,6 @@
                             <span v-else>Lista de Artículos</span>
                         </a>--}}
                     </div>
-                    {{--TODO: hola --}}
-                    {{--todo: hola --}}
                 </div>
             </div>
         </div>

@@ -57,11 +57,120 @@ var appConfig = new Vue({
                 id_cargo:null,
                 nombre: '',
             }
-        }
+        },
+        empleado: {
+            /*config:{
+                url:urlGlobal.suggestionsOfCiudades,
+                placeholder:'Buscar por nombre de Ciudad',
+                variableForSuggestions:'pais_ciudad',
+                variableForSuggestionsId:'id_ciudad'
+            },*/
+            hideSuggestions:false,
+            data: [],
+            attributes: {
+                id_empleado:null,
+                nombre:'',
+                ci:'',
+                sexo:'',
+                fecha_nacimiento:'',
+                telefono:null,
+                celular:null,
+                correo:'',
+                direccion:'',
+                foto:null,
+                persona_referencia:'',
+                telefono_referencia:'',
+                fecha_registro:null,
+                status:'',
+                id_sucursal:null,
+            },
+            tempAttributes: {
+                id_proveedor:null,
+                razon_social:'',
+                nit:'',
+                telefono:'',
+                fax:'',
+                celular:'',
+                correo:'',
+                sitio_web:'',
+                direccion: '',
+                fecha_registro: '',
+                rubro: '',
+                ciudad: {
+                    id_ciudad:null,
+                    nombre:'',
+                    pais_ciudad:''
+                }
+                ,
+                id_ciudad: ''
+            }
+        },
+        empresa: {
+            data: [],
+            attributes: {
+                id_empresa:null,
+                razon_social:'',
+                nit:'',
+                propietario:'',
+                actividad:'',
+            },
+            tempAttributes: {
+                id_empresa:null,
+                razon_social:'',
+                nit:'',
+                propietario:'',
+                actividad:'',
+            }
+        },
+        empresa_sucursal: {
+            config:{
+                url:urlGlobal.suggestionsOfCiudades,
+                placeholder:'Buscar por nombre de Ciudad',
+                variableForSuggestions:'pais_ciudad',
+                variableForSuggestionsId:'id_ciudad'
+            },
+            hideSuggestions:false,
+            modeEdit:false,
+            modeCreate:false,
+            sucursales:[],
+            attributes: {
+                id_sucursal:null,
+                nombre:'',
+                casa_matriz:0,
+                direccion:'',
+                telefono:'',
+                fecha_apertura:'',
+                estatus:'',
+                id_ciudad:'',
+                ciudad: {
+                    id_ciudad:null,
+                    nombre:'',
+                    pais_ciudad:''
+                },
+                id_empresa:'',
+            },
+            tempAttributes: {
+                id_sucursal:null,
+                nombre:'',
+                casa_matriz:0,
+                direccion:'',
+                telefono:'',
+                fecha_apertura:'',
+                estatus:'',
+                id_ciudad:'',
+                ciudad: {
+                    id_ciudad:null,
+                    nombre:'',
+                    pais_ciudad:''
+                },
+                id_empresa:'',
+            }
+        },
     },
     mounted(){
         this.getMonedas();
         this.getCargo();
+        this.getEmpresas();
     },
     methods: {
         //<editor-fold desc="Methods of Pais">
@@ -275,6 +384,7 @@ var appConfig = new Vue({
         },
         //</editor-fold>
 
+        //<editor-fold desc="Methods Cargo">
         submitFormCargo() {
             if (!this.cargo.attributes.id_cargo) {
                 this.registerCargo();
@@ -342,8 +452,236 @@ var appConfig = new Vue({
                 nombre: '',
             });
         },
+        //</editor-fold>
 
 
+        //<editor-fold desc="Methods of Empresa">
+        submitFormEmpresa() {
+            if (!this.empresa.attributes.id_empresa) {
+                this.registerEmpresa();
+            } else {
+                this.updateEmpresa();
+            }
+        },
+        getEmpresas(){
+            axios.get(urlGlobal.resourcesEmpresa
+            ).then(response => {
+                this.empresa.data = response.data;
+                if(this.empresa_sucursal.attributes.id_empresa){
+                    this.findSucursales(this.empresa_sucursal.attributes.id_empresa);
+                }
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        registerEmpresa(){
+            let inputs = Object.assign({},this.empresa.attributes);
+            axios.post(urlGlobal.resourcesEmpresa, inputs
+            ).then(response => {
+                this.getEmpresas();
+                this.empresa.attributes = new Object({
+                    id_empresa:null,
+                    razon_social:'',
+                    nit:'',
+                    propietario:'',
+                    actividad:'',
+                });
+                this.notificationSuccess();
+            }).catch(errors => {
+                this.notificationErrors(errors);
+                //toastr.warning(_errors);
+            });
+        },
+        updateEmpresa(){
+            let inputs = Object.assign({},this.empresa.attributes);
+            axios.put(urlGlobal.resourcesEmpresa + '/'+ inputs.id_empresa, inputs)
+                .then(response => {
+                    $('#modal-edit-empresa').modal('hide');
+                    Object.assign(this.empresa.tempAttributes ,this.empresa.attributes);
+                    this.empresa.attributes = new Object({
+                        id_empresa:null,
+                        razon_social:'',
+                        nit:'',
+                        propietario:'',
+                        actividad:'',
+                    });
+                    this.empresa.tempAttributes = new Object({
+                        id_empresa:null,
+                        razon_social:'',
+                        nit:'',
+                        propietario:'',
+                        actividad:'',
+                    });
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
+        modeEditEmpresa(empresa) {
+            this.empresa.tempAttributes = empresa;
+            this.empresa.attributes = Object.assign({}, empresa);
+        },
+        cancelModeEditEmpresa() {
+            $('#modal-edit-empresa').modal('hide');
+            this.empresa.attributes = new Object({
+                id_empresa:null,
+                razon_social:'',
+                nit:'',
+                propietario:'',
+                actividad:'',
+            });
+            this.empresa.tempAttributes = new Object({
+                id_empresa:null,
+                razon_social:'',
+                nit:'',
+                propietario:'',
+                actividad:'',
+            });
+        },
+        //</editor-fold>
+
+
+        submitFormEmpresaSucursal() {
+            if (!this.empresa_sucursal.attributes.id_sucursal) {
+                this.registerEmpresaSucursal();
+            } else {
+                this.updateEmpresaSucursal();
+            }
+        },
+
+        registerEmpresaSucursal(){
+            let inputs = Object.assign({},this.empresa_sucursal.attributes);
+            axios.post(urlGlobal.addSucursalToEmpresa+inputs.id_empresa, inputs
+            ).then(response => {
+                let id_empresa = this.empresa_sucursal.attributes.id_empresa;
+                this.empresa_sucursal.attributes = new Object({
+                    id_sucursal:null,
+                    nombre:'',
+                    casa_matriz:0,
+                    direccion:'',
+                    telefono:'',
+                    fecha_apertura:'',
+                    estatus:'',
+                    id_ciudad:'',
+                    ciudad:'',
+                    id_empresa:'',
+                });
+                this.empresa_sucursal.attributes.id_empresa= id_empresa;
+                this.empresa_sucursal.hideSuggestions = true;
+                setTimeout(()=>{
+                    this.empresa_sucursal.hideSuggestions = false;
+                },1);
+                this.getEmpresas();
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors(errors);
+            });
+        },
+        updateEmpresaSucursal(){
+            let inputs = Object.assign({},this.empresa_sucursal.attributes);
+            axios.put(urlGlobal.resourcesSucursal + '/'+ inputs.id_sucursal, inputs)
+                .then(response => {
+                    Object.assign(this.empresa_sucursal.tempAttributes ,this.empresa_sucursal.attributes);
+                    this.empresa_sucursal.attributes = new Object({
+                        id_sucursal:null,
+                        nombre:'',
+                        casa_matriz:0,
+                        direccion:'',
+                        telefono:'',
+                        fecha_apertura:'',
+                        estatus:'',
+                        id_ciudad:'',
+                        ciudad:'',
+                        id_empresa:'',
+                    });
+                    this.empresa_sucursal.tempAttributes = new Object({
+                        id_sucursal:null,
+                        nombre:'',
+                        casa_matriz:0,
+                        direccion:'',
+                        telefono:'',
+                        fecha_apertura:'',
+                        estatus:'',
+                        id_ciudad:'',
+                        ciudad:'',
+                        id_empresa:'',
+                    });
+                    this.cancelModeEditEmpresaSucursal();
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
+
+        findSucursales(id_empresa){
+            for(indexEmpresa in this.empresa.data){
+                if(this.empresa.data[indexEmpresa].id_empresa===id_empresa){
+                    this.empresa_sucursal.sucursales = this.empresa.data[indexEmpresa].sucursales;
+                    break;
+                }
+            }
+        },
+        seeSucursalesOfEmpresa(sucursales, id_empresa) {
+            this.empresa_sucursal.sucursales = sucursales;
+            this.empresa_sucursal.attributes.id_empresa = id_empresa;
+        },
+        changeModeEditEmpresaSucursal(sucursal){
+            console.log(sucursal);
+            this.empresa_sucursal.tempAttributes = sucursal;
+            this.empresa_sucursal.attributes = Object.assign({}, sucursal);
+            this.empresa_sucursal.modeEdit = true;
+            this.empresa_sucursal.modeCreate = true;
+        },
+        cancelModeEditEmpresaSucursal(){
+            this.empresa_sucursal.hideSuggestions = true;
+            setTimeout(()=>{
+                this.empresa_sucursal.hideSuggestions = false;
+            },1);
+            this.empresa_sucursal.attributes = new Object({
+                id_sucursal:null,
+                nombre:'',
+                casa_matriz:0,
+                direccion:'',
+                telefono:'',
+                fecha_apertura:'',
+                estatus:'',
+                id_ciudad:'',
+                ciudad:'',
+                id_empresa:'',
+            });
+            this.empresa_sucursal.tempAttributes = new Object({
+                id_sucursal:null,
+                nombre:'',
+                casa_matriz:0,
+                direccion:'',
+                telefono:'',
+                fecha_apertura:'',
+                estatus:'',
+                id_ciudad:'',
+                ciudad:'',
+                id_empresa:'',
+            });
+            this.empresa_sucursal.modeEdit = false;
+            this.empresa_sucursal.modeCreate = false;
+        },
+        assignAnIdentificationToTheSucursal(response) {
+            if (response && response.id_ciudad) {
+                this.empresa_sucursal.attributes.id_ciudad = response.id_ciudad;
+                this.empresa_sucursal.attributes.ciudad = response;
+            } else {
+                this.empresa_sucursal.attributes.id_ciudad = null;
+                this.empresa_sucursal.attributes.ciudad = {
+                    id_ciudad:null,
+                    nombre:'',
+                    pais_ciudad:''
+                };
+            }
+        },
+
+
+
+        //<editor-fold desc="Methods Notificacion">
         formatErrors: function (errors) {
             let _errors = errors.response.data.errors;
             let response = [];
@@ -373,5 +711,6 @@ var appConfig = new Vue({
             _errors = this.formatErrors2(errors);
             toastr.error(_errors, 'Corrija los Siguientes Errores', {timeOut: 10000});
         }
+        //</editor-fold>
     }
 });

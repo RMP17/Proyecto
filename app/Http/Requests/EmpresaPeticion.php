@@ -34,20 +34,20 @@ class EmpresaPeticion extends FormRequest
             case 'POST':
             {
                 return [
-                    'txtRazon_social' => 'required|max:200',
-                    'txtNit' => 'required|unique:empresa,nit|max:15',
-                    'txtPropietario' => 'required|max:50',
-                    'txtActividad' => 'max:200',
+                    'razon_social' => 'required|max:200',
+                    'nit' => 'required|unique:empresa,nit|max:15',
+                    'propietario' => 'required|max:50',
+                    'actividad' => 'max:200',
                 ];
             }
             case 'PUT':
             case 'PATCH':
             {
                 return [
-                    'txtRazon_social' => 'required|max:200',
-                    'txtNit' => 'required|unique:empresa,nit,'.$this->empresa.',id_empresa|max:15',
-                    'txtPropietario' => 'required|max:50',
-                    'txtActividad' => 'max:200',
+                    'razon_social' => 'required|max:200',
+                    'nit' => 'required|unique:empresa,nit,'.$this->empresa.',id_empresa|max:15',
+                    'propietario' => 'required|max:50',
+                    'actividad' => 'max:200',
                 ];
             }
             default:break;
@@ -55,11 +55,11 @@ class EmpresaPeticion extends FormRequest
     }
     public function messages(){
         return[
-            'txtRazon_social.required'=>'Debe ingresar la Razón Social',
-            'txtRazon_social.unique'=>'La razón social de la empresa ya existe en el registro',
-            'txtNit.required'=>'Debe ingresar el NIT de la empresa',
-            'txtNit.unique'=>'El NIT de la empresa ya existe en el registro',
-			'txtPropietario'=>'Es necesario conocer el nombre del propietario de la empresa',
+            'razon_social.required'=>'Debe ingresar la Razón Social',
+            'razon_social.unique'=>'La razón social de la empresa ya existe en el registro',
+            'nit.required'=>'Debe ingresar el NIT de la empresa',
+            'nit.unique'=>'El NIT de la empresa ya existe en el registro',
+			'propietario'=>'Es necesario conocer el nombre del propietario de la empresa',
         ];
     }
 }

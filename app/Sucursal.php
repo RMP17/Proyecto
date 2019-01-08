@@ -24,4 +24,17 @@ class Sucursal extends Model
 	protected $guarded = [
 	
 	];
+    public function empresa(){
+        return $this->belongsTo(Empresa::class,'id_empresa');
+    }
+    public function ciudad(){
+        return $this->belongsTo(Ciudad::class,'id_ciudad');
+    }
+    public static function updateSucursal($sucursal, $id_sucursal){
+
+        $_sucusal = Sucursal::findOrFail($id_sucursal);
+        $_sucusal->fill($sucursal);
+        $_sucusal->update();
+        return true;
+    }
 }
