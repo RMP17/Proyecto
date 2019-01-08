@@ -57,11 +57,9 @@ class CuentaProveedorControlador extends Controller
 		return response()->json();
 	}
 	
-	public function destroy(CuentaProveedorPeticion $peticion,$id_cuenta)
+	public function destroy($id_cuenta)
 	{
-		$cuenta = CuentaProveedor :: findOrFail($id_cuenta);
-		DB::table('cuenta_proveedor')->where('id_cuenta', '=', $id_cuenta)->delete();
-		$id_proveedor= $peticion -> get('cbxProveedor');
-		return Redirect :: to ('cuentaproveedor/'.$id_proveedor);
+	    CuentaProveedor::deleteCuentaProveedor($id_cuenta);
+        return response()->json();
 	}
 }

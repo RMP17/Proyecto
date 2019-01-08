@@ -44,4 +44,13 @@ class CuentaProveedor extends Model
         }
         return false;
     }
+    public static function deleteCuentaProveedor($id_cuenta) {
+        $cuenta_proveedor = CuentaProveedor::findOrFail($id_cuenta);
+
+        if(!is_null($cuenta_proveedor)) {
+            $cuenta_proveedor->delete();
+            return true;
+        }
+        return false;
+    }
 }

@@ -1,9 +1,9 @@
 .w-10em{
     width: 10em;
 }
-input::-webkit-calendar-picker-indicator {
+/*input::-webkit-calendar-picker-indicator {
     display: none;
-}
+}*/
 .active>span{
     color: white;
 }

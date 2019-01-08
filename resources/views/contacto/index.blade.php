@@ -41,7 +41,7 @@
             <td>
                 <a href="javascript:void(0)"
                    title="Editar Contacto"
-                   @click_X="modeEditProveedor(_contacto)"
+                   @click="modeEditContactoProveedor(_contacto)"
                    data-backdrop="static"
                    data-keyboad="false"
                    data-target="#modal-edit-contacto"
@@ -84,14 +84,14 @@
 </div>
 {{--===============================================Modal Edit Contact======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc_x="cancelModeEditProveedor"
+     @keydown.esc="cancelModeEditContacto"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-contacto">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title pt-1 pr-1">Editar Contacto</h4>
                 <button type="button" class="close"
-                        @click_x="cancelModeEditProveedor"
+                        @click="cancelModeEditContacto"
                         data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>
@@ -101,7 +101,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger"
-                        data-dismiss="modal" @click_x="cancelModeEditProveedor" > Cerrar</button>
+                        data-dismiss="modal" @click="cancelModeEditContacto" > Cerrar</button>
             </div>
         </div>
     </div>

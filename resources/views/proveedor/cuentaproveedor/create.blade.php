@@ -39,7 +39,7 @@
         <button v-if="!cuenta_proveedor.attributes.id_cuenta" type="submit" class="btn btn-primary w-25">Registrar</button>
         <div v-else>
             <button type="submit" class="btn btn-primary w-25">Actualizaar</button>
-            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditProveedor" >Cancelar</button>
+            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditCuentaProveedor" >Cancelar</button>
         </div>
     </div>
 </form>

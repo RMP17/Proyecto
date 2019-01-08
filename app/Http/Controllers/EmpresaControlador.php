@@ -2,11 +2,11 @@
 
 namespace Allison\Http\Controllers;
 
+use Allison\Http\Requests\SucursalPeticion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\EmpresaPeticion;
 use Allison\Empresa;
-use DB;
 
 class EmpresaControlador extends Controller
 {
@@ -15,17 +15,10 @@ class EmpresaControlador extends Controller
 		
 	}
 	
-	public function index(Request $peticion)
+	public function index()
 	{
-		
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$empresas = Empresa::where('razon_social','like', '%'.$consulta.'%')
-				->orderBy('razon_social', 'asc')
-				->paginate(10);
-			return view('empresa.index', compact('empresas', 'consulta'));
-		}
+	    $empresa = Empresa::getEmpresas();
+	    return response()->json($empresa);
 	}
 	
 	public function create()
@@ -35,13 +28,8 @@ class EmpresaControlador extends Controller
 	
 	public function store(EmpresaPeticion $peticion)
 	{
-		$empresa = new Empresa;
-		$empresa -> razon_social= $peticion -> get('txtRazon_social');
-		$empresa -> nit= $peticion -> get('txtNit');
-		$empresa -> propietario= $peticion -> get('txtPropietario');
-		$empresa -> actividad= $peticion -> get('txtActividad');
-		$empresa -> save();
-		return Redirect :: to ('empresa');
+	    Empresa::newEmpresa($peticion->all());
+		return response()->json();
 	}
 	
 	public function show($id_empresa)
@@ -56,13 +44,8 @@ class EmpresaControlador extends Controller
 	
 	public function update(EmpresaPeticion $peticion, $id_empresa)
 	{
-		$empresa = Empresa :: findOrFail($id_empresa);
-		$empresa -> razon_social = $peticion -> get('txtRazon_social');
-		$empresa -> nit= $peticion -> get('txtNit');
-		$empresa -> propietario= $peticion -> get('txtPropietario');
-		$empresa -> actividad= $peticion -> get('txtActividad');
-		$empresa->update();
-		return Redirect :: to ('empresa');
+	    Empresa::updateEmpresa($peticion->all(),$id_empresa);
+		return  response()->json();
 	}
 	
 	public function destroy($id_empresa)
@@ -70,5 +53,10 @@ class EmpresaControlador extends Controller
 		$empresa = Empresa :: findOrFail($id_empresa);
 		DB::table('empresa')->where('id_empresa', '=', $id_empresa)->delete();
 		return Redirect :: to ('empresa');
+	}
+	public function addSucursalToEmpresa(SucursalPeticion $request, $id_empresa)
+	{
+	    Empresa::addSucursalToEmpresa($request->all(), $id_empresa);
+	    return response()->json();
 	}
 }

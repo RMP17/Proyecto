@@ -58,16 +58,8 @@ class ContactoControlador extends Controller
 	
 	public function update(ContactoPeticion $peticion, $id_contacto)
 	{
-		$contacto = Contacto :: findOrFail($id_contacto);
-		$contacto -> nombre = $peticion -> get('txtNombre');
-		$contacto -> telefono = $peticion -> get('txtTelefono');
-		$contacto -> celular = $peticion -> get('txtCelular');
-		$contacto -> interno = $peticion -> get('txtInterno');
-		$contacto -> correo = $peticion -> get('txtCorreo');
-		$contacto -> id_cargo = $peticion -> get('cbxCargo');
-		$contacto -> id_proveedor = $peticion -> get('cbxProveedor');
-		$contacto -> update();
-		return Redirect :: to ('contacto');
+        Contacto::updateContacto($peticion->all(), $id_contacto);
+        return response()->json();
 	}
 	
 	public function destroy($id_contacto)

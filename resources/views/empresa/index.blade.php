@@ -1,104 +1,136 @@
-@extends('maquetas.admin')
-@section('page_wrapper')
-
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <div class="page-breadcrumb">
-        <div class="row">
-            <div class="col-12 d-flex no-block align-items-center">
-                <h4 class="page-title">Lista de empresas</h4>
-                <div class="col-3">
-                    <a type="button" class="btn btn-outline-dark" href="{{url ('empresa/create')}}">Registrar nueva</a>
-                </div>
-                <div class="ml-auto text-right">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url('')}}">Inicio</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Retornar a la página principal</li>
-                        </ol>
-                    </nav>
-                </div>
+<a href data-target="#modal-registro-empresa" data-toggle="modal"
+   title="Nueva Empresa">
+    <button type="button" class="btn btn-outline-success btn-sm"><i
+                class="fas fa-plus"></i></button>
+</a>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Razón social</th>
+            <th scope="col">NIT</th>
+            <th scope="col">Propietario</th>
+            <th scope="col">Actividad</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="_empresa in empresa.data">
+            <td>@{{ _empresa.razon_social }}</td>
+            <td>@{{ _empresa.nit }}</td>
+            <td>@{{ _empresa.propietario }}</td>
+            <td>@{{ _empresa.actividad }}</td>
+            <td>
+                <a href="javascript:void(0)"
+                   title="Editar Empresa"
+                   @click="modeEditEmpresa(_empresa)"
+                   data-backdrop="static"
+                   data-keyboad="false"
+                   data-target="#modal-edit-empresa"
+                   data-toggle="modal"
+                   type="button" class="btn btn-warning btn-sm">
+                    <i class="mdi mdi-pencil"></i>
+                </a>
+                <a href="javascript:void(0)"
+                   title="Ver Sucursales"
+                   @click="seeSucursalesOfEmpresa(_empresa.sucursales, _empresa.id_empresa)"
+                   data-backdrop="static"
+                   data-keyboad="false"
+                   data-target="#modal-sucursales"
+                   data-toggle="modal"
+                   type="button" class="btn btn-info btn-sm">
+                    <i class="fas fa-building"></i>
+                </a>
+                {{--<a title="Sucursales"
+                   href="{{URL::action('SucursalControlador@show',$e->id_empresa)}}"
+                   type="submit" class="btn btn-sm"><img style="width: 19px"
+                                                         src="{{asset('nihil/imagenes/store2.png')}}"></a>
+                <a title="Cuenta Bancaria"
+                   href="{{URL::action('CuentaControlador@show',$e->id_empresa)}}"
+                   type="submit" class="btn btn-primary btn-sm"><i
+                            class="fab fa-cc-visa"></i></a>--}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{{--===============================================Modal New Empresa======================================--}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-registro-empresa">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Neva Empresa</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                @include('empresa.create')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @click=""> Cerrar</button>
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Container fluid  -->
-    <!-- ============================================================== -->
-    <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Empresas</h4>
-                        <div class="table-responsive">
-                            <table id="zero_config" class="table table-striped table-bordered">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Razón social</th>
-                                    <th scope="col">NIT</th>
-                                    <th scope="col">Propietario</th>
-                                    <th scope="col">Actividad</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php $i = 0; ?>
-                                @foreach($empresas as $e)
-                                    <tr>
-                                        @if ($e -> id_empresa > 1)
-                                            <th scope="row">{{$i}}</th>
-                                            <td>{{ $e -> razon_social }}</td>
-                                            <td>{{ $e -> nit }}</td>
-                                            <td>{{ $e -> propietario }}</td>
-                                            <td>{{ $e -> actividad }}</td>
-                                            <td>
-                                                <a title="Editar"
-                                                   href="{{URL::action('EmpresaControlador@edit',$e->id_empresa)}}"
-                                                   type="submit" class="btn btn-warning btn-sm"> <i
-                                                            class="mdi mdi-pencil"></i></a>
-                                                <a title="Sucursales"
-                                                   href="{{URL::action('SucursalControlador@show',$e->id_empresa)}}"
-                                                   type="submit" class="btn btn-sm"><img style="width: 19px"
-                                                                                         src="{{asset('nihil/imagenes/store2.png')}}"></a>
-                                                <a title="Cuenta Bancaria"
-                                                   href="{{URL::action('CuentaControlador@show',$e->id_empresa)}}"
-                                                   type="submit" class="btn btn-primary btn-sm"><i
-                                                            class="fab fa-cc-visa"></i></a>
-                                            </td>
-                                        @endif
-                                    </tr>
-                                    <?php $i++; ?>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                {{$empresas -> render()}}
+</div>
+{{--===============================================Modal Edit Empresa======================================--}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true"
+     @keydown.esc="cancelModeEditEmpresa"
+     role="dialog" tabindex="-1" id="modal-edit-empresa">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Edit Empresa</h4>
+                <button type="button" class="close"
+                        @click="cancelModeEditEmpresa"
+                        data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                @include('empresa.create')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditEmpresa"> Cerrar</button>
             </div>
         </div>
-
-        <!-- ============================================================== -->
-        <!-- End PAge Content -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Right sidebar -->
-        <!-- ============================================================== -->
-        <!-- .right-sidebar -->
-        <!-- ============================================================== -->
-        <!-- End Right sidebar -->
-        <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Container fluid  -->
-    <!-- ============================================================== -->
+</div>
 
-@endsection
+{{--===============================================Modal Sucursales ======================================--}}
+<div class="modal fade modal-slide-in-right"
+     @keydown.esc="cancelModeEditEmpresaSucursal"
+     aria-hidden="true" role="dialog" tabindex="-1" id="modal-sucursales">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Sucursales</h4>
+
+                <a v-show="!empresa_sucursal.modeEdit" href
+                   data-toggle="modal"
+                   class="btn btn-outline-dark w-10em"
+                   @click="empresa_sucursal.modeCreate=!empresa_sucursal.modeCreate"
+                >
+                    <span v-show="!empresa_sucursal.modeCreate">Nueva</span>
+                    <span v-show="empresa_sucursal.modeCreate">Ver</span>
+                </a>
+                <button type="button" class="close"
+                        @click="cancelModeEditEmpresaSucursal"
+                        data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <div v-show="!empresa_sucursal.modeCreate">
+                    @include('sucursal.show')
+                </div>
+                <div v-show="empresa_sucursal.modeCreate">
+                    @include('sucursal.create')
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditEmpresaSucursal"> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

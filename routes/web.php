@@ -32,6 +32,9 @@ Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
 Route::get('proveedor/contactos/{id_proveedor}', 'ProveedorControlador@getContactosOfProveedor');
 Route::get('proveedores/{query}', 'ProveedorControlador@suggestionsProveedores');
 
+Route::prefix('empresa')->group(function () {
+    Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');
+});
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');
     Route::get('id/{id}', 'PaisControlador@getPaisById');

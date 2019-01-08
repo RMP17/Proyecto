@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="table-responsive">
-    <table class="table table-striped table-sm table-bordered">
+    <table class="table table-sm table-striped table-bordered">
         <thead>
         <tr>
             <th>Razón Social <br>NIT / CI</th>
@@ -130,14 +130,14 @@
 </div>
 {{--===============================================Modal Add Cuenta de Banco======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditProveedor"
+     @keydown.esc="cancelModeEditCuentaProveedor"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-add-cuenta-banco">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title pt-1 pr-1">Cuentas</h4>
 
-                <a v-show="!cuenta_proveedor.modeEdit" href data-target="#modal-create-categoria"
+                <a v-show="!cuenta_proveedor.modeEdit" href
                    data-toggle="modal"
                    class="btn btn-outline-dark w-10em"
                    @click="cuenta_proveedor.modeCreate=!cuenta_proveedor.modeCreate"
@@ -146,7 +146,7 @@
                     <span v-show="cuenta_proveedor.modeCreate">Ver</span>
                 </a>
                 <button type="button" class="close"
-                        @click="cancelModeEditProveedor"
+                        @click="cancelModeEditCuentaProveedor"
                         data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>
@@ -160,7 +160,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditProveedor" > Cerrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
             </div>
         </div>
     </div>

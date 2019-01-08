@@ -63,18 +63,9 @@ class SucursalControlador extends Controller
 		return view ('sucursal.edit',compact('sucursal', 'paises', 'pais', 'ciudad'));
 	}
 	
-	public function update(SucursalPeticion $peticion)
+	public function update(SucursalPeticion $peticion,$id_sucursal)
 	{
-		$sucursal = new Sucursal;
-		$sucursal -> nombre = $peticion -> get('txtNombre');
-		$sucursal -> casa_matriz = $peticion -> get('rbtCasaMatriz');
-		$sucursal -> direccion = $peticion -> get('txtDireccion');
-		$sucursal -> telefono = $peticion -> get('txtTelefono');
-		$sucursal -> fecha_apertura = date("Y-m-d", strtotime($peticion -> get('dtmFechaApertura')));
-		$sucursal -> id_ciudad = $peticion -> get('cbxCiudad');
-		$sucursal->update();
-		$id_empresa=$peticion -> get('cbxEmpresa');
-		return Redirect :: to ('sucursal/'.$id_empresa);
+		Sucursal::updateSucursal($peticion->all(), $id_sucursal);
 	}
 	
 	public function destroy(Request $peticion,$id_sucursal)
