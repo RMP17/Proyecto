@@ -14,7 +14,6 @@ class Kardex extends Model
 	protected $fillable = [
 		'fecha_inicio',
 		'fecha_baja',
-		'fecha_registro',
 		'id_empleado',
 		'id_cargo',
 		'id_tipo_empleado',
@@ -23,5 +22,11 @@ class Kardex extends Model
 	protected $guarded = [
 	
 	];
-	
+
+    public function salario(){
+        return $this->hasOne(Salario::class,'id_kardex','id_kardex');
+    }
+    public function kardexObservaciones(){
+        return $this->hasMany(KardexObservaciones::class,'id_kardex','id_kardex');
+    }
 }

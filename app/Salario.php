@@ -19,4 +19,8 @@ class Salario extends Model
 	protected $guarded = [
 	
 	];
+    public function moneda(){
+        return $this->hasOne(Moneda::class,'id_moneda','id_kardex');
+    }
+
 }

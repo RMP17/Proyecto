@@ -19,4 +19,27 @@ class Almacen extends Model
 	protected $guarded = [
 	
 	];
+    public function sucursal(){
+        return $this->belongsTo(Sucursal::class,'id_sucursal');
+    }
+
+	public static function getAlmacenes() {
+	    $almacenes= Almacen::select('*')->orderBy('codigo', 'asc')->get();
+	    foreach ($almacenes as $almacene) {
+            $almacene->sucursal;
+        }
+	    return $almacenes;
+    }
+    public static function addAlmacen($parameters_almacen) {
+        $_almacen = new Almacen();
+        $_almacen->fill($parameters_almacen);
+        $_almacen->save();
+        return true;
+    }
+    public static function updateAlmacen($almacen, $id_almacen){
+        $_almacen = Almacen::findOrFail($id_almacen);
+        $_almacen->fill($almacen);
+        $_almacen->update();
+        return true;
+    }
 }

@@ -67,52 +67,9 @@ class EmpleadoControlador extends Controller
 	
 	public function store(EmpleadoPeticion $peticion)
 	{
-		$conversor = new ConversorImagenes;
-		$empleado = new Empleado;
-		$empleado -> nombre = $peticion -> get('txtNombre');
-		$empleado -> ci = $peticion -> get('txtCi');
-		$empleado -> sexo = $peticion -> get('rbtSexo');
-		$empleado -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
-		$empleado -> telefono = $peticion -> get('txtTelefono');
-		$empleado -> celular = $peticion -> get('txtCelular');
-		$empleado -> correo = $peticion -> get('txtCorreo');
-		$empleado -> direccion = $peticion -> get('txtDireccion');
-		$empleado -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
-		$empleado -> persona_referencia = $peticion -> get('txtPersonaReferencia');
-		$empleado -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
-		$empleado -> fecha_registro = date('Y-m-d', time());
-		$empleado -> estatus = 'A';
-		$empleado -> id_sucursal = $peticion -> get('cbxSucursal');
-		$empleado -> save();
-		$id_empleado = Empleado :: where('ci', '=', $peticion -> get('txtCi'))
-		         		->first()
-						->id_empleado;
-
-		$kardexActiva = Kardex ::where('id_empleado', '=',$id_empleado)
-			->where('fecha_baja', '=', null)
-			->get();
-
-		if(sizeof($kardexActiva) == 0)
-		{
-
-		$kardex = new Kardex;
-		$kardex -> fecha_inicio = date("Y-m-d", strtotime($peticion -> get('dtmFecha_inicio')));
-		$kardex -> fecha_registro= date("Y-m-d", time());
-		$kardex -> id_empleado= $id_empleado;
-		$kardex -> id_cargo= $peticion -> get('cbxCargo');
-		$kardex->save();
-
-		$id_kardex = Kardex ::where('id_empleado', '=', $id_empleado)
-				->where('kardex.fecha_baja','=', null)
-				->first()
-				->id_kardex;
-		$salarios = new Salario;
-		$salarios-> id_kardex = $id_kardex;
-		$salarios -> monto = $peticion -> get('txtMonto');
-		$salarios -> id_moneda = $peticion -> get('cbxMoneda');
-		$salarios -> save();
-		}
-		return Redirect :: to ('empleado');
+	    Empleado::newEmpleado($peticion->all());
+	    return response()->json();
+		/*if(sizeof($kardexActiva) == 0)*/
 	}
 	public function show($id_empleado)
 	{

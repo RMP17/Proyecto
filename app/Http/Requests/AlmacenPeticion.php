@@ -33,16 +33,18 @@ class AlmacenPeticion extends FormRequest
 			case 'POST':
 			{
 				return [
-					'txtCodigo' => 'required|unique:almacen,codigo|max:50',
-					'txtDireccion' =>'required|max:200',
+					'codigo' => 'required|unique:almacen,codigo|max:50',
+					'direccion' =>'required|max:200',
+					'id_proveedor' =>'required',
 				];
 			}
 			case 'PUT':
 			case 'PATCH':
 			{
 				return [
-					'txtCodigo' => 'required|unique:almacen,codigo,'.$this->almacen.',id_almacen|max:50',
-					'txtDireccion' =>'required|max:200',
+                    'codigo' => 'required|unique:almacen,codigo,'.$this->id_almacen.',id_almacen|max:50',
+                    'direccion' =>'required|max:200',
+                    'id_proveedor' =>'required',
 				];
 			}
 			default:break;
@@ -52,9 +54,10 @@ class AlmacenPeticion extends FormRequest
 	public function messages()
     {
         return [
-            'txtCodigo.required' => 'Debe ingresar el codigo o identificador del almacen que desea registrar.',
-			'txtCodigo.unique' => 'Los almacenes deben tener un identificador o código único dentro del registro.',
-			'txtDireccion.required' => 'Es necesaria la dirección en la que este ubicado el almacen.',
+            'codigo.required' => 'Debe ingresar el codigo o identificador del almacen que desea registrar.',
+			'codigo.unique' => 'Los almacenes deben tener un identificador o código único dentro del registro.',
+			'direccion.required' => 'Es necesaria la dirección en la que este ubicado el almacen.',
+			'id_proveedor.required' => 'El proveedor es requerido',
         ];
     }
 }

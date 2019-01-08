@@ -11,19 +11,9 @@ use DB;
 
 class AlmacenControlador extends Controller
 {
-    public function __construct()
+    public function index()
 	{
-		
-	}
-	
-    public function show($id_sucursal)
-	{
-			$almacenes = DB::table('almacen')
-			->join('sucursal', 'almacen.id_sucursal', '=', 'sucursal.id_sucursal')
-			->select('almacen.id_almacen as id_almacen', 'almacen.codigo as codigo', 'almacen.direccion as direccion', 'almacen.id_sucursal as id_sucursal', 'sucursal.nombre as sucursal')
-			->where('almacen.id_sucursal', '=', $id_sucursal)
-			->get();		
-			return view('sucursal.almacen.show', compact('almacenes','id_sucursal'));
+        return response()->json(Almacen::getAlmacenes());
 	}
 
 	public function create($id_sucursal)
@@ -33,13 +23,8 @@ class AlmacenControlador extends Controller
 	
 	public function store(AlmacenPeticion $peticion)
 	{
-		$almacen = new Almacen;
-		$almacen -> codigo = $peticion -> get('txtCodigo');
-		$almacen -> direccion = $peticion -> get('txtDireccion');
-		$almacen -> id_sucursal = $peticion -> get('txtIdSucursal');
-		$almacen -> save();
-		$id_sucursal= $peticion -> get('txtIdSucursal');
-		return Redirect :: to ('almacen/'.$id_sucursal);
+		Almacen::addAlmacen($peticion->all());
+		return response()->json();
 	}
 	
 	public function edit($id_almacen)
@@ -49,12 +34,8 @@ class AlmacenControlador extends Controller
 	
 	public function update(AlmacenPeticion $peticion, $id_almacen)
 	{
-		$almacen = Almacen :: findOrFail($id_almacen);
-		$almacen -> codigo = $peticion -> get('txtCodigo');
-		$almacen -> direccion = $peticion -> get('txtDireccion');
-		$almacen->update();
-		$id_sucursal = $peticion -> get('txtIdSucursal');
-		return Redirect :: to ('almacen/'.$id_sucursal);
+		Almacen::updateAlmacen($peticion->all(), $id_almacen);
+		return response()->json();
 	}
 	
 	public function destroy($id_almacen)
