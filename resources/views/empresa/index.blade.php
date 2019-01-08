@@ -59,7 +59,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pt-1 pr-1">Neva Empresa</h4>
+                <h4 class="modal-title pt-1 pr-1">Nueva Empresa</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>

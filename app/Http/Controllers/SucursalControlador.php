@@ -18,14 +18,9 @@ class SucursalControlador extends Controller
 		
 	}
 	
-    public function show($id_empresa)
+    public function index()
 	{
-			$sucursales = DB::table('sucursal as s')
-			->join('ciudad as c', 'c.id_ciudad', '=', 's.id_ciudad')
-			->select('s.id_sucursal','s.nombre as nombre_sucursal','s.direccion','s.telefono','s.fecha_apertura', 's.estatus','c.nombre as nombre_ciudad' )
-			->where('s.id_empresa', '=', $id_empresa)
-			->get();
-			return view('sucursal.show', compact('sucursales','id_empresa'));
+	    return response()->json(Sucursal::select('*')->orderby('nombre', 'desc')->get());
 	}
 
 	public function create($id_empresa)

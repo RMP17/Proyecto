@@ -35,7 +35,7 @@ class AlmacenPeticion extends FormRequest
 				return [
 					'codigo' => 'required|unique:almacen,codigo|max:50',
 					'direccion' =>'required|max:200',
-					'id_proveedor' =>'required',
+					'id_sucursal' =>'required',
 				];
 			}
 			case 'PUT':
@@ -44,7 +44,7 @@ class AlmacenPeticion extends FormRequest
 				return [
                     'codigo' => 'required|unique:almacen,codigo,'.$this->id_almacen.',id_almacen|max:50',
                     'direccion' =>'required|max:200',
-                    'id_proveedor' =>'required',
+                    'id_sucursal' =>'required',
 				];
 			}
 			default:break;
@@ -57,7 +57,7 @@ class AlmacenPeticion extends FormRequest
             'codigo.required' => 'Debe ingresar el codigo o identificador del almacen que desea registrar.',
 			'codigo.unique' => 'Los almacenes deben tener un identificador o código único dentro del registro.',
 			'direccion.required' => 'Es necesaria la dirección en la que este ubicado el almacen.',
-			'id_proveedor.required' => 'El proveedor es requerido',
+			'id_proveedor.required' => 'La sucursal es requerido',
         ];
     }
 }

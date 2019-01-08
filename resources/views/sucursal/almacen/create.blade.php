@@ -1,48 +1,37 @@
-<html>
-	<head> <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}"> </head>
-	<body>
-		<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-create-almacen-{{$id_sucursal}}">
-			@if (count($errors) > 0)
-				<div class="alert alert-danger">
-					<ul>
-						@foreach ($errors->all() as $error)
-							<li> {{$error}} </li>
-						@endforeach
-					</ul>
-				</div>
-			@endif
-			{!!Form::open(array('class' => 'form-horizontal', 'url' => 'almacen', 'method' => 'POST', 'autocomplete' => 'off'))!!}
-			{{Form::token()}}
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title"> Registrar nuevo almacen </h4>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-								<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
-							</button>
-						</div>
-						<div class="modal-body">	
-							<input type="hidden" id="txtIdSucursal" name="txtIdSucursal" value="{{$id_sucursal}}">
-							<div class="form-group row">
-									<label for="txtCodigo" class="col-sm-3 text-right control-label col-form-label">Codigo : </label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control" id="txtCodigo" placeholder="El código o nombre único del almacen aquí" name="txtCodigo">
-									</div>
-							</div>
-							<div class="form-group row">
-									<label for="txtDireccion" class="col-sm-3 text-right control-label col-form-label">Direccion : </label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control" id="txtDireccion" placeholder="La dirección dónde está ubicado el almacen aquí" name="txtDireccion">
-									</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary"> Crear </button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar </button>
-						</div>		
-					</div>
-				</div>
-			{{Form::Close()}}
-		<div>
-	<body>
-</html>
+<form @submit.prevent="submitFormAlmacen">
+    <div class="form-group row mb-2">
+        <label for="txtCodigo" class="col-sm-3 text-right control-label col-form-label">Codigo : </label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control"
+                   v-model="almacen.attributes.codigo"
+                   id="txtCodigo" placeholder="El código o nombre único del almacen aquí" name="txtCodigo">
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label for="txtDireccion" class="col-sm-3 text-right control-label col-form-label">Direccion : </label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control"
+                   v-model="almacen.attributes.direccion"
+                   id="txtDireccion" placeholder="La dirección dónde está ubicado el almacen aquí" name="txtDireccion">
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label for="cbxSucursal" class="col-sm-3 text-right control-label col-form-label">Sucursal : </label>
+        <div class="col-sm-8">
+            <select class="custom-select" id="cbxSucursal"
+                    v-model="almacen.attributes.id_sucursal"
+                    name="cbxCargo">
+                <option v-for="almacen in almacen.sucursales" :value="almacen.id_sucursal">
+                    @{{ almacen.nombre }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group text-center" >
+        <button v-if="!almacen.attributes.id_almacen" type="submit" class="btn btn-primary w-25">Registrar</button>
+        <div v-else>
+            <button type="submit" class="btn btn-primary w-25">Actualizaar</button>
+            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditEmpresaSucursal" >Cancelar</button>
+        </div>
+    </div>
+</form>

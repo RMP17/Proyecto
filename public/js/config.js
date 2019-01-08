@@ -166,11 +166,31 @@ var appConfig = new Vue({
                 id_empresa:'',
             }
         },
+
+        almacen: {
+            hideSuggestions:false,
+            data: [],
+            sucursales:[],
+            attributes: {
+                id_almacen:null,
+                codigo: '',
+                direccion: '',
+                id_sucursal: null,
+            },
+            tempAttributes: {
+                id_almacen:null,
+                codigo: null,
+                direccion: '',
+                id_sucursal: null,
+            }
+        },
     },
     mounted(){
         this.getMonedas();
         this.getCargo();
         this.getEmpresas();
+        this.getSucursalesAlmacen();
+        this.getAlmacen();
     },
     methods: {
         //<editor-fold desc="Methods of Pais">
@@ -454,7 +474,6 @@ var appConfig = new Vue({
         },
         //</editor-fold>
 
-
         //<editor-fold desc="Methods of Empresa">
         submitFormEmpresa() {
             if (!this.empresa.attributes.id_empresa) {
@@ -541,6 +560,7 @@ var appConfig = new Vue({
         //</editor-fold>
 
 
+        //<editor-fold desc="Methods of Empresa Sucursal">
         submitFormEmpresaSucursal() {
             if (!this.empresa_sucursal.attributes.id_sucursal) {
                 this.registerEmpresaSucursal();
@@ -678,8 +698,96 @@ var appConfig = new Vue({
                 };
             }
         },
+        //</editor-fold>
 
+        submitFormAlmacen() {
+            if (!this.empresa_sucursal.attributes.id_sucursal) {
+                this.registerAlmacen();
+            } else {
+                this.updateAlmacen();
+            }
+        },
+        getAlmacen(){
+            axios.get(urlGlobal.resourcesAlmacen
+            ).then(response => {
+                this.almacen.data = response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        registerAlmacen(){
+            let inputs = Object.assign({}, this.almacen.attributes);
+            axios.post(urlGlobal.resourcesAlmacen, inputs
+            ).then(response => {
+                this.almacen.attributes = new Object({
+                    id_almacen:null,
+                    codigo: '',
+                    direccion: '',
+                    id_sucursal: null,
+                });
+                this.almacen.hideSuggestions = true;
+                setTimeout(()=>{
+                    this.almacen.hideSuggestions = false;
+                },1);
+                //this.getEmpresas();
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors(errors);
+            });
+        },
+        updateAlmacen(){
+            let inputs = Object.assign({},this.empresa_sucursal.attributes);
+            axios.put(urlGlobal.resourcesSucursal + '/'+ inputs.id_sucursal, inputs)
+                .then(response => {
+                    Object.assign(this.empresa_sucursal.tempAttributes ,this.empresa_sucursal.attributes);
+                    this.empresa_sucursal.attributes = new Object({
+                        id_sucursal:null,
+                        nombre:'',
+                        casa_matriz:0,
+                        direccion:'',
+                        telefono:'',
+                        fecha_apertura:'',
+                        estatus:'',
+                        id_ciudad:'',
+                        ciudad:'',
+                        id_empresa:'',
+                    });
+                    this.empresa_sucursal.tempAttributes = new Object({
+                        id_sucursal:null,
+                        nombre:'',
+                        casa_matriz:0,
+                        direccion:'',
+                        telefono:'',
+                        fecha_apertura:'',
+                        estatus:'',
+                        id_ciudad:'',
+                        ciudad:'',
+                        id_empresa:'',
+                    });
+                    this.cancelModeEditEmpresaSucursal();
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
 
+        modeEditAlmacen(almacen) {
+            this.almacen.tempAttributes = almacen;
+            this.almacen.attributes = Object.assign({}, almacen);
+        },
+        cancelModeEditAlmacen(){
+
+        },
+
+        getSucursalesAlmacen() {
+            axios.get(urlGlobal.resourcesSucursal
+            ).then(response => {
+                this.almacen.sucursales = response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
 
         //<editor-fold desc="Methods Notificacion">
         formatErrors: function (errors) {

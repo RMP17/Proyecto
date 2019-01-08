@@ -39,6 +39,13 @@
                                 <a class="nav-item nav-link w-10em"
                                    id="nav-profile-tab"
                                    data-toggle="tab"
+                                   href="#nav-almacen"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Almacén</a>
+                                <a class="nav-item nav-link w-10em"
+                                   id="nav-profile-tab"
+                                   data-toggle="tab"
                                    href="#nav-paises"
                                    role="tab"
                                    aria-controls="nav-profile"
@@ -101,6 +108,9 @@
                                 </div>
                                 <div class="tab-pane fade" id="nav-empresa" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('empresa.index')
+                                </div>
+                                <div class="tab-pane fade" id="nav-almacen" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    @include('sucursal.almacen.show')
                                 </div>
                             </div>
                         </div>

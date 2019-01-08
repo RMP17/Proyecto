@@ -19,6 +19,7 @@
                 <td>@{{ _sucursal.telefono}}</td>
                 <td>@{{ _sucursal.fecha_apertura}}</td>
                 <td>@{{ _sucursal.ciudad ? _sucursal.ciudad.pais_ciudad: '' }}</td>
+                <td></td>
                 <td>
                     <a href="javascript:void(0)"
                        title="Editar Sucursal"
