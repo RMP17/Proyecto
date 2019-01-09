@@ -78,3 +78,8 @@ legend {
     font-size: 0.75rem;
     line-height: 3;
 }
+@media (min-width: 1200px) {
+    .modal-xl {
+        max-width: 1140px;
+    }
+}

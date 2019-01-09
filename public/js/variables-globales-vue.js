@@ -9,7 +9,7 @@ var urlGlobal={
     resourcesCuentaProveedor:url + 'cuenta-proveedor',
     resourcesProveedor:url + 'proveedor',
     resourcesFabricante:url + 'fabricante',
-    resourcesEmpleados:url + 'empleado',
+    resourcesEmpleado:url + 'empleado',
     resourcesEmpresa:url + 'empresa',
     resourcesContacto:url + 'contacto',
     resourcesSucursal:url + 'sucursal',

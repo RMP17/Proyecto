@@ -31,7 +31,7 @@
         <button v-if="!almacen.attributes.id_almacen" type="submit" class="btn btn-primary w-25">Registrar</button>
         <div v-else>
             <button type="submit" class="btn btn-primary w-25">Actualizaar</button>
-            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditEmpresaSucursal" >Cancelar</button>
+            <button type="button" class="btn btn-warning w-25" @click="cancelModeEditAlmacen" >Cancelar</button>
         </div>
     </div>
 </form>

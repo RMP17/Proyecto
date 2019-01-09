@@ -104,7 +104,7 @@
                                 </div>
                                         {{--=================================================END NAV PAISES==================================--}}
                                 <div class="tab-pane fade" id="nav-empleados" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                    {{--@include('empleado.index')--}}
+                                    @include('empleado.index')
                                 </div>
                                 <div class="tab-pane fade" id="nav-empresa" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('empresa.index')

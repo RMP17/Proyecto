@@ -21,6 +21,11 @@ class EmpleadoPeticion extends FormRequest
      *
      * @return array
      */
+    protected function prepareForValidation()
+    {
+        $data = json_decode($this->data, true);
+        $this->replace($data);
+    }
     public function rules()
     {
 		switch($this->method())
@@ -49,7 +54,6 @@ class EmpleadoPeticion extends FormRequest
 			case 'PATCH':
 			{
 				return [
-					'cbxSucursal' => 'required',
                     'nombre' => 'required|max:50',
                     'ci' => 'required|unique:empleado,ci,'.$this->empleado.',|max:15',
                     'sexo' =>'max:1',

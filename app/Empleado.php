@@ -40,7 +40,7 @@ class Empleado extends Model
     }
 
     public static function newEmpleado($oarameters){
-
+        // TODO: se debe trabajas aqui
         DB::beginTransaction();
         try {
             $_empleado = new Empleado();

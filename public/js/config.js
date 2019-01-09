@@ -83,6 +83,15 @@ var appConfig = new Vue({
                 fecha_registro:null,
                 status:'',
                 id_sucursal:null,
+                kardex:{
+                    id_kardex:null,
+                    id_cargo:null,
+                    fecha_inicio:'',
+                    salario:{
+                        monto:null,
+                        id_moneda:null
+                    }
+                }
             },
             tempAttributes: {
                 id_proveedor:null,
@@ -168,7 +177,6 @@ var appConfig = new Vue({
         },
 
         almacen: {
-            hideSuggestions:false,
             data: [],
             sucursales:[],
             attributes: {
@@ -700,13 +708,15 @@ var appConfig = new Vue({
         },
         //</editor-fold>
 
+        //<editor-fold desc="Methods of Almacen">
         submitFormAlmacen() {
-            if (!this.empresa_sucursal.attributes.id_sucursal) {
+            if (!this.almacen.attributes.id_sucursal) {
                 this.registerAlmacen();
             } else {
                 this.updateAlmacen();
             }
         },
+
         getAlmacen(){
             axios.get(urlGlobal.resourcesAlmacen
             ).then(response => {
@@ -715,6 +725,7 @@ var appConfig = new Vue({
                 console.log('errors');
             });
         },
+
         registerAlmacen(){
             let inputs = Object.assign({}, this.almacen.attributes);
             axios.post(urlGlobal.resourcesAlmacen, inputs
@@ -729,43 +740,32 @@ var appConfig = new Vue({
                 setTimeout(()=>{
                     this.almacen.hideSuggestions = false;
                 },1);
-                //this.getEmpresas();
+                this.getAlmacen();
                 this.notificationSuccess();
             }).catch(errors => {
                 console.log('errors');
                 this.notificationErrors(errors);
             });
         },
+
         updateAlmacen(){
-            let inputs = Object.assign({},this.empresa_sucursal.attributes);
-            axios.put(urlGlobal.resourcesSucursal + '/'+ inputs.id_sucursal, inputs)
+            let inputs = Object.assign({},this.almacen.attributes);
+            axios.put(urlGlobal.resourcesAlmacen + '/'+ inputs.id_almacen, inputs)
                 .then(response => {
-                    Object.assign(this.empresa_sucursal.tempAttributes ,this.empresa_sucursal.attributes);
-                    this.empresa_sucursal.attributes = new Object({
-                        id_sucursal:null,
-                        nombre:'',
-                        casa_matriz:0,
-                        direccion:'',
-                        telefono:'',
-                        fecha_apertura:'',
-                        estatus:'',
-                        id_ciudad:'',
-                        ciudad:'',
-                        id_empresa:'',
+                    Object.assign(this.almacen.tempAttributes ,this.almacen.attributes);
+                    this.almacen.attributes = new Object({
+                        id_almacen:null,
+                        codigo: '',
+                        direccion: '',
+                        id_sucursal: null,
                     });
-                    this.empresa_sucursal.tempAttributes = new Object({
-                        id_sucursal:null,
-                        nombre:'',
-                        casa_matriz:0,
-                        direccion:'',
-                        telefono:'',
-                        fecha_apertura:'',
-                        estatus:'',
-                        id_ciudad:'',
-                        ciudad:'',
-                        id_empresa:'',
+                    this.almacen.tempAttributes = new Object({
+                        id_almacen:null,
+                        codigo: '',
+                        direccion: '',
+                        id_sucursal: null,
                     });
-                    this.cancelModeEditEmpresaSucursal();
+                    this.cancelModeEditAlmacen();
                     this.notificationSuccess();
                 }).catch(errors => {
                 this.notificationErrors(errors);
@@ -776,8 +776,21 @@ var appConfig = new Vue({
             this.almacen.tempAttributes = almacen;
             this.almacen.attributes = Object.assign({}, almacen);
         },
-        cancelModeEditAlmacen(){
 
+        cancelModeEditAlmacen(){
+            $("#modal-edit-almacen").modal('hide');
+            this.almacen.attributes = new Object({
+                id_almacen:null,
+                codigo: '',
+                direccion: '',
+                id_sucursal: null,
+            });
+            this.almacen.tempAttributes = new Object({
+                id_almacen:null,
+                codigo: '',
+                direccion: '',
+                id_sucursal: null,
+            });
         },
 
         getSucursalesAlmacen() {
@@ -788,6 +801,97 @@ var appConfig = new Vue({
                 console.log('errors');
             });
         },
+        //</editor-fold>
+
+
+        submitFormEmpleado() {
+            if (!this.empleado.attributes.id_empleado) {
+                this.registerEmpleado();
+            } else {
+                this.updateEmpleado();
+            }
+        },
+
+        handleFileUpload(event){
+            this.empleado.attributes.foto = event.target.files[0];
+        },
+        registerEmpleado(){
+            let inputs = Object.assign({}, this.empleado.attributes);
+            let formData = new FormData();
+            formData.append('foto', inputs.foto);
+            delete inputs.foto;
+            formData.append('data', JSON.stringify(inputs) );
+
+            axios.post( urlGlobal.resourcesEmpleado, formData/*,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }*/
+            ).then( response => {
+                this.empleado.attributes = {
+                    id_empleado:null,
+                    nombre:'',
+                    ci:'',
+                    sexo:'',
+                    fecha_nacimiento:'',
+                    telefono:null,
+                    celular:null,
+                    correo:'',
+                    direccion:'',
+                    foto:null,
+                    persona_referencia:'',
+                    telefono_referencia:'',
+                    fecha_registro:null,
+                    status:'',
+                    id_sucursal:null,
+                    kardex:{
+                        id_kardex:null,
+                        id_cargo:null,
+                        fecha_inicio:'',
+                        salario:{
+                            monto:null,
+                            id_moneda:null
+                        }
+                    }
+                };
+                this.empleado.hideSuggestions = true;
+                setTimeout(()=>{
+                    this.empleado.hideSuggestions = false;
+                },1);
+
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                this.notificationErrors(errors);
+            });
+        },
+
+        updateEmpleado(){
+            console.log('wwww');
+            /*let inputs = Object.assign({},this.almacen.attributes);
+            axios.put(urlGlobal.resourcesAlmacen + '/'+ inputs.id_almacen, inputs)
+                .then(response => {
+                    Object.assign(this.almacen.tempAttributes ,this.almacen.attributes);
+                    this.almacen.attributes = new Object({
+                        id_almacen:null,
+                        codigo: '',
+                        direccion: '',
+                        id_sucursal: null,
+                    });
+                    this.almacen.tempAttributes = new Object({
+                        id_almacen:null,
+                        codigo: '',
+                        direccion: '',
+                        id_sucursal: null,
+                    });
+                    this.cancelModeEditAlmacen();
+                    this.notificationSuccess();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });*/
+        },
+
 
         //<editor-fold desc="Methods Notificacion">
         formatErrors: function (errors) {
@@ -820,5 +924,6 @@ var appConfig = new Vue({
             toastr.error(_errors, 'Corrija los Siguientes Errores', {timeOut: 10000});
         }
         //</editor-fold>
+
     }
 });

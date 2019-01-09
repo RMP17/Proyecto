@@ -61,7 +61,7 @@
     </div>
 </div>
 
-{{--===============================================Modal Edit Contact======================================--}}
+{{--===============================================Modal Edit Almacen======================================--}}
  {{--FIXME: aqui me quedaste , debes trabjar en actualizar--}}
 <div class="modal fade modal-slide-in-right"
      @keydown.esc="cancelModeEditAlmacen"
@@ -69,7 +69,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pt-1 pr-1">Editar Contacto</h4>
+                <h4 class="modal-title pt-1 pr-1">Editar Almacén</h4>
                 <button type="button" class="close"
                         @click="cancelModeEditAlmacen"
                         data-dismiss="modal" aria-label="Cerrar">

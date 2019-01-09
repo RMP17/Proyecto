@@ -21,7 +21,7 @@ class EmpleadoControlador extends Controller
 	}
 	public function index(Request $peticion)
 	{	
-		if ($peticion)
+		/*if ($peticion)
 		{
 			$consulta = trim($peticion->get('txtBuscar'));
 			$empleados = DB::table('empleado')
@@ -51,8 +51,8 @@ class EmpleadoControlador extends Controller
 			$cargos = Cargo ::orderBy('nombre','asc')
 			->get();
 			$monedas= Moneda ::orderBy('nombre', 'asc')->get();
-			return view('empleado.index', compact('empleados', 'consulta', 'paises','cargos','monedas'));
-		}
+			return view('empleado.index', compact('empleados', 'consulta', 'paises','cargos','monedas'));*/
+
 	}
 	public function create()
 	{
@@ -86,7 +86,6 @@ class EmpleadoControlador extends Controller
 		$ciudad = Ciudad :: findOrFail($id_ciudad);
 		$id_pais = $ciudad -> id_pais;
 		$pais = Pais :: findOrFail ($id_pais);
-
 
 		return view ('empleado.edit', compact ('empleado', 'paises', 'pais', 'ciudad', 'sucursal'));
 	}
