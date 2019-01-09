@@ -192,7 +192,7 @@
 		<button v-if="!empleado.attributes.id_empleado" type="submit" class="btn btn-primary w-25">Registrar</button>
 		<div v-else>
 			<button type="submit" class="btn btn-primary w-25">Actualizaar</button>
-			<button type="button" class="btn btn-warning w-25" @click="cancelModeEditAlmacen" >Cancelar</button>
+			<button type="button" class="btn btn-warning w-25" @click="cancelModeEditEmpleado" >Cancelar</button>
 		</div>
 	</div>
 

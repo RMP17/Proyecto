@@ -24,7 +24,7 @@ class EmpleadoPeticion extends FormRequest
     protected function prepareForValidation()
     {
         $data = json_decode($this->data, true);
-        $this->replace($data);
+        $this->merge($data);
     }
     public function rules()
     {
@@ -48,6 +48,7 @@ class EmpleadoPeticion extends FormRequest
 					'persona_referencia' =>'max:200',
 					'telefono_referencia' =>'max:15',
 					'id_sucursal' => 'required',
+                    'imagen' => 'image|mimes:jpeg,png,jpg|max:2048',
 				];
 			}
 			case 'PUT':
@@ -64,6 +65,7 @@ class EmpleadoPeticion extends FormRequest
                     'persona_referencia' =>'max:200',
                     'telefono_referencia' =>'max:15',
                     'id_sucursal' => 'required',
+                    'imagen' => 'image|mimes:jpeg,png,jpg|max:2048',
 				];
 			}
 			default:break;

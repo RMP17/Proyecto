@@ -20,38 +20,9 @@ class EmpleadoControlador extends Controller
 	{	
 	}
 	public function index(Request $peticion)
-	{	
-		/*if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$empleados = DB::table('empleado')
-				->join('sucursal', 'empleado.id_sucursal', '=', 'sucursal.id_sucursal')
-				->where('empleado.nombre', 'like', '%'.$consulta.'%')
-				->orderBy('nombre', 'asc')
-				->select('empleado.id_empleado as id_empleado', 
-							'empleado.nombre as nombre',  
-							'empleado.ci as ci',
-							'empleado.sexo as sexo',
-							'empleado.fecha_nacimiento as fecha_nacimiento', 
-							'empleado.telefono as telefono', 
-							'empleado.celular as celular', 
-							'empleado.correo as correo',
-							'empleado.direccion as direccion', 
-							'empleado.foto as foto', 
-							'empleado.persona_referencia as persona_referencia', 
-							'empleado.telefono_referencia as telefono_referencia', 
-							'empleado.fecha_registro as fecha_registro', 
-							'empleado.estatus as estatus', 
-							'empleado.id_sucursal as id_sucursal', 
-							'sucursal.nombre as sucursal',
-							DB::raw('DATEDIFF(curdate(), empleado.fecha_nacimiento) as edad'))
-				->get();
-			$paises = Pais::orderBy('nombre', 'asc')
-			->get();
-			$cargos = Cargo ::orderBy('nombre','asc')
-			->get();
-			$monedas= Moneda ::orderBy('nombre', 'asc')->get();
-			return view('empleado.index', compact('empleados', 'consulta', 'paises','cargos','monedas'));*/
+	{
+		$empleados = Empleado::getEmpleados();
+		return response()->json($empleados);
 
 	}
 	public function create()
@@ -67,7 +38,7 @@ class EmpleadoControlador extends Controller
 	
 	public function store(EmpleadoPeticion $peticion)
 	{
-	    Empleado::newEmpleado($peticion->all());
+	    Empleado::newEmpleado($peticion);
 	    return response()->json();
 		/*if(sizeof($kardexActiva) == 0)*/
 	}
@@ -92,23 +63,7 @@ class EmpleadoControlador extends Controller
 	
 	public function update(EmpleadoPeticion $peticion, $id_empleado)
 	{
-		$conversor = new ConversorImagenes;
-		$empleado = Empleado :: findOrFail($id_empleado);
-		$empleado -> nombre = $peticion -> get('txtNombre');
-		$empleado -> ci = $peticion -> get('txtCi');
-		$empleado -> sexo = $peticion -> get('rbtSexo');
-		$empleado -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
-		$empleado -> telefono = $peticion -> get('txtTelefono');
-		$empleado -> celular = $peticion -> get('txtCelular');
-		$empleado -> correo = $peticion -> get('txtCorreo');
-		$empleado -> direccion = $peticion -> get('txtDireccion');
-		if ($peticion -> get('imgFoto') != null)
-			$empleado -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
-		$empleado -> persona_referencia = $peticion -> get('txtPersonaReferencia');
-		$empleado -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
-		$empleado -> id_sucursal = $peticion -> get('cbxSucursal');
-		$empleado->update();
-		return Redirect :: to ('empleado');
+
 	}
 	
 	public function destroy($id_empleado)

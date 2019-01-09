@@ -23,45 +23,45 @@
         </tr>
         </thead>
         <tbody>
-        {{--@foreach($empleados as $e)
-            <tr>
-                <td>{{ $e -> nombre }}
-
-                    @if($e->estatus=='A')
-
-                        <span class="waves-effect waves-light btn btn-primary btn-sm">Activo</span>
-                    @else
-                        @if($e->estatus=='X')
-
-                            <span class="waves-effect waves-light btn btn-danger btn-sm">Inactivo</span>
-
-                        @endif
-                    @endif
-                </td>
-                <td>{{ $e -> ci }}</td>
-                @if ($e -> sexo == 'm')
-                    <td>Masculino</td>
-                @else
-                    <td>Femenino</td>
-                @endif
-                <td>{{ ceil($e -> edad/365) -1 }}</td>
-                <td>{{ $e -> sucursal }}</td>
-                <td>{{ $e -> telefono }}</td>
-                <td>{{ $e -> celular }}</td>
-                <td>{{ $e -> correo }}</td>
-                <td>{{ $e -> direccion }}</td>
-                <td>{{ $e -> fecha_registro }}</td>
-                <td>{{ $e -> persona_referencia }}</td>
-                <td>{{ $e -> telefono_referencia }}</td>
-                <td>
-                    <a title="Editar" href="{{URL::action('EmpleadoControlador@edit', $e -> id_empleado)}}"><button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button></a>
-                    <a title="Dar de baja" href="" data-target="#modal-delete-empleado-{{$e -> id_empleado}}" data-toggle="modal"><button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-thumb-down"></i></button></a>
-
-                    <!-- <button type="button" class="btn btn-dark btn-sm"><i class="mdi mdi-folder"></i></button >-->
-                </td>
-            </tr>
-            @include('empleado.destroy')
-        @endforeach--}}
+        <tr v-for="_empleado in empleado.data">
+            <td>@{{ _empleado.nombre }} <br>
+                <span v-if="!!_empleado.status" class="waves-effect waves-light btn btn-success btn-sm">Activo</span>
+                <span v-else class="waves-effect waves-light btn btn-secondary btn-sm">Inactivo</span>
+            </td>
+            <td>@{{ _empleado.ci }}</td>
+            <td>
+                <span v-if="_empleado.sexo==='m'">Masculino</span>
+                <span v-else>Femenino</span>
+            </td>
+            <td>@{{ _empleado.edad }}</td>
+            <td>@{{ _empleado.sucursal.nombre }}</td>
+            <td>@{{ _empleado.telefono }}</td>
+            <td>@{{ _empleado.celular }}</td>
+            <td>@{{ _empleado.correo }}</td>
+            <td>@{{ _empleado.direccion }}</td>
+            <td>@{{ _empleado.fecha_registro }}</td>
+            <td>@{{ _empleado.persona_referencia }}</td>
+            <td>@{{ _empleado.telefono_referencia }}</td>
+            <td>
+                <a href="javascript:void(0)"
+                   title="Editar Empleado"
+                   @click="modeEditEmpleado(_empleado)"
+                   data-backdrop="static"
+                   data-keyboad="false"
+                   data-target="#modal-edit-empleado"
+                   data-toggle="modal"
+                   type="button" class="btn btn-warning btn-sm">
+                    <i class="mdi mdi-pencil"></i>
+                </a>
+               {{-- <a title="Editar" href="{{URL::action('EmpleadoControlador@edit', $e -> id_empleado)}}">
+                    <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button>
+                </a>
+                <a title="Dar de baja" href="" data-target="#modal-delete-empleado-{{$e -> id_empleado}}"
+                   data-toggle="modal">
+                    <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-thumb-down"></i></button>
+                </a>--}}
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
@@ -81,6 +81,31 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--===============================================Modal Edit Empleado======================================--}}
+<div class="modal fade modal-slide-in-right"
+     @keydown.esc="cancelModeEditEmpleado"
+     aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-empleado">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Editar Empleado</h4>
+                <button type="button" class="close"
+                        @click="cancelModeEditEmpleado"
+                        data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                @include('empleado.create')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"
+                        data-dismiss="modal" @click="cancelModeEditEmpleado" > Cerrar</button>
             </div>
         </div>
     </div>

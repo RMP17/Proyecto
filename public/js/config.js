@@ -193,12 +193,13 @@ var appConfig = new Vue({
             }
         },
     },
-    mounted(){
+    created:function(){
         this.getMonedas();
         this.getCargo();
         this.getEmpresas();
         this.getSucursalesAlmacen();
         this.getAlmacen();
+        this.getEmpleados();
     },
     methods: {
         //<editor-fold desc="Methods of Pais">
@@ -812,6 +813,16 @@ var appConfig = new Vue({
             }
         },
 
+        getEmpleados() {
+            axios.get(urlGlobal.resourcesEmpleado
+            ).then(response => {
+                this.empleado.data = response.data;
+                console.log(response.data);
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+
         handleFileUpload(event){
             this.empleado.attributes.foto = event.target.files[0];
         },
@@ -868,28 +879,137 @@ var appConfig = new Vue({
         },
 
         updateEmpleado(){
-            console.log('wwww');
-            /*let inputs = Object.assign({},this.almacen.attributes);
-            axios.put(urlGlobal.resourcesAlmacen + '/'+ inputs.id_almacen, inputs)
-                .then(response => {
-                    Object.assign(this.almacen.tempAttributes ,this.almacen.attributes);
-                    this.almacen.attributes = new Object({
-                        id_almacen:null,
-                        codigo: '',
-                        direccion: '',
-                        id_sucursal: null,
-                    });
-                    this.almacen.tempAttributes = new Object({
-                        id_almacen:null,
-                        codigo: '',
-                        direccion: '',
-                        id_sucursal: null,
-                    });
-                    this.cancelModeEditAlmacen();
-                    this.notificationSuccess();
-                }).catch(errors => {
+
+            let inputs = Object.assign({},this.empleado.attributes);
+            formData.append('foto', inputs.foto);
+            delete inputs.foto;
+            formData.append('data', JSON.stringify(inputs) );
+            formData.append('_method', 'PUT');
+            axios.put(urlGlobal.resourcesEmpleado + '/' + inputs.id_empleado, inputs,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            ).then(response => {
+                Object.assign(this.empleado.tempAttributes, this.empleado.attributes);
+                this.empleado.attributes = new Object({
+                    id_empleado: null,
+                    nombre: '',
+                    ci: '',
+                    sexo: '',
+                    fecha_nacimiento: '',
+                    telefono: null,
+                    celular: null,
+                    correo: '',
+                    direccion: '',
+                    foto: null,
+                    persona_referencia: '',
+                    telefono_referencia: '',
+                    fecha_registro: null,
+                    status: '',
+                    id_sucursal: null,
+                    kardex: {
+                        id_kardex: null,
+                        id_cargo: null,
+                        fecha_inicio: '',
+                        salario: {
+                            monto: null,
+                            id_moneda: null
+                        }
+                    }
+                });
+                this.empleado.tempAttributes = new Object({
+                    id_empleado: null,
+                    nombre: '',
+                    ci: '',
+                    sexo: '',
+                    fecha_nacimiento: '',
+                    telefono: null,
+                    celular: null,
+                    correo: '',
+                    direccion: '',
+                    foto: null,
+                    persona_referencia: '',
+                    telefono_referencia: '',
+                    fecha_registro: null,
+                    status: '',
+                    id_sucursal: null,
+                    kardex: {
+                        id_kardex: null,
+                        id_cargo: null,
+                        fecha_inicio: '',
+                        salario: {
+                            monto: null,
+                            id_moneda: null
+                        }
+                    }
+                });
+                this.cancelModeEditAlmacen();
+                this.notificationSuccess();
+            }).catch(errors => {
                 this.notificationErrors(errors);
-            });*/
+            });
+        },
+
+        modeEditEmpleado(empleado) {
+            this.empleado.tempAttributes = empleado;
+            this.empleado.attributes = Object.assign({}, empleado);
+        },
+        cancelModeEditEmpleado(){
+            $("#modal-edit-empleado").modal('hide');
+            this.empleado.attributes = new Object({
+                id_empleado:null,
+                nombre:'',
+                ci:'',
+                sexo:'',
+                fecha_nacimiento:'',
+                telefono:null,
+                celular:null,
+                correo:'',
+                direccion:'',
+                foto:null,
+                persona_referencia:'',
+                telefono_referencia:'',
+                fecha_registro:null,
+                status:'',
+                id_sucursal:null,
+                kardex:{
+                    id_kardex:null,
+                    id_cargo:null,
+                    fecha_inicio:'',
+                    salario:{
+                        monto:null,
+                        id_moneda:null
+                    }
+                }
+            });
+            this.empleado.tempAttributes = new Object({
+                id_empleado:null,
+                nombre:'',
+                ci:'',
+                sexo:'',
+                fecha_nacimiento:'',
+                telefono:null,
+                celular:null,
+                correo:'',
+                direccion:'',
+                foto:null,
+                persona_referencia:'',
+                telefono_referencia:'',
+                fecha_registro:null,
+                status:'',
+                id_sucursal:null,
+                kardex:{
+                    id_kardex:null,
+                    id_cargo:null,
+                    fecha_inicio:'',
+                    salario:{
+                        monto:null,
+                        id_moneda:null
+                    }
+                }
+            });
         },
 
 

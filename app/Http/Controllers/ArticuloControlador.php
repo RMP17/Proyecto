@@ -163,6 +163,7 @@ class ArticuloControlador extends Controller
 
         $urlImage = null;
         $path = public_path().'/images/';
+        //TODO: Te quedaste aqui de guia
         if (count($peticion->allFiles()) > 0 ) {
             if (!is_null($articulo->imagen)) {
                 $_temPath = $path.$articulo->imagen;

@@ -62,7 +62,6 @@
 </div>
 
 {{--===============================================Modal Edit Almacen======================================--}}
- {{--FIXME: aqui me quedaste , debes trabjar en actualizar--}}
 <div class="modal fade modal-slide-in-right"
      @keydown.esc="cancelModeEditAlmacen"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-almacen">
