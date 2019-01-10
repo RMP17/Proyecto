@@ -42,9 +42,9 @@ class EmpresaControlador extends Controller
 		return view ('empresa.edit', ['empresa' => Empresa :: findOrFail($id_empresa)]);
 	}
 	
-	public function update(EmpresaPeticion $peticion, $id_empresa)
+	public function updateEmpleado(EmpresaPeticion $peticion, $id_empresa)
 	{
-	    Empresa::updateEmpresa($peticion->all(),$id_empresa);
+	    Empresa::updateEmpresa($peticion,$id_empresa);
 		return  response()->json();
 	}
 	

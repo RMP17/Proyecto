@@ -31,6 +31,8 @@ Route::get('config', 'ConfigController@index');
 Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
 Route::get('proveedor/contactos/{id_proveedor}', 'ProveedorControlador@getContactosOfProveedor');
 Route::get('proveedores/{query}', 'ProveedorControlador@suggestionsProveedores');
+/*Route::put('empleado/update{id_empleado}', 'EmpleadoControlador@updateEmpleado');*/
+Route::get('kardex/{id_empleado}', 'KardexControlador@getKardesEmpleado');
 
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');
@@ -76,7 +78,7 @@ Route::resources([
 	'subcategoria' => 'SubcategoriaControlador',
 	'sucursal' => 'SucursalControlador',
 	'venta' => 'VentaControlador',
-	'kardex' => 'KardexControlador',
+	/*'kardex' => 'KardexControlador',*/
 	'compra' => 'CompraControlador',
 	'kardexO' => 'KardexObservacionesControlador',
 	]);

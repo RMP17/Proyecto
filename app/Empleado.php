@@ -24,13 +24,10 @@ class Empleado extends Model
 		'foto',
 		'persona_referencia',
 		'telefono_referencia',
-		'estatus',
 		'id_sucursal',
 	];
 	
-	protected $guarded = [
-	
-	];
+	protected $guarded = [];
 
     public function sucursal(){
         return $this->belongsTo(Sucursal::class,'id_sucursal');
@@ -61,7 +58,7 @@ class Empleado extends Model
         DB::beginTransaction();
         try {
             $data = json_decode($oarameters->data, true);
-            $urlImage = null;
+            $urlImage = '';
             $path = public_path().'/images';
             if (count($oarameters->allFiles()) > 0) {
                 $files = $oarameters->allFiles();
@@ -74,7 +71,7 @@ class Empleado extends Model
             $_empleado->fill($data);
             $_empleado->fecha_registro = Carbon::now();
             $_empleado->foto = $urlImage;
-            $_empleado->status = 1;
+            $_empleado->estatus = 1;
             $_empleado->save();
 
             $kardex = new Kardex;
@@ -94,47 +91,38 @@ class Empleado extends Model
         }
     }
 
-    public function updateEmpleado($parameters_empleado, $id_empleado){
-        //TODO: Te quedaste aqui
+    public static function updateEmpleado($parameters_empleado, $id_empleado){
         DB::beginTransaction();
         try {
             $data = json_decode($parameters_empleado->data, true);
             $urlImage = null;
-            $path = public_path().'/images';
-            if (count($peticion->allFiles()) > 0 ) {
-                if (!is_null($articulo->imagen)) {
-                    $_temPath = $path.$articulo->imagen;
+            $_empleado = Empleado::findOrFail($id_empleado);
+            $path = public_path().'/images/';
+            if (count($parameters_empleado->allFiles()) > 0 ) {
+                if (!is_null($parameters_empleado->foto)) {
+                    $_temPath = $path.$_empleado->foto;
                     if (File::exists($_temPath)) {
                         File::delete($_temPath);
                     }
                 }
-                $files = $peticion->allFiles();
-                $validator2 = Validator::make($files, [
-                    'imagen' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                ]);
-                if ($validator2->fails()) {
-                    return response()->json($validator2->errors(), 400);
-                };
-                $imageTempName = $files['imagen']->getPathname();
-                $imageName = $files['imagen']->getClientOriginalName();
-                $files['imagen']->move($path, now()->timestamp.$imageName);
+                $files = $parameters_empleado->allFiles();
+                $imageTempName = $files['foto']->getPathname();
+                $imageName = $files['foto']->getClientOriginalName();
+                $files['foto']->move($path, now()->timestamp.$imageName);
                 $urlImage = now()->timestamp.$imageName;
+                $_empleado->foto = $urlImage;
             }
-            $_empleado = Empleado::findOrFail($id_empleado);
+
             $_empleado->fill($data);
-            $_empleado->fecha_registro = Carbon::now();
-            $_empleado->foto = $urlImage;
-            $_empleado->status = 1;
             $_empleado->update();
 
-            $kardex = new Kardex;
+            $kardex = Kardex::find($data['kardex']['id_kardex']);
             $kardex->fill($data['kardex']);
-            $kardex ->fecha_registro = Carbon::now();
-            $_empleado->kardex()->save($kardex);
+            $kardex->update();
 
-            $salario = new Salario();
+            $salario = Salario::find($data['kardex']['id_kardex']);
             $salario->fill($data['kardex']['salario']);
-            $kardex->salario()->save($salario);
+            $salario->update();
             DB::commit();
             return true;
 

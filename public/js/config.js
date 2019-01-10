@@ -81,7 +81,7 @@ var appConfig = new Vue({
                 persona_referencia:'',
                 telefono_referencia:'',
                 fecha_registro:null,
-                status:'',
+                estatus:'',
                 id_sucursal:null,
                 kardex:{
                     id_kardex:null,
@@ -192,6 +192,39 @@ var appConfig = new Vue({
                 id_sucursal: null,
             }
         },
+
+        kardex: {
+            data: [],
+            empleado:{
+                id_empleado:null,
+                nombre:''
+            },
+            /*attributes: {
+                empleado:{
+                    id_empleado:null,
+                    nombre:''
+                },
+                fecha_inicio:'',
+                fecha_baja:'',
+                cargo:{
+                    id_cargo:null,
+                    nombre:''
+                },
+                salario:{
+                    monto:0,
+                    moneda:null
+                },
+            },*/
+            kardex_observaciones:{
+                observacion:''
+            },
+            /*tempAttributes: {
+                id_almacen:null,
+                codigo: null,
+                direccion: '',
+                id_sucursal: null,
+            }*/
+        }
     },
     created:function(){
         this.getMonedas();
@@ -805,6 +838,7 @@ var appConfig = new Vue({
         //</editor-fold>
 
 
+        //<editor-fold desc="Methods of Empleado">
         submitFormEmpleado() {
             if (!this.empleado.attributes.id_empleado) {
                 this.registerEmpleado();
@@ -855,7 +889,7 @@ var appConfig = new Vue({
                     persona_referencia:'',
                     telefono_referencia:'',
                     fecha_registro:null,
-                    status:'',
+                    estatus:'',
                     id_sucursal:null,
                     kardex:{
                         id_kardex:null,
@@ -868,6 +902,7 @@ var appConfig = new Vue({
                     }
                 };
                 this.empleado.hideSuggestions = true;
+                this.notificationSuccess();
                 setTimeout(()=>{
                     this.empleado.hideSuggestions = false;
                 },1);
@@ -881,11 +916,12 @@ var appConfig = new Vue({
         updateEmpleado(){
 
             let inputs = Object.assign({},this.empleado.attributes);
+            let formData = new FormData();
             formData.append('foto', inputs.foto);
             delete inputs.foto;
             formData.append('data', JSON.stringify(inputs) );
             formData.append('_method', 'PUT');
-            axios.put(urlGlobal.resourcesEmpleado + '/' + inputs.id_empleado, inputs,
+            axios.post(urlGlobal.resourcesEmpleado+ '/' + inputs.id_empleado, formData,
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -945,7 +981,7 @@ var appConfig = new Vue({
                         }
                     }
                 });
-                this.cancelModeEditAlmacen();
+                this.cancelModeEditEmpleado();
                 this.notificationSuccess();
             }).catch(errors => {
                 this.notificationErrors(errors);
@@ -972,7 +1008,7 @@ var appConfig = new Vue({
                 persona_referencia:'',
                 telefono_referencia:'',
                 fecha_registro:null,
-                status:'',
+                estatus:'',
                 id_sucursal:null,
                 kardex:{
                     id_kardex:null,
@@ -998,7 +1034,7 @@ var appConfig = new Vue({
                 persona_referencia:'',
                 telefono_referencia:'',
                 fecha_registro:null,
-                status:'',
+                estatus:'',
                 id_sucursal:null,
                 kardex:{
                     id_kardex:null,
@@ -1011,8 +1047,23 @@ var appConfig = new Vue({
                 }
             });
         },
+        //</editor-fold>
 
 
+        getKardex(empleado) {
+            this.kardex.empleado.nombre=empleado.nombre;
+            this.kardex.empleado.id_empleado=empleado.id_empleado;
+            axios.get(urlGlobal.getKardex+empleado.id_empleado
+            ).then(response => {
+                this.kardex.data = response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        // FIXME: quitar
+        hideModal( id ){
+            $('#'+id).modal('hide');
+        },
         //<editor-fold desc="Methods Notificacion">
         formatErrors: function (errors) {
             let _errors = errors.response.data.errors;

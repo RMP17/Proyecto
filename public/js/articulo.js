@@ -1,4 +1,3 @@
- // urlGlobal esta en desplegable_pais_ciudad.js
 var appArticulo = new Vue({
     el: '#app-articulo',
     data: {
@@ -407,7 +406,7 @@ var appArticulo = new Vue({
             delete inputs.imagen;
             formData.append('data', JSON.stringify(inputs) );
             formData.append('_method', 'PUT');
-            axios.post( urlGlobal.resourcesArticulo+'/update'+'/'+inputs.id_articulo, formData,
+            axios.post( urlGlobal.resourcesArticulo+'/update/'+inputs.id_articulo, formData,
                 formData,
                 {
                     headers: {

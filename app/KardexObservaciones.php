@@ -20,5 +20,7 @@ class KardexObservaciones extends Model
 	protected $guarded = [
 	
 	];
-	
+    public function kardex(){
+        return $this->belongsTo(Kardex::class,'id_kardex');
+    }
 }

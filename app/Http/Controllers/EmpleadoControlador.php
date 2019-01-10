@@ -63,7 +63,8 @@ class EmpleadoControlador extends Controller
 	
 	public function update(EmpleadoPeticion $peticion, $id_empleado)
 	{
-
+        Empleado::updateEmpleado($peticion, $id_empleado);
+        return response()->json();
 	}
 	
 	public function destroy($id_empleado)
