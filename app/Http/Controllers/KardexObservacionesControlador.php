@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\KardexObservacionesPeticion;
 use Allison\KardexObservaciones;
-use DB;
 
 class KardexObservacionesControlador extends Controller
 {
@@ -14,50 +13,27 @@ class KardexObservacionesControlador extends Controller
 	{
 		
 	}
-	public function show(Request $peticion, $id_kardex){
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$kardexO = KardexObservaciones ::where('id_kardex', '=', $id_kardex)
-				->paginate(10);
-			return view('kardex.kardex_observaciones.show', compact('kardexO', 'id_kardex'));
-		}
+	public function show($id_kardex){
+
+        $kardex_observaciones = KardexObservaciones::getKardexObservacionesOfKardex($id_kardex);
+        return response()->json($kardex_observaciones);
 	}
-	
-	public function create($id_kardex)
-	{
-		return view('kardex.kardex_observaciones.create', compact('id_kardex'));
-	}
-	
+
 	public function store(KardexObservacionesPeticion $peticion)
-	{
-		$kardexO = new KardexObservaciones;
-		$kardexO -> observacion = $peticion -> get('txtObservacion');
-		$kardexO -> fecha = date("Y-m-d", time());
-		$kardexO -> id_kardex = $peticion -> get('cbxKardex');
-		$kardexO -> save();
-		$id_kardex=$peticion -> get('cbxKardex');
-		return Redirect :: to ('kardexO/'.$id_kardex);
+    {
+        KardexObservaciones::newKardexObservacion($peticion->all());
+        return response()->json();
 	}
-	public function edit($id_kardex)
+
+	public function update(KardexObservacionesPeticion $peticion, $id_kardex_observacion)
 	{
-		return view ('kardex.kardex_observaciones.edit', ['kardexO' => KardexObservaciones:: findOrFail($id_kardex)]);
+	    KardexObservaciones::updateKardexObservacion($peticion->all(), $id_kardex_observacion);
+		return response()->json();
 	}
-	
-	public function update(KardexPeticion $peticion, $id_kardex)
+	public function destroy($id_kardex_observacion)
 	{
-		$kardexO = KardexObservaciones :: findOrFail($id_kardex);
-		$kardexO -> observacion = $peticion -> get('txtObservacion');
-		$kardexO -> id_kardex = $peticion -> get('cbxKardex');
-		$kardexO->update();
-		$id_kardex=$peticion -> get('cbxKardex');
-		return Redirect :: to ('kardexO/'.$id_kardex);
-	}
-	public function destroy($id_kardex)
-	{
-		$kardexO = KardexObservaciones :: findOrFail($id_kardex);
-		DB::table('kardex_observaciones')->where('id_kardex', '=', $id_kardex)->delete();
-		return Redirect :: to ('kardex');
+		KardexObservaciones::findOrFail($id_kardex_observacion)->delete();
+        return response()->json();
 	}
 	
 }

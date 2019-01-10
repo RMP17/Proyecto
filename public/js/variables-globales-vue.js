@@ -15,6 +15,7 @@ var urlGlobal={
     resourcesSucursal:url + 'sucursal',
     getAllCiudades:url + 'ciudades',
     getKardex:url + 'kardex/',
+    resourcesKardexObservaciones:url + 'kardexObservaciones',
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
     resourcesArticulo:url + 'articulo',

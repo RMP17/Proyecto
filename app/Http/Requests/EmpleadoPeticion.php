@@ -72,7 +72,9 @@ class EmpleadoPeticion extends FormRequest
                     'kardex.salario.id_moneda' => 'required',
 				];
 			}
-			default:break;
+			default:{
+                return [];
+            }
 		}
     }
 	

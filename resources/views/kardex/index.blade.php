@@ -20,11 +20,7 @@
 				<td>
 					<a href="javascript:void(0)"
 					   title="Ver Observaciones"
-
-					   data-backdrop="static"
-					   data-keyboad="false"
-					   data-target="#modal-kardex-observaciones"
-					   data-toggle="modal"
+					   @click="getKardexObservaciones(_kardex.kardex_observaciones,_kardex.id_kardex)"
 					   type="button" class="btn btn-info btn-sm">
 						<i class="far fa-comment-alt"></i>
 					</a>

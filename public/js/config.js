@@ -194,6 +194,7 @@ var appConfig = new Vue({
         },
 
         kardex: {
+            currentTab:10,
             data: [],
             empleado:{
                 id_empleado:null,
@@ -208,7 +209,7 @@ var appConfig = new Vue({
                 fecha_baja:'',
                 cargo:{
                     id_cargo:null,
-                    nombre:''
+                    nombre:2''
                 },
                 salario:{
                     monto:0,
@@ -216,7 +217,17 @@ var appConfig = new Vue({
                 },
             },*/
             kardex_observaciones:{
-                observacion:''
+                data:[],
+                attributes:{
+                    id_kardex_observacion:null,
+                    id_kardex:null,
+                    observacion:''
+                },
+                tempAttributes:{
+                    id_kardex_observacion:null,
+                    id_kardex:null,
+                    observacion:''
+                }
             },
             /*tempAttributes: {
                 id_almacen:null,
@@ -1060,9 +1071,118 @@ var appConfig = new Vue({
                 console.log('errors');
             });
         },
-        // FIXME: quitar
-        hideModal( id ){
-            $('#'+id).modal('hide');
+        getKardexObservacionesOfServer() {
+            axios.get(urlGlobal.resourcesKardexObservaciones+'/'+this.kardex
+                .kardex_observaciones.attributes.id_kardex
+            ).then(response => {
+                this.kardex.kardex_observaciones.data=response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        getKardexObservaciones(observaciones,id_kardex){
+            this.kardex.kardex_observaciones.data=observaciones;
+            this.kardex.kardex_observaciones.attributes.id_kardex=id_kardex;
+            this.changeTab(11);
+        },
+
+        registerKardexObservacion(){
+            let inputs = Object.assign({}, this.kardex.kardex_observaciones.attributes);
+            axios.post( urlGlobal.resourcesKardexObservaciones,inputs
+            ).then( response => {
+                this.kardex.kardex_observaciones.attributes.id_kardex_observacion =null;
+                this.kardex.kardex_observaciones.attributes.observacion = '';
+                this.getKardexObservacionesOfServer();
+                this.notificationSuccess();
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                this.notificationErrors(errors);
+            });
+        },
+
+        modeEditKardexObserbacion(kardex_observacion) {
+            this.kardex.kardex_observaciones.tempAttributes = kardex_observacion;
+            this.kardex.kardex_observaciones.attributes = Object.assign({}, kardex_observacion);
+        },
+        cancelModeEditKardexObserbacion(){
+            let id_kardex = this.kardex.kardex_observaciones.attributes.id_kardex;
+            this.kardex.kardex_observaciones.attributes = new Object({
+                id_kardex_observacion:null,
+                id_kardex:null,
+                observacion:''
+            });
+            this.kardex.kardex_observaciones.attributes.id_kardex = id_kardex;
+            this.kardex.kardex_observaciones.tempAttributes = new Object({
+                id_kardex_observacion:null,
+                id_kardex:null,
+                observacion:''
+            });
+        },
+
+        updateKardexObservaciones(){
+            let inputs = Object.assign({}, this.kardex.kardex_observaciones.attributes);
+            axios.put(urlGlobal.resourcesKardexObservaciones+ '/' + inputs.id_kardex_observaciones,
+            inputs
+            ).then(response => {
+                Object.assign(this.kardex.kardex_observaciones.tempAttributes,
+                    this.kardex.kardex_observaciones.attributes);
+                this.cancelModeEditKardexObserbacion();
+                this.notificationSuccess();
+            }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
+        submitFormKardexObservaciones() {
+            if (!this.kardex.kardex_observaciones.attributes.id_kardex_observaciones) {
+                this.registerKardexObservacion();
+            } else {
+                this.updateKardexObservaciones();
+            }
+        },
+        deleteFabricante: function(id, index) {
+            let r = confirm("ESTÁ SEGURO");
+            if (r === true) {
+                axios.delete(urlGlobal.resourcesFabricante+'/'+id)
+                    .then( response =>{
+                        this.fabricante.data.splice(index,1);
+                        this.fabricante.pagination.total -= 1;
+                        this.fabricante.pagination.last_page = Math.ceil(this.fabricante.pagination.total/10);
+                    }).catch((errors)=>{
+                    console.log(errors);
+                    this.categoria.errors = this.formatErrors(errors);
+                });
+            }
+        },
+        deleteKardexObservaciones(id, index){
+            let r = confirm("ESTÁ SEGURO");
+            if (r === true) {
+                axios.delete(urlGlobal.resourcesKardexObservaciones+ '/' + id
+                ).then(response => {
+                    this.kardex.kardex_observaciones.data.splice(index,1);
+                    this.notificationSuccess();
+                }).catch(errors => {
+                    console.log('errors');
+                    this.notificationErrors(errors);
+                });
+            }
+        },
+        forceClosedModelKardex() {
+            this.kardex.kardex_observaciones.attributes.id_kardex = null;
+            this.kardex.currentTab = 10;
+            this.kardex.kardex_observaciones.attributes = new Object({
+                id_kardex_observacion:null,
+                id_kardex:null,
+                observacion:''
+            });
+            this.kardex.kardex_observaciones.tempAttributes = new Object({
+                id_kardex_observacion:null,
+                id_kardex:null,
+                observacion:''
+            });
+        },
+
+        changeTab(tab) {
+            this.kardex.currentTab=tab;
         },
         //<editor-fold desc="Methods Notificacion">
         formatErrors: function (errors) {

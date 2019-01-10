@@ -80,7 +80,7 @@ Route::resources([
 	'venta' => 'VentaControlador',
 	/*'kardex' => 'KardexControlador',*/
 	'compra' => 'CompraControlador',
-	'kardexO' => 'KardexObservacionesControlador',
+	'kardexObservaciones' => 'KardexObservacionesControlador',
 	]);
 
 // Rutas de control con peticiones ajax

@@ -23,27 +23,42 @@ class KardexObservacionesPeticion extends FormRequest
      */
     public function rules()
     {
-                switch($this->method())
-        {
+        switch ($this->method()) {
             case 'GET':
 
             case 'DELETE':
-            {
-                return [];
-            }
+                {
+                    return [];
+                }
             case 'POST':
-            {
-                return [];
-                    
-            }
+                {
+                    return [
+                        'id_kardex' => 'required',
+                        'observacion' => 'required|max:50',
+                    ];
+
+                }
             case 'PUT':
             case 'PATCH':
-            {
-                return [
-
-                ];
-            }
-            default:break;
+                {
+                    return [
+                        'id_kardex' => 'required',
+                        'observacion' => 'required|max:50',
+                    ];
+                }
+            default:
+                {
+                    return [];
+                }
         }
+    }
+
+    public function messages()
+    {
+        return [
+            'id_kardex.required' => 'ID de Kardex es requerido',
+            'observacion.required' => 'El campo de observación es requerido.',
+            //'observacion.max' => 'El campo de observación excede el numero caracteres permitidos.',
+        ];
     }
 }
