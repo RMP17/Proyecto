@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Allison\User::class,
+            'model' => Allison\Acceso::class,
         ],
 
         // 'users' => [

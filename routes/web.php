@@ -51,11 +51,15 @@ Route::prefix('articulo')->group(function () {
     Route::get('codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloByCodigoBarra');
     Route::put('status/{id_articulo}', 'ArticuloControlador@changeStatusOfArticulo');
 });
+Route::prefix('permiso')->group(function () {
+    Route::get('', 'PermisoController@getPermisos');
+});
 
 
 Route::resources([
 	'almacen' => 'AlmacenControlador',
 	'articulo' => 'ArticuloControlador',
+	'acceso' => 'AccesoController',
 	'caja' => 'CajaControlador',
 	'cajachica' => 'CajaChicaControlador',
 	'cargo' => 'CargoControlador',
@@ -103,3 +107,7 @@ Route::get('subcategoria/create/{id_categoria}', 'SubcategoriaControlador@create
 Route::get('sucursal/create/{id_sucursal}', 'SucursalControlador@create');
 
 
+
+Auth::routes();
+
+//Route::get('/home', 'HomeController@index')->name('home');

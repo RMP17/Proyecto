@@ -235,7 +235,41 @@ var appConfig = new Vue({
                 direccion: '',
                 id_sucursal: null,
             }*/
-        }
+        },
+        acceso: {
+            currentTab:10,
+            permisos:[],
+            data: [],
+            empleado:{
+                id_empleado:null,
+                nombre:''
+            },
+            attributes: {
+                id_empleado:null,
+                usuario:'',
+                pass:'',
+                permisos_permitidos:[]
+            },
+            kardex_observaciones:{
+                data:[],
+                attributes:{
+                    id_kardex_observacion:null,
+                    id_kardex:null,
+                    observacion:''
+                },
+                tempAttributes:{
+                    id_kardex_observacion:null,
+                    id_kardex:null,
+                    observacion:''
+                }
+            },
+            /*tempAttributes: {
+                id_almacen:null,
+                codigo: null,
+                direccion: '',
+                id_sucursal: null,
+            }*/
+        },
     },
     created:function(){
         this.getMonedas();
@@ -244,6 +278,7 @@ var appConfig = new Vue({
         this.getSucursalesAlmacen();
         this.getAlmacen();
         this.getEmpleados();
+        this.getPermisos();
     },
     methods: {
         //<editor-fold desc="Methods of Pais">
@@ -877,7 +912,6 @@ var appConfig = new Vue({
             formData.append('foto', inputs.foto);
             delete inputs.foto;
             formData.append('data', JSON.stringify(inputs) );
-
             axios.post( urlGlobal.resourcesEmpleado, formData/*,
                 formData,
                 {
@@ -913,6 +947,7 @@ var appConfig = new Vue({
                     }
                 };
                 this.empleado.hideSuggestions = true;
+                this.getEmpleados();
                 this.notificationSuccess();
                 setTimeout(()=>{
                     this.empleado.hideSuggestions = false;
@@ -1060,7 +1095,7 @@ var appConfig = new Vue({
         },
         //</editor-fold>
 
-
+        //<editor-fold desc="Methods of Kardex and Observaciones">
         getKardex(empleado) {
             this.kardex.empleado.nombre=empleado.nombre;
             this.kardex.empleado.id_empleado=empleado.id_empleado;
@@ -1180,6 +1215,51 @@ var appConfig = new Vue({
                 observacion:''
             });
         },
+        //</editor-fold>
+
+        getPermisos() {
+            axios.get(urlGlobal.getPermisos
+            ).then(response => {
+                let permisos=[];
+                response.data.forEach(value=>{
+                    value.permitir = 0;
+                    permisos.push(value);
+                });
+                this.acceso.permisos = permisos;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+
+        registerAcceso(){
+            let inputs = Object.assign({}, this.acceso.attributes);
+            inputs.id_empleado = this.acceso.empleado.id_empleado;
+            inputs.permisos_permitidos = this.acceso.permisos;
+            axios.post( urlGlobal.resourcesAcceso,inputs
+            ).then( response => {
+                /*this.kardex.kardex_observaciones.attributes.id_kardex_observacion =null;
+                this.kardex.kardex_observaciones.attributes.observacion = '';
+                this.getKardexObservacionesOfServer();
+                this.notificationSuccess();*/
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                this.notificationErrors(errors);
+            });
+        },
+        getAccesoOf(empleado){
+            this.acceso.empleado.id_empleado=empleado.id_empleado;
+            this.acceso.empleado.nombre=empleado.nombre;
+        },
+        // 1: para permitir; 0: para no permitir
+        changePermisos(selectValue) {
+            this.acceso.permisos.forEach(permiso => {
+                permiso.permitir = selectValue;
+            });
+        },
+
+
+
+
 
         changeTab(tab) {
             this.kardex.currentTab=tab;

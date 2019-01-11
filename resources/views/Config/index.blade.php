@@ -50,6 +50,13 @@
                                    role="tab"
                                    aria-controls="nav-profile"
                                    aria-selected="false">Países</a>
+                                {{--<a class="nav-item nav-link w-10em"
+                                   id="nav-profile-tab"
+                                   data-toggle="tab"
+                                   href="#nav-permisos"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Permisos</a>--}}
                             </div>
                         </nav>
 
@@ -98,20 +105,31 @@
                                     </div>
                                 </div>
                                         {{--=========================================END TAP CONFIG==========================--}}
-                                        {{--=========================================END TAP PAISES==========================--}}
+                                        {{--=========================================TAP PAISES==========================--}}
                                 <div class="tab-pane fade" id="nav-paises" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('pais.index')
                                 </div>
-                                        {{--=================================================END NAV PAISES==================================--}}
+                                        {{--=========================================END TAP PAISES==================================--}}
+                                        {{--=========================================TAP EMPLEADO==========================--}}
                                 <div class="tab-pane fade" id="nav-empleados" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('empleado.index')
                                 </div>
+                                        {{--=========================================END TAP EMPLEADO==========================--}}
+                                        {{--=========================================TAP EMPRESA==========================--}}
                                 <div class="tab-pane fade" id="nav-empresa" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('empresa.index')
                                 </div>
+                                        {{--=========================================END TAP EMPLEADO==================================--}}
+                                        {{--=========================================TAP SUCURSAL==================================--}}
                                 <div class="tab-pane fade" id="nav-almacen" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     @include('sucursal.almacen.show')
                                 </div>
+                                        {{--=========================================END TAP AlMACEN==================================--}}
+                                        {{--=========================================TAP PERMISOS==================================--}}
+                                <div class="tab-pane fade" id="nav-permisos" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    @include('acceso.permisos.index')
+                                </div>
+                                        {{--=========================================END TAB PERMISOS==================================--}}
                             </div>
                         </div>
                     </div>

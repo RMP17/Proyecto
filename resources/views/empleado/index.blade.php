@@ -61,6 +61,16 @@
                    type="button" class="btn btn-info btn-sm">
                     <i class="far fa-file-alt"></i>
                 </a>
+                <a href="javascript:void(0)"
+                   title="Ver Kardex"
+                   @click="getAccesoOf(_empleado)"
+                   data-backdrop="static"
+                   data-keyboad="false"
+                   data-target="#modal-add-acceso"
+                   data-toggle="modal"
+                   type="button" class="btn btn-info btn-sm">
+                    <i class="far fa-user-circle fa-lg"></i>
+                </a>
                {{-- <a title="Editar" href="{{URL::action('EmpleadoControlador@edit', $e -> id_empleado)}}">
                     <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button>
                 </a>
@@ -105,6 +115,7 @@
                 <button type="button" class="close"
                         @click="cancelModeEditEmpleado"
                         data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>
             </div>
             <div class="modal-body pb-0">
@@ -145,3 +156,29 @@
     </div>
 </div>
 
+{{--===============================================Modal add Acceso ======================================--}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-2" id="modal-add-acceso">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Acceso de @{{kardex.empleado.nombre}}</h4>
+                <button v-if="acceso.currentTab===10" type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+                <a v-else href="javascript:void(0)"
+                   title="Atras"
+                   @click="changeTab(acceso.currentTab - 1)"
+                   class="text-secondary">
+                    <i class="fas fa-arrow-left fa-2x"></i>
+                </a>
+            </div>
+            <div class="modal-body pb-0">
+                <div v-if="acceso.currentTab === 10">@include('acceso.index')</div>
+                {{--<div v-if="acceso.currentTab === 11">@include('kardex.kardex_observaciones.show')</div>--}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="forceClosedModelKardex"> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
