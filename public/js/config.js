@@ -1231,6 +1231,31 @@ var appConfig = new Vue({
             });
         },
 
+        getAccesoOfEmpleadoServer(empleado) {
+            axios.get(urlGlobal.resourcesAcceso+'/'+empleado.id_empleado
+            ).then(response => {
+                if (response.data.id_empleado) {
+                    this.acceso.attributes.usuario = response.data.usuario;
+                    this.acceso.attributes.id_empleado = response.data.id_empleado;
+                    response.data.permiso.forEach(_permiso=>{
+                        this.acceso.permisos.forEach(permisos_disponibles =>{
+                            if (permisos_disponibles.id_permiso === _permiso.id_permiso) {
+                                permisos_disponibles.permitir = 1;
+                            }
+                        });
+                    });
+                } else {
+                    this.acceso.permisos.forEach(permisos_disponibles =>{
+                        permisos_disponibles.permitir = 0;
+                    });
+                    this.acceso.attributes.usuario = '';
+                    this.acceso.attributes.id_empleado = null;
+                }
+                // this.acceso.permisos = permisos;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
         registerAcceso(){
             let inputs = Object.assign({}, this.acceso.attributes);
             inputs.id_empleado = this.acceso.empleado.id_empleado;
@@ -1247,6 +1272,7 @@ var appConfig = new Vue({
             });
         },
         getAccesoOf(empleado){
+            this.getAccesoOfEmpleadoServer(empleado);
             this.acceso.empleado.id_empleado=empleado.id_empleado;
             this.acceso.empleado.nombre=empleado.nombre;
         },

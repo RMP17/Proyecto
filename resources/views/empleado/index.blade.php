@@ -161,7 +161,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pt-1 pr-1">Acceso de @{{kardex.empleado.nombre}}</h4>
+                <h4 class="modal-title pt-1 pr-1">Acceso de @{{acceso.empleado.nombre}}</h4>
                 <button v-if="acceso.currentTab===10" type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>

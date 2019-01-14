@@ -18,7 +18,7 @@ class Permiso extends Model
 
     ];
     public function acceso(){
-        return $this->belongsToMany(Acceso::class,'permiso_usuario', 'usuario');
+        return $this->belongsToMany(Acceso::class,'permiso_usuario', 'id_permiso', 'id_acceso');
     }
 
     public static function getPermisos(){

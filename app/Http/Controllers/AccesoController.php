@@ -48,7 +48,13 @@ class AccesoController extends Controller
      */
     public function show($id)
     {
-        //
+        $acceso = Acceso::find($id);
+        if(!is_null($acceso)) {
+            $acceso->permiso;
+        } else {
+            $acceso=null;
+        }
+        return response()->json($acceso);
     }
 
     /**
@@ -69,9 +75,10 @@ class AccesoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AccesoRequest $request, $id)
     {
-        //
+        Acceso::updateAcceso($request->all());
+        return response()->json();
     }
 
     /**

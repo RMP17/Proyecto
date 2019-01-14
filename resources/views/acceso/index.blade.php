@@ -1,16 +1,13 @@
 @include('kardex.kardex_observaciones.create')
-
+<div class="col-auto text-center">
+    <button class="btn btn-primary" @click="changePermisos(1)" style="width: 132px">
+        Seleccionar todo
+    </button>
+    <button class="btn btn-primary" @click="changePermisos(0)" style="width: 132px">
+        Deseleccionar
+    </button>
+</div>
 <div class="d-flex flex-wrap justify-content-center">
-    <div class="m-1">
-        <button class="btn btn-primary" @click="changePermisos(1)" style="width: 132px">
-            Seleccionar todo
-        </button>
-    </div>
-    <div class="m-1">
-        <button class="btn btn-primary" @click="changePermisos(0)" style="width: 132px">
-            Deseleccionar
-        </button>
-    </div>
 	<div v-for="(permiso, index) in acceso.permisos" class="m-1"
 		 style="padding: 0.3rem;border: 1px solid darkgray;border-radius: 5px;">
 		<div class="custom-control custom-checkbox" style="width: 120px;">

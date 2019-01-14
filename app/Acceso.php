@@ -13,15 +13,15 @@ class Acceso extends Model
 	
 	protected $fillable = [
 		'usuario',
-		'pass',
 		'estatus',
 	];
+    public $incrementing = false;
 	
 	protected $guarded = [
-	
+	    'id_empleado'
 	];
     public function permiso(){
-        return $this->belongsToMany(Permiso::class,'permiso_usuario', 'id_permiso');
+        return $this->belongsToMany(Permiso::class,'permiso_usuario', 'id_acceso','id_permiso');
     }
     public function setPassAttribute($value) {
 //        $this->attributes['pass'] = Hash::make($value);
@@ -31,10 +31,27 @@ class Acceso extends Model
         $_acceso = new Acceso();
         $_acceso->fill($parameters_acceso);
         $_acceso->id_empleado = $parameters_acceso['id_empleado'];
+        $_acceso->pass = $parameters_acceso['pass'];
+        $_acceso->estatus = 1;
         $_acceso->save();
-
         $ids=[];
-        // FIXME: corrige este campo
+        foreach ($parameters_acceso['permisos_permitidos'] as $permiso) {
+            if($permiso['permitir']) {
+                array_push($ids,$permiso['id_permiso']);
+            }
+        }
+        $_acceso->permiso()->attach($ids);
+        return true;
+    }
+
+    public static function updateAcceso($parameters_acceso) {
+        $_acceso = Acceso::findOrFail($parameters_acceso['id_empleado']);
+        $_acceso->fill($parameters_acceso);
+        if(!empty($parameters_acceso['pass'])) {
+            $_acceso->pass = $parameters_acceso['pass'];
+        }
+        $_acceso->update();
+        $ids=[];
         foreach ($parameters_acceso['permisos_permitidos'] as $permiso) {
             if($permiso['permitir']) {
                 array_push($ids,$permiso['id_permiso']);
