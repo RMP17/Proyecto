@@ -89,17 +89,6 @@
                         <!-- ============================================================== -->
                         <!-- create new -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                             <span class="d-none d-md-block">Opciones <i class="fa fa-angle-down"></i></span>
-                             <span class="d-block d-md-none"><i class="fa fa-plus"></i></span>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{url ('moneda')}}">Monedas y cambios</a>
-								<div class="dropdown-divider"></div>
-                            </div>
-                        </li>
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->
@@ -208,6 +197,22 @@
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="d-none d-md-block">{{ Auth::user()->usuario  }} <i class="fa fa-angle-down"></i></span>
+                                <span class="d-block d-md-none"><i class="fa fa-plus"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{url ('logout')}}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();"
+                                >Cerrar Sesión</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -235,10 +240,6 @@
                                                     href="{{ url('venta')  }}" aria-expanded="false"><i
                                         class="mdi mdi-view-dashboard"></i><span class="hide-menu">Ventas</span></a>
                         </li>
-                        <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                    href="{{ url('empresa')  }}" aria-expanded="false"><i
-                                        class="fas fa-building"></i><span class="hide-menu">Empresa</span></a>
-                        </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                href="{{ url('compra')  }}" aria-expanded="false">
@@ -250,12 +251,8 @@
                                         class="mdi mdi-chart-bubble"></i><span class="hide-menu">Artículos</span></a>
                         </li>
                         <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                    href="{{ url('empleado')}}" aria-expanded="false"><i
-                                        class="mdi mdi-border-inside"></i><span class="hide-menu">Empleados</span></a>
-                        </li>
-                        <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                    href="{{ url('cajachica')}}" aria-expanded="false"><i
-                                        class="mdi mdi-blur-linear"></i><span class="hide-menu">Caja chica</span></a>
+                                                    href="{{ url('caja')}}" aria-expanded="false"><i
+                                        class="mdi mdi-blur-linear"></i><span class="hide-menu">Cajas</span></a>
                         </li>
                         <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
                                                     href="javascript:void(0)" aria-expanded="false"><i
@@ -411,6 +408,9 @@
     <script src="{{asset('js/vue.js')}}"></script>
     <script src="{{asset('js/axios.js')}}"></script>
     <script src="{{asset('js/variables-globales-vue.js')}}"></script>
+    <script src="{{asset('js/components/dates.js')}}"></script>
+    <script src="{{asset('js/jspdf.min.js')}}"></script>
+    <script src="{{asset('js/jspdf.plugin.autotable.min.js')}}"></script>
     @yield('scripts')
 </body>
 

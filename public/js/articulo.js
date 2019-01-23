@@ -393,10 +393,10 @@ var appArticulo = new Vue({
                 this.articulo.errors = [];
                 this.$refs.inputCategoria.value = '';
                 this.$refs.inputFabricante.value = '';
+                this.notificationSuccess();
             }).catch( errors => {
                 console.log('FAILURE!!');
-                console.log(errors);
-                this.articulo.errors = this.formatErrors2(errors);
+                this.notificationErrors2(errors);
             });
         },
         updateArticulo(){
@@ -461,9 +461,10 @@ var appArticulo = new Vue({
                 this.articulo.errors = [];
                 this.$refs.inputCategoria.value = '';
                 this.$refs.inputFabricante.value = '';
+                this.notificationSuccess();
             }).catch( errors => {
                 console.log('FAILURE!!');
-                this.articulo.errors = this.formatErrors2(errors);
+                this.notificationErrors(errors);
             });
         },
         getArticuloByCodigoBarras: function(codigoBarras) {
@@ -597,11 +598,12 @@ var appArticulo = new Vue({
 
         },
         //</editor-fold>
+        //<editor-fold desc="Methods of Notifications">
         formatErrors: function (errors) {
             let _errors = errors.response.data.errors;
             let response = [];
             Object.keys(errors.response.data.errors).forEach(value => {
-                response.push(_errors[value][0]);
+                response.push('<li>'+_errors[value][0]+'</li>');
             });
             return response
         },
@@ -609,9 +611,23 @@ var appArticulo = new Vue({
             let _errors = errors.response.data;
             let response = [];
             Object.keys(errors.response.data).forEach(value => {
-                response.push(_errors[value][0]);
+                response.push('<li>'+_errors[value][0]+'</li>');
             });
             return response
         },
+        notificationSuccess(){
+            toastr.success('Tarea realizada con Exito', {timeOut: 10000});
+        },
+        notificationErrors(errors){
+            let _errors;
+            _errors = this.formatErrors(errors);
+            toastr.error(_errors, 'Corrija los Siguientes Errores', {timeOut: 10000});
+        },
+        notificationErrors2(errors){
+            let _errors;
+            _errors = this.formatErrors2(errors);
+            toastr.error(_errors, 'Corrija los Siguientes Errores', {timeOut: 10000});
+        },
+        //</editor-fold
     }
 });

@@ -35,6 +35,9 @@ class Empleado extends Model
     public function kardex(){
         return $this->hasMany(Kardex::class,'id_empleado','id_empleado');
     }
+    public function acceso(){
+        return $this->hasOne(Acceso::class,'id_empleado','id_empleado');
+    }
     protected function edad()
     {
         $edad=0;
@@ -148,6 +151,11 @@ class Empleado extends Model
             $empleado->kardex = $kardex;
             $empleado->edad = $empleado->edad();
         }
+
+        return $empleados;
+    }
+    public static function simpleSuggestionsEmpleado($query){
+        $empleados = Empleado::where('nombre', 'like','%'.$query.'%')->orderBy('nombre','desc')->take(10)->get();
 
         return $empleados;
     }

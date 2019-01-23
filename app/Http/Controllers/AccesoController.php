@@ -77,7 +77,7 @@ class AccesoController extends Controller
      */
     public function update(AccesoRequest $request, $id)
     {
-        Acceso::updateAcceso($request->all());
+        Acceso::updateAcceso($request->all(), $id);
         return response()->json();
     }
 

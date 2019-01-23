@@ -20,34 +20,9 @@ class VentaControlador extends Controller
 		
 	}
 	
-	public function index(Request $peticion)
-	{	
-		if ($peticion)
-		{
-			$ventas = DB::table('venta')
-				->join('moneda', 'venta.id_moneda', '=', 'moneda.id_moneda')
-				->join('cliente', 'venta.id_cliente', '=', 'cliente.id_cliente')
-				->join('caja', 'venta.id_caja', '=', 'caja.id_caja')
-				->join('tipo_pago', 'venta.id_tipo_pago', '=', 'tipo_pago.id_tipo_pago')
-				->where('venta.estatus', '=', 'C')
-				->orderBy('venta.id_venta', 'asc')
-				->select('venta.id_venta as id_venta', 
-							'venta.fecha as fecha',  
-							'venta.costo_total as costo_total',
-							'venta.codigo_tarjeta_cheque as codigo_tarjeta_cheque',
-							'venta.descuento as descuento', 
-							'venta.estatus as estatus', 
-							'venta.id_moneda as id_moneda', 
-							'venta.id_cliente as id_cliente',
-							'venta.id_caja as id_caja', 
-							'venta.id_tipo_pago as id_tipo_pago', 
-							'moneda.nombre as moneda', 
-							'cliente.razon_social as cliente', 
-							'caja.nombre as caja', 
-							'tipo_pago.tipo_pago as tipo_pago')
-				->get();
-			return view('venta.index', compact('ventas'));
-		}
+	public function index()
+	{
+        return view('venta.index');
 	}
 	
 	public function create()

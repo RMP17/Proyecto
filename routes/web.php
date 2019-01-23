@@ -14,14 +14,19 @@
 /*Vistas*/
 
 Route::get('/', function () {
+    return view('auth.login');
+});
+Route::get('/home', function () {
     return view('maquetas.home');
 });
 
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
+// Funcional aplicacion del middleware de autenticacion
+
+/*Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', function () {
+        return view('maquetas.home');
+    });
+});*/
 
 
 /*Controladores*/
@@ -32,10 +37,19 @@ Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
 Route::get('proveedor/contactos/{id_proveedor}', 'ProveedorControlador@getContactosOfProveedor');
 Route::get('proveedores/{query}', 'ProveedorControlador@suggestionsProveedores');
 /*Route::put('empleado/update{id_empleado}', 'EmpleadoControlador@updateEmpleado');*/
+Route::get('empleado/suggestions/{query}', 'EmpleadoControlador@simpleSuggestionsEmpleado');
 Route::get('kardex/{id_empleado}', 'KardexControlador@getKardesEmpleado');
+Route::get('contacto/suggestions/{query}', 'ContactoControlador@getContactosForSuggestion');
+Route::get('cajas', 'CajaControlador@getCajas');
 
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');
+});
+Route::prefix('compra')->group(function () {
+    Route::get('creditos', 'CompraControlador@getPurchasesOnCreditInForce');
+    Route::get('creditos/{id_compra}', 'CompraCreditoController@getCreditoCompra');
+    Route::post('credito', 'CompraCreditoController@store');
+    Route::post('date_range', 'CompraControlador@getComprasByRageDate');
 });
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');

@@ -28,7 +28,16 @@ class Contacto extends Model
     public function proveedor(){
         return $this->belongsTo(Proveedor::class,'id_proveedor');
     }
+    /*public static function getContactos(){
+        $_contacto = Contacto::select('*')->orderBy('nombre')->get();
 
+        $_contacto->save();
+        return true;
+    }*/
+    public static function getContactosForSuggestion($query){
+        $_contactos = Contacto::where('nombre', 'like','%'.$query.'%')->orderBy('nombre','desc')->take(10)->get();
+        return $_contactos;
+    }
     public static function newContacto($parameters_contacto){
         $_contacto = new Contacto();
         $_contacto->fill($parameters_contacto);

@@ -174,7 +174,7 @@
                                        onblur="ValidarDecimalPegado(event, this.id)">
                             </div>
                         </div>
-                        <div class="form-group row mb-2">
+                        {{--<div class="form-group row mb-2">
                             <label for="txtVolumen"
                                    class="col-sm-4 text-right control-label col-form-label">Volumen:</label>
                             <div class="col-sm-8">
@@ -184,7 +184,7 @@
                                        onkeypress="return ValidarDecimalTecleado(event, this.id)"
                                        onblur="ValidarDecimalPegado(event, this.id)">
                             </div>
-                        </div>
+                        </div>--}}
                     </fieldset>
 
                     <h4 class="card-title">Precio de compra y venta de producción del artículo (Bs.)</h4>

@@ -49,22 +49,6 @@
         </div>
     </div>
     <div class="form-group row mb-2">
-        <label for="cbxProveedor" class="col-sm-3 text-right control-label col-form-label">Proveedor : </label>
-        <div class="col-md-7">
-            <div v-if="!contacto.attributes.id_contacto">
-                <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contacto.configProveedor"
-                                                @selected-suggestion-event="assignAnIdentificationToContactOfProveedor">
-                </app-online-suggestions-objects>
-            </div>
-            <div v-else>
-                <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contacto.configProveedor"
-                                                :input-value="contacto.tempAttributes.proveedor.razon_social"
-                                                @selected-suggestion-event="assignAnIdentificationToContactOfProveedor">
-                </app-online-suggestions-objects>
-            </div>
-        </div>
-    </div>
-    <div class="form-group row mb-2">
         <label for="cbxCargo" class="col-sm-3 text-right control-label col-form-label">Cargo : </label>
         <div class="col-md-7">
             <select class="custom-select" id="cbxCargo"

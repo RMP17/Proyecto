@@ -69,4 +69,8 @@ class ContactoControlador extends Controller
 		$contacto->update();
 		return Redirect :: to ('contacto');
 	}
+	public function getContactosForSuggestion($query){
+         $contactos = Contacto::getContactosForSuggestion($query);
+         return response()->json($contactos);
+    }
 }

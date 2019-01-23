@@ -33,12 +33,16 @@ class CompraPeticion extends FormRequest
             }
             case 'POST':
             {
-                return [
-                    
-                    /*'cbxMoneda' => 'required',
-                    'cbxEmpleado' => 'required',
-                    'cbxContacto' => 'required'*/
+                $rules = [
+                    'fecha' => 'required',
+                    'id_moneda' => 'required',
+                    'detalles_compra' => 'required',
+                    'tipo_pago' => 'required'
                 ];
+                foreach ($this->request->get('detalles_compra') as $key => $val) {
+                    $rules['detalles_compra.'.$key.'.id_almacen'] = 'required';
+                }
+                return $rules;
             }
             case 'PUT':
             case 'PATCH':
@@ -56,6 +60,7 @@ class CompraPeticion extends FormRequest
     public function messages()
     {
         return [
+            'detalles_compra.*.required' => 'El almacen es requerido'
             
             /*'cbxMoneda.required' => 'Elija la moneda',
             'txtCosto.required' => 'Los campos de costo son abligatorios',

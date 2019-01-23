@@ -12,7 +12,7 @@ use DB;
 class CajaChicaControlador extends Controller
 {
    
-   public function index(Request $peticion)
+   public function index()
 	{
 		if ($peticion)
 		{
@@ -21,9 +21,9 @@ class CajaChicaControlador extends Controller
 				->join('empleado as e', 'e.id_empleado','=','c.id_empleado')
 				->join('sucursal as s', 's.id_sucursal', '=', 'c.id_sucursal')
 				->orderBy('c.fecha_cierre', 'asc')
-				->select('c.id_caja_chica as id_caja_chica', 
-						'c.fecha_apertura as fecha_apertura', 
-						'c.fecha_cierre as fecha_cierre', 
+				->select('c.id_caja_chica as id_caja_chica',
+						'c.fecha_apertura as fecha_apertura',
+						'c.fecha_cierre as fecha_cierre',
 						'c.monto_apertura as monto_apertura',
 						'c.monto_estado as monto_estado',
 						'c.monto_declarado as monto_declarado',
@@ -35,8 +35,9 @@ class CajaChicaControlador extends Controller
 				->get();
 			$sucursales = Sucursal::orderBy('nombre', 'asc')
 				->get();
-			return view('cajachica.index', compact('caja_chica', 'consulta', 'sucursales'));
+
 		}
+        return view('cajachica.index', compact('caja_chica', 'consulta', 'sucursales'));
 	}
 	
 	public function create()

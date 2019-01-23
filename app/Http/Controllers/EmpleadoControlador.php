@@ -1,6 +1,7 @@
 <?php
 namespace Allison\Http\Controllers;
 use Allison\Http\Controllers\ConversorImagenes;
+use Allison\Http\Resources\SimpleSuggestionsEmpleadosResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\EmpleadoPeticion;
@@ -12,7 +13,6 @@ use Allison\Kardex;
 use Allison\Salario;
 use Allison\Moneda;
 use Allison\Cargo;
-use DB;
 
 class EmpleadoControlador extends Controller
 {
@@ -84,5 +84,11 @@ class EmpleadoControlador extends Controller
 				->get();
 			return response()->json($empleados);
 		}
+	}
+	public function simpleSuggestionsEmpleado($query)
+	{
+        $empleados = Empleado::simpleSuggestionsEmpleado($query);
+
+	    return SimpleSuggestionsEmpleadosResource::collection($empleados);
 	}
 }

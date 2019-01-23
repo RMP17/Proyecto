@@ -1,87 +1,119 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
+	<div id="app-caja">
+		<div class="page-breadcrumb mb-2">
+			<div class="row">
+				<div class="col-12 d-flex no-block align-items-center">
+					<h4 class="page-title">Cajas</h4>
+					<div class="col-auto">
+						<nav>
+							<div class="nav nav-tabs show active" id="nav-tab" role="tablist">
+								<a class="nav-item nav-link w-10em active"
+								   id="nav-profile-tab"
+								   data-toggle="tab"
+								   href="#nav-config"
+								   role="tab"
+								   aria-controls="nav-profile"
+								   aria-selected="false">Ver Cajas</a>
+								{{--<a class="nav-item nav-link w-10em"
+								   id="nav-profile-tab"
+								   data-toggle="tab"
+								   href="#nav-empleados"
+								   role="tab"
+								   aria-controls="nav-profile"
+								   aria-selected="false">Empleados</a>
+								<a class="nav-item nav-link w-10em"
+								   id="nav-profile-tab"
+								   data-toggle="tab"
+								   href="#nav-empresa"
+								   role="tab"
+								   aria-controls="nav-profile"
+								   aria-selected="false">Empresa</a>
+								<a class="nav-item nav-link w-10em"
+								   id="nav-profile-tab"
+								   data-toggle="tab"
+								   href="#nav-almacen"
+								   role="tab"
+								   aria-controls="nav-profile"
+								   aria-selected="false">Almacén</a>
+								<a class="nav-item nav-link w-10em"
+								   id="nav-profile-tab"
+								   data-toggle="tab"
+								   href="#nav-paises"
+								   role="tab"
+								   aria-controls="nav-profile"
+								   aria-selected="false">Países</a>--}}
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- ============================================================== -->
-		<!-- Start Page Content -->
+		<!-- End Bread crumb and right sidebar toggle -->
+		<!-- ============================================================== -->
+		<!-- ============================================================== -->
+		<!-- Container fluid  -->
 		<!-- ============================================================== -->
 		<div class="container-fluid">
-		<div class="row">
-			<div class="col-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="page-breadcrumb">
-							<div class="row">
-								<div class="col-12 d-flex no-block align-items-center">
-									<h4 class="card-title m-b-0">Cajas</h4>
-									<div class="col-3">
-										<a href="" data-target="#modal-create-caja" data-toggle="modal"><button type="button" class="btn btn-outline-dark btn-sm">Nueva</button></a>
+			<!-- ============================================================== -->
+			<!-- Start Page Content -->
+			<!-- ============================================================== -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="tab-content" id="nav-tabContent">
+								{{--=================================================NAV TABCONTENT==================================--}}
+								{{--=========================================TAP CONFIG==========================--}}
+								<div class="tab-pane fade show active" id="nav-config" role="tabpanel"
+									 aria-labelledby="nav-profile-tab">
+									<div class="container-fluid">
+										<div class="card-group mb-0 ">
+											<div class="card">
+												<div class="card-body pl-0">
+													<h5 class="card-title text-center">Cajas</h5>
+													@include('caja.show')
+												</div>
+											</div>
+											<div class="card border-0">
+												<div class="card-body pr-0">
+													<h5 class="card-title text-center">Caja Chica</h5>
+													@include('cajachica.index')
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
+								{{--=========================================END TAP CONFIG==========================--}}
+								{{--=========================================TAP PAISES==========================--}}
+								<div class="tab-pane fade" id="nav-paises" role="tabpanel" aria-labelledby="nav-contact-tab">
+									{{--@include('pais.index')--}}
+								</div>
+								{{--=========================================END TAP PAISES==================================--}}
 							</div>
 						</div>
 					</div>
-					<?php $idSucursal = 0; ?>
-					@foreach($cajas as $c)
-						@if ($idSucursal != $c -> id_sucursal)
-							<?php $idSucursal = $c -> id_sucursal; ?>
-							<table class="table">
-							<h5> Sucursal : {{$c -> sucursal}} </h5>
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">Nombre</th>
-									<th scope="col">Empleado a cargo</th>
-									<th scope="col">Acciones</th>
-									</tr>
-							</thead>
-							<tbody>
-							<?php $i = 1; ?>
-						@endif
-						<tr>
-						  <th scope="row">{{$i}}</th>
-						  <td>{{ $c -> nombre }}</td>
-						  <td>{{ $c -> empleado }}</td>
-						  <td>
-								<a href="" data-target="#modal-edit-caja-{{$c -> id_caja}}" data-toggle="modal"><button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button></a>
-								<a href="" data-target="#modal-delete-caja-{{$c -> id_caja}}" data-toggle="modal"><button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete-forever"></i></button></a>
-								<div><div>@include ('caja.edit')</div></div>
-								<div><div>@include ('caja.destroy')</div></div>
-						  </td>  
-						</tr>
-						<?php $i++; ?>
-						@if ($idSucursal != $c -> id_sucursal)
-									</tbody>
-							</table>
-						@endif
-					@endforeach					
+					{{--{{$compras -> render()}}--}}
 				</div>
 			</div>
-			@include ('caja.create')
-		</div>
+
+			<!-- ============================================================== -->
+			<!-- End PAge Content -->
+			<!-- ============================================================== -->
+			<!-- ============================================================== -->
+			<!-- Right sidebar -->
+			<!-- ============================================================== -->
+			<!-- .right-sidebar -->
+			<!-- ============================================================== -->
+			<!-- End Right sidebar -->
+			<!-- ============================================================== -->
 		</div>
 		<!-- ============================================================== -->
-		<!-- All Jquery -->
+		<!-- End Container fluid  -->
 		<!-- ============================================================== -->
-		<script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
-		<!-- Bootstrap tether Core JavaScript -->
-		<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
-		<script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-		<!-- slimscrollbar scrollbar JavaScript -->
-		<script src="{{asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
-		<script src="{{asset('assets/extra-libs/sparkline/sparkline.js')}}"></script>
-		<!--Wave Effects -->
-		<script src="{{asset('dist/js/waves.js')}}"></script>
-		<!--Menu sidebar -->
-		<script src="{{asset('dist/js/sidebarmenu.js')}}"></script>
-		<!--Custom JavaScript -->
-		<script src="{{asset('dist/js/custom.min.js')}}"></script>
-		<!-- this page js -->
-		<script src="{{asset('assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
-		<script src="{{asset('assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
-		<script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
-		<script>
-			/****************************************
-			 *       Basic Table                   *
-			 ****************************************/
-			$('#zero_config').DataTable();
-		</script>
+	</div>
+@endsection
+@section('scripts')
+	<script src="{{asset('js/caja.js')}}"></script>
 @endsection

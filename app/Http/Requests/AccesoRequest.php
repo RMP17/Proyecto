@@ -41,8 +41,7 @@ class AccesoRequest extends FormRequest
             case 'PATCH':
                 {
                     return [
-                        'usuario' => 'required|unique:acceso,usuario,'.$this->id_empleado.',id_empleado',
-                        'pass' => 'required',
+                        //'usuario' => 'required|unique:acceso,usuario,'.$this->id_empleado.',id_empleado',
                     ];
                 }
             default:break;

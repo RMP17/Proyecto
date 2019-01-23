@@ -1,4 +1,4 @@
-<form @submit.prevent="registerAcceso">
+<form @submit.prevent="submitFormAcceso">
 	<div class="form-group row">
 		<div class="col">
 			<label for="txtUsuario">Usuario</label>

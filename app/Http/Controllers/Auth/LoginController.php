@@ -5,6 +5,7 @@ namespace Allison\Http\Controllers\Auth;
 use Allison\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class LoginController extends Controller
 {
@@ -43,10 +44,13 @@ class LoginController extends Controller
         $field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
             ? $this->username()
             : 'usuario';
-
         return [
             $field => $request->get($this->username()),
             'password' => $request->password,
         ];
     }
+    /*public function username()
+    {
+        return 'usuario';
+    }*/
 }

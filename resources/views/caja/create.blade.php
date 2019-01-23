@@ -1,71 +1,34 @@
-<html>
-	<head> <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}"> </head>
-	<body>
-		<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-create-caja">
-			@if (count($errors) > 0)
-				<div class="alert alert-danger">
-					<ul>
-						@foreach ($errors->all() as $error)
-							<li> {{$error}} </li>
-						@endforeach
-					</ul>
-				</div>
-			@endif
-			{!!Form::open(array('class' => 'form-horizontal', 'url' => 'caja', 'method' => 'POST', 'autocomplete' => 'off'))!!}
-			{{Form::token()}}
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title"> Registrar nueva caja </h4>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-								<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
-							</button>
-						</div>
-						<div class="modal-body">	
-							<div class="form-group row">
-									<label for="txtNombre" class="col-sm-3 text-right control-label col-form-label">Nueva caja : </label>
-									<div class="col-sm-9">
-										<input type="text" class="form-control" id="txtNombre" placeholder="Nombre de la caja que desea registrar" name="txtNombre">
-									</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="cbxSucursal" class="col-sm-3 text-right control-label col-form-label">Sucursal : </label>
-							<div class="col-sm-9">
-								<div class="col-md-9">
-									<select class="select2 form-control custom-select" style="width: 100%; height:36px;" id="cbxSucursal" name="cbxSucursal">
-										<option>Sucursal...</option>
-										@foreach($sucursales as $s)
-											<option value={{$s -> id_sucursal}}>{{$s ->nombre}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="cbxEmpleado" class="col-sm-3 text-right control-label col-form-label">Empleado a cargo : </label>
-							<div class="col-sm-9">
-								<div class="col-md-9">
-									<select class="select2 form-control custom-select" style="width: 100%; height:36px;" id="cbxEmpleado" name="cbxEmpleado">
-										<option>Empleado...</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="submit" class="btn btn-primary"> Crear </button>
-							<button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar </button>
-						</div>		
-					</div>
-				</div>
-			{{Form::Close()}}
-		<div>
-		
-		<!-- ============================================================== -->
-		<!-- All Jquery -->
-		<!-- ============================================================== -->
-		<script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
-		<script src="{{asset('nihil/js/desplegable_sucursal_empleado.js')}}"></script>
-		
-	<body>
-</html>
+<form class="form-horizontal" @submit.prevent="submitFormCaja">
+    <div class="form-group row mb-2">
+        <label for="txtNombre"
+               class="col-sm-3 control-label col-form-label">Nombre:</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control"
+                   id="txtNombre"
+                   autocomplete="off"
+                   v-model="caja.attributes.nombre"
+                   placeholder="Nombre de la caja" >
+        </div>
+    </div>
+    <div class="form-group row mb-2">
+        <label class="col-sm-3 control-label col-form-label">Empleado:</label>
+        <div class="col-sm-9">
+            <div v-if="!caja.attributes.id_caja">
+                <app-online-suggestions-objects v-if="!caja.hideSuggestions" :config="configEmpleado"
+                                                @selected-suggestion-event="selectEmpleado">
+                </app-online-suggestions-objects>
+            </div>
+            <div v-else>
+                <app-online-suggestions-objects v-if="!caja.hideSuggestions" :config="configEmpleado"
+                                                :input-value="caja.tempAttributes.empleado.nombre"
+                                                @selected-suggestion-event="selectEmpleado">
+                </app-online-suggestions-objects>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <button v-if="!caja.attributes.id_caja" type="submit" class="btn btn-primary">Registrar</button>
+        <button v-else type="submit" class="btn btn-primary">Actualizar</button>
+    </div>
+</form>
+

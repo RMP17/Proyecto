@@ -32,6 +32,7 @@ class Articulo extends Model
     }
     public function getArticuloBy($key, $codigo){
         $articulo = null;
+        $array = [];
         if($key=='codigo'){
             $articulo = Articulo::where('codigo',$codigo)->first();
         } else if ($key=='codigo-barras') {
@@ -40,6 +41,17 @@ class Articulo extends Model
         if(!is_null($articulo)){
             $articulo->categoria = Categoria::find($articulo['id_categoria']);
             $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $empleado = Empleado::find(auth()->user()->id_empleado);
+            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $totalStock = 0;
+            foreach ($almacenes as $almacen) {
+                $stock = Stock::where('id_almacen',$almacen->id_almacen)
+                    ->where('id_articulo',$articulo->id_articulo)->first();
+                if(!is_null($stock)) {
+                    $totalStock+=$stock->cantidad;
+                }
+            }
+            $articulo->stock = $totalStock;
             unset($articulo->id_categoria);
             unset($articulo->id_fabricante);
             if(is_null($articulo->dimension)) {
@@ -53,11 +65,28 @@ class Articulo extends Model
                 $articulo->dimensiones=$articulo->dimension;
                 unset($articulo->dimension);
             }
-        } else {
-            unset($articulo->id_categoria);
-            unset($articulo->id_fabricante);
-            $articulo->categoria = null;
-            $articulo->fabricante = null;
+            $array[]=$articulo;
+        }
+        return  $array;
+    }
+    public function getArticuloByName($nombre){
+
+        $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
+            ->orderBy('nombre','desc')->take(10)->get();
+        foreach ($articulos as &$articulo) {
+            $articulo->categoria = Categoria::find($articulo['id_categoria']);
+            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $empleado = Empleado::find(auth()->user()->id_empleado);
+            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $totalStock = 0;
+            foreach ($almacenes as $almacen) {
+                $stock = Stock::where('id_almacen',$almacen->id_almacen)
+                    ->where('id_articulo',$articulo->id_articulo)->first();
+                if(!is_null($stock)) {
+                    $totalStock+=$stock->cantidad;
+                }
+            }
+            $articulo->stock = $totalStock;
             if(is_null($articulo->dimension)) {
                 $articulo->dimensiones=[
                     'largo' => null,
@@ -70,14 +99,8 @@ class Articulo extends Model
                 unset($articulo->dimension);
             }
         }
-        $array[]=$articulo;
-        return  $array;
-    }
-    public function getArticuloByName($codigo){
 
-        $articulo = Articulo::where('nombre', 'like','%'.$codigo.'%')
-            ->select('id_articulo','nombre','codigo','codigo_barra')->orderBy('nombre','desc')->take(10)->get();
-        return $articulo;
+        return $articulos;
     }
     public function getArticuloById($id){
 
@@ -85,6 +108,17 @@ class Articulo extends Model
         if(!is_null($articulo)){
             $articulo->categoria = Categoria::find($articulo['id_categoria']);
             $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $empleado = Empleado::find(auth()->user()->id_empleado);
+            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $totalStock = 0;
+            foreach ($almacenes as $almacen) {
+                $stock = Stock::where('id_almacen',$almacen->id_almacen)
+                    ->where('id_articulo',$articulo->id_articulo)->first();
+                if(!is_null($stock)) {
+                    $totalStock+=$stock->cantidad;
+                }
+            }
+            $articulo->stock = $totalStock;
             if(is_null($articulo->dimension)) {
                 $articulo->dimensiones=[
                     'largo' => null,

@@ -71,6 +71,16 @@
                    type="button" class="btn btn-info btn-sm">
                     <i class="fas fa-credit-card"></i>
                 </a>
+                <a href="javascript:void(0)"
+                   title="Ver Contactos"
+                   data-backdrop="static"
+                   data-keyboad="false"
+                   @click="getContactoProveedor(_proveedor)"
+                   data-target="#modal-contacto"
+                   data-toggle="modal"
+                   type="button" class="btn btn-info btn-sm btn-sm-icon">
+                    <i class="far fa-address-card fa-2x"></i>
+                </a>
                 {{--<a href="{{URL::action('ProveedorControlador@edit', $p -> id_proveedor)}}">
                     <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button>
                 </a>
@@ -157,6 +167,43 @@
                 </div>
                 <div v-else>
                     @include('proveedor.cuentaproveedor.create')
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--===============================================Modal Add Contacto======================================--}}
+<div class="modal fade modal-slide-in-right"
+     @keydown.esc_="cancelModeEditCuentaProveedor"
+     aria-hidden="true" role="dialog" tabindex="-1" id="modal-contacto">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Contactos de @{{ contacto.title }}</h4>
+
+                <a v-show="!contacto.modeEdit" href
+                   data-toggle="modal"
+                   class="btn btn-outline-dark w-10em"
+                   @click="contacto.modeCreate=!contacto.modeCreate"
+                >
+                    <span v-show="!contacto.modeCreate">Nuevo</span>
+                    <span v-show="contacto.modeCreate">Ver</span>
+                </a>
+                <button type="button" class="close"
+                        @click_="cancelModeEditCuentaProveedor"
+                        data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <div v-if="!contacto.modeCreate">
+                    @include('contacto.index')
+                </div>
+                <div v-else>
+                    @include('contacto.create')
                 </div>
             </div>
             <div class="modal-footer">

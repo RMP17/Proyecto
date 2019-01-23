@@ -18,23 +18,9 @@ class CajaControlador extends Controller
 		
 	}
 	
-	public function index(Request $peticion)
+	public function index()
 	{
-		
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$cajas = DB::table('caja')
-				->join('empleado', 'caja.id_empleado', '=', 'empleado.id_empleado')
-				->join('sucursal', 'caja.id_sucursal', '=', 'sucursal.id_sucursal')
-				->where('caja.nombre', 'like', '%'.$consulta.'%')
-				->orderBy('caja.id_sucursal', 'asc')
-				->select('caja.id_caja as id_caja', 'caja.nombre as nombre',  'caja.id_empleado as id_empleado', 'caja.id_sucursal as id_sucursal', 'empleado.nombre as empleado', 'sucursal.nombre as sucursal')
-				->get();
-			$sucursales = Sucursal::orderBy('nombre', 'asc')
-				->get();
-			return view('caja.index', compact('cajas', 'consulta', 'sucursales'));
-		}
+        return view('caja.index');
 	}
 	
 	public function create()
@@ -45,33 +31,14 @@ class CajaControlador extends Controller
 	
 	public function store(CajaPeticion $peticion)
 	{
-		$caja = new Caja;
-		$caja -> nombre = $peticion -> get('txtNombre');
-		$caja -> estatus = 'A';
-		$caja -> id_empleado = $peticion -> get('cbxEmpleado');
-		$caja -> id_sucursal = $peticion -> get('cbxSucursal');
-		$caja -> save();
-		return Redirect :: to ('caja');
+		Caja::newCaja($peticion->all());
+		return response()->json();
 	}
-	
-	public function show($id_caja)
-	{
-		return view ('caja.show', ['caja' => Caja :: findOrFail($id_caja)]);
-	}
-	
-	public function edit($id_caja)
-	{
-		return view ('caja.edit', compact ('caja', 'pais'));
-	}
-	
+
 	public function update(CajaPeticion $peticion, $id_caja)
 	{
-		$caja = Caja :: findOrFail($id_caja);
-		$caja -> nombre = $peticion -> get('txtNombre');
-		$caja -> id_empleado = $peticion -> get('cbxEmpleado');
-		$caja -> id_sucursal = $peticion -> get('cbxSucursal');
-		$caja -> update();
-		return Redirect :: to ('caja');
+        Caja::updateCaja($peticion->all());
+        return response()->json();
 	}
 	
 	public function destroy($id_caja)
@@ -80,5 +47,10 @@ class CajaControlador extends Controller
 		$caja -> estatus = 'X';
 		$caja -> update();
 		return Redirect :: to ('caja');
+	}
+	public function getCajas()
+	{
+	    $cajas = Caja::getCajas();
+        return response()->json($cajas);
 	}
 }

@@ -4,8 +4,9 @@ namespace Allison;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Acceso extends Model
+class Acceso extends Authenticatable
 {
     protected $table = 'acceso';
 	protected $primaryKey = 'id_empleado';
@@ -23,9 +24,15 @@ class Acceso extends Model
     public function permiso(){
         return $this->belongsToMany(Permiso::class,'permiso_usuario', 'id_acceso','id_permiso');
     }
-    public function setPassAttribute($value) {
+    public function empleado(){
+        return $this->hasOne(Empleado::class,'id_empleado','id_empleado');
+    }
+    public function setPasswordAttribute($value) {
 //        $this->attributes['pass'] = Hash::make($value);
         $this->attributes['pass'] = bcrypt($value);
+    }
+    public function getAuthPassword() {
+        return $this->pass;
     }
     public static function newAcceso($parameters_acceso) {
         $_acceso = new Acceso();
@@ -44,11 +51,11 @@ class Acceso extends Model
         return true;
     }
 
-    public static function updateAcceso($parameters_acceso) {
-        $_acceso = Acceso::findOrFail($parameters_acceso['id_empleado']);
+    public static function updateAcceso($parameters_acceso, $id_empleado) {
+        $_acceso = Acceso::findOrFail($id_empleado);
         $_acceso->fill($parameters_acceso);
         if(!empty($parameters_acceso['pass'])) {
-            $_acceso->pass = $parameters_acceso['pass'];
+            $_acceso->pass = Hash::make($parameters_acceso['pass']);
         }
         $_acceso->update();
         $ids=[];

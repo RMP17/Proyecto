@@ -107,6 +107,7 @@ class ArticuloControlador extends Controller
         if($articulo->divisible){
             $dimensiones = new Dimensiones();
             $dimensiones->fill($data['dimensiones']);
+            $dimensiones->volumen = $data['dimensiones']['largo']*$data['dimensiones']['ancho']*$data['dimensiones']['espesor'];
             $articulo->dimension()->save($dimensiones);
         }
         return response()->json();

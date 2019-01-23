@@ -20,7 +20,7 @@ class Venta extends Model
 		'id_moneda',
 		'id_cliente',
 		'id_caja',
-		'id_tipo_pago',
+		'tipo_pago',
 	];
 	
 	protected $guarded = [

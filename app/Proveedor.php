@@ -82,13 +82,10 @@ class Proveedor extends Model
         $contactos = $_proveedor->contactos;
 
         foreach ($contactos as $contacto) {
-            $contacto->proveedor = [
-                'id_proveedor' =>$_proveedor->id_proveedor,
-                'razon_social' =>$_proveedor->razon_social,
-                ];
+
             $contacto->cargo = Cargo::find($contacto->id_cargo);
         }
 
-        return $_proveedor->contactos;
+        return $contactos;
     }
 }

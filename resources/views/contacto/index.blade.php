@@ -1,16 +1,10 @@
-﻿<div class="d-flex bd-highlight">
-    <div class="mr-auto">
-        <a href data-target="#modal-new-contact" data-toggle="modal"
-           title="Nuevo Contacto" class="btn btn-outline-success btn-sm-icon">
-            <i class="far fa-address-card fa-2x"></i>
-        </a>
-    </div>
+﻿{{--<div class="d-flex bd-highlight">
     <div style="width: 15rem">
         <app-online-suggestions-objects v-if="!contacto.hideSuggestions" :config="contacto.configProveedor"
                                         @selected-suggestion-event="getContactosDeProveedor">
         </app-online-suggestions-objects>
     </div>
-</div>
+</div>--}}
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-sm">
         <thead>
@@ -22,7 +16,6 @@
             <th>Correo</th>
             <th>Registrado en fecha</th>
             <th>Estado</th>
-            <th>Proveedor</th>
             <th>Cargo</th>
             <th>Acctiones</th>
         </tr>
@@ -36,25 +29,14 @@
             <td>@{{ _contacto.correo }}</td>
             <td>@{{ _contacto.fecha_registro }}</td>
             <td>@{{ _contacto.estado }}</td>
-            <td>@{{ _contacto.proveedor ? _contacto.proveedor.razon_social : '' }}</td>
             <td>@{{ _contacto.cargo ? _contacto.cargo.nombre: '' }}</td>
             <td>
                 <a href="javascript:void(0)"
-                   title="Editar Contacto"
-                   @click="modeEditContactoProveedor(_contacto)"
-                   data-backdrop="static"
-                   data-keyboad="false"
-                   data-target="#modal-edit-contacto"
-                   data-toggle="modal"
+                   title="Editar"
+                   @click="changeModeEditContactoProveedor(_contacto)"
                    type="button" class="btn btn-warning btn-sm">
                     <i class="mdi mdi-pencil"></i>
                 </a>
-                {{--<a href="{{URL::action('ContactoControlador@edit', $c -> id_contacto)}}">
-                    <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button>
-                </a>
-                <a href="" data-target="#modal-delete-{{$c -> id_contacto}}" data-toggle="modal">
-                    <button type="button" class="btn btn-danger btn-sm"><i <i class="mdi mdi-thumb-down"></i></button>
-                </a>--}}
             </td>
         </tr>
         </tbody>

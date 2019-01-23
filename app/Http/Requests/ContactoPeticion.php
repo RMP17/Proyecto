@@ -35,9 +35,8 @@ class ContactoPeticion extends FormRequest
                     'nombre' => 'required|max:200',
                     'telefono' =>'max:15',
                     'celular' =>'max:15',
-                    'correo' =>'unique:contacto,correo|max:50',
-                    'proveedor' => 'required',
-                    'id_cargo' => 'required',
+                    'correo' =>'nullable|unique:contacto,correo|max:50',
+                    'id_proveedor' => 'required',
                 ];
             }
             case 'PUT':
@@ -47,9 +46,8 @@ class ContactoPeticion extends FormRequest
                     'nombre' => 'required|max:200',
                     'telefono' =>'max:15',
                     'celular' =>'max:15',
-                    'correo' =>'unique:contacto,correo,'.$this->id_contacto.',id_contacto|max:50',
-                    'proveedor' => 'required',
-                    'id_cargo' => 'required',
+                    'correo' =>'nullable|unique:contacto,correo,'.$this->id_contacto.',id_contacto|max:50',
+                    'id_proveedor' => 'required',
                 ];
             }
             default:break;

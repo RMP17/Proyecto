@@ -1236,6 +1236,7 @@ var appConfig = new Vue({
             ).then(response => {
                 if (response.data.id_empleado) {
                     this.acceso.attributes.usuario = response.data.usuario;
+                    this.acceso.attributes.pass = '';
                     this.acceso.attributes.id_empleado = response.data.id_empleado;
                     response.data.permiso.forEach(_permiso=>{
                         this.acceso.permisos.forEach(permisos_disponibles =>{
@@ -1256,16 +1257,37 @@ var appConfig = new Vue({
                 console.log('errors');
             });
         },
+
+        submitFormAcceso() {
+            if (!this.acceso.attributes.id_empleado) {
+                this.registerAcceso();
+            } else {
+                this.updateAcceso();
+            }
+        },
         registerAcceso(){
             let inputs = Object.assign({}, this.acceso.attributes);
             inputs.id_empleado = this.acceso.empleado.id_empleado;
             inputs.permisos_permitidos = this.acceso.permisos;
             axios.post( urlGlobal.resourcesAcceso,inputs
             ).then( response => {
+                this.acceso.attributes.id_empleado = inputs.id_empleado
                 /*this.kardex.kardex_observaciones.attributes.id_kardex_observacion =null;
                 this.kardex.kardex_observaciones.attributes.observacion = '';
-                this.getKardexObservacionesOfServer();
-                this.notificationSuccess();*/
+                this.getKardexObservacionesOfServer();*/
+                this.notificationSuccess();
+            }).catch( errors => {
+                console.log('FAILURE!!');
+                this.notificationErrors(errors);
+            });
+        },
+        updateAcceso(){
+            let inputs = Object.assign({}, this.acceso.attributes);
+            inputs.id_empleado = this.acceso.empleado.id_empleado;
+            inputs.permisos_permitidos = this.acceso.permisos;
+            axios.put( urlGlobal.resourcesAcceso +'/'+ inputs.id_empleado ,inputs
+            ).then( response => {
+                this.notificationSuccess();
             }).catch( errors => {
                 console.log('FAILURE!!');
                 this.notificationErrors(errors);

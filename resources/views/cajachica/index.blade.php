@@ -1,31 +1,3 @@
-@extends('maquetas.admin')
-@section('page_wrapper')
-    <!-- ============================================================== -->
-    <!-- Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
-    <div class="page-breadcrumb">
-        <div class="row">
-            <div class="col-12 d-flex no-block align-items-center">
-                <h4 class="page-title">Caja chica</h4>
-                <div class="col-3">
-                    <a href="" data-target="#modal-create-caja_chica" data-toggle="modal">
-                        <button type="button" class="btn btn-outline-danger">Aperturar caja</button>
-                    </a>
-                </div>
-                <div class="ml-auto text-right">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{url('')}}">Inicio</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Retornar a la página principal</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Bread crumb and right sidebar toggle -->
-    <!-- ============================================================== -->
     <!-- ============================================================== -->
     <!-- Container fluid  -->
     <!-- ============================================================== -->
@@ -56,7 +28,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($caja_chica as $c)
+                                {{--@foreach($caja_chica as $c)
                                     <tr>
                                         @if($c->fecha_cierre==null)
                                             <td>
@@ -110,7 +82,7 @@
                                             <td>{{ $c -> empleado }}</td>
                                         @endif
                                     </tr>
-                                @endforeach
+                                @endforeach--}}
                                 </tbody>
                             </table>
                         </div>
@@ -134,4 +106,3 @@
     <!-- ============================================================== -->
     <!-- ============================================================== -->
     @include('cajachica.create')
-@endsection

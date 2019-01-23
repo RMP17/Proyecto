@@ -24,18 +24,15 @@ class CajaPeticion extends FormRequest
     public function rules()
     {
        return [
-            'txtNombre' => 'required|max:50',
-			'cbxEmpleado' => 'required',
-			'cbxSucursal' => 'required',
+            'nombre' => 'required|max:50',
+			'id_empleado' => 'required',
         ];
     }
 	
 	public function messages()
     {
         return [
-            'txtNombre.required' => 'Debe ingresar el nombre de la ciudad que desea registrar',
-			'cbxEmpleado.required' => 'Debe elegir un empleado que controle esta caja',
-			'cbxSucursal.required' => 'Debe elegir una sucursal en la que esta caja funcione',
+
         ];
     }
 }
