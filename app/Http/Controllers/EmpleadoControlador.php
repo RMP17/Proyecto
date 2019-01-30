@@ -40,25 +40,10 @@ class EmpleadoControlador extends Controller
 	{
 	    Empleado::newEmpleado($peticion);
 	    return response()->json();
-		/*if(sizeof($kardexActiva) == 0)*/
 	}
 	public function show($id_empleado)
 	{
 		return view ('empleado.show', ['empleado' => Empleado :: findOrFail($id_empleado)]);
-	}
-	public function edit($id_empleado)
-	{
-		$paises = Pais::orderBy('nombre', 'asc')
-			->get();
-		$empleado = Empleado :: findOrFail($id_empleado);
-		$id_sucursal = $empleado -> id_sucursal;
-		$sucursal = Sucursal :: findOrFail($id_sucursal);
-		$id_ciudad = $sucursal -> id_ciudad;
-		$ciudad = Ciudad :: findOrFail($id_ciudad);
-		$id_pais = $ciudad -> id_pais;
-		$pais = Pais :: findOrFail ($id_pais);
-
-		return view ('empleado.edit', compact ('empleado', 'paises', 'pais', 'ciudad', 'sucursal'));
 	}
 	
 	public function update(EmpleadoPeticion $peticion, $id_empleado)
@@ -73,17 +58,6 @@ class EmpleadoControlador extends Controller
 		$empleado->estatus = 'X';
 		$empleado->update();
 		return Redirect :: to ('empleado');
-	}
-	
-	public function EmpleadosPorSucursal(Request $peticion, $id_sucursal)
-	{
-		if($peticion->ajax())
-		{
-			$empleados = Empleado::where('id_sucursal', '=', $id_sucursal)
-				->where('estatus', '=', 'A')
-				->get();
-			return response()->json($empleados);
-		}
 	}
 	public function simpleSuggestionsEmpleado($query)
 	{

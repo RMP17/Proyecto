@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-12-2018 a las 22:01:42
+-- Tiempo de generación: 30-01-2019 a las 14:46:03
 -- Versión del servidor: 10.1.25-MariaDB
 -- Versión de PHP: 7.1.7
 
@@ -31,9 +31,19 @@ SET time_zone = "+00:00";
 CREATE TABLE `acceso` (
   `id_empleado` int(11) NOT NULL,
   `usuario` varchar(25) DEFAULT NULL,
-  `pass` varchar(32) DEFAULT NULL,
-  `estatus` char(1) DEFAULT NULL
+  `pass` char(255) DEFAULT NULL,
+  `estatus` char(1) DEFAULT NULL,
+  `remember_token` char(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `acceso`
+--
+
+INSERT INTO `acceso` (`id_empleado`, `usuario`, `pass`, `estatus`, `remember_token`) VALUES
+(17, 'bol', '$2y$10$SwdTQbB6Wp4qdmbhhRvWtuBm0vb0PQkWUGPe5dKy.depLenM18y0G', '1', 'GbbtmpbDxN2ScxGptef7UAi23ua4oQLWPnuJrl0P4Z1wlBxVnpkeIqYyOcy4'),
+(18, 'rider2', '$2y$10$97cP9dpG0QaaZWqafQhCLu.MO9KtEi5GcMb8kqrddaFxGD5Its.AG', NULL, 'ESuM0aNWqVSi9BJRwIfv2bX0YIGXFgKaVuEwSXXhQQ3JorlSBCRVj8mEUcmL'),
+(19, 'Jose', '$2y$10$Q0QsySi9ztebcRZLkGg4yuZpTWwBYOgbGl3bJn3ppoJ69marH495C', '1', NULL);
 
 -- --------------------------------------------------------
 
@@ -48,6 +58,18 @@ CREATE TABLE `almacen` (
   `id_sucursal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `almacen`
+--
+
+INSERT INTO `almacen` (`id_almacen`, `codigo`, `direccion`, `id_sucursal`) VALUES
+(1, 'ALma6000', 'kjhjhkjhk', 1),
+(2, 'Almacen 23', 'kkhwlekjqwlekqj', 2),
+(3, 'Almacen 100', 'ojkjawldkj', 2),
+(4, 'Alma33333', 'we', 2),
+(5, 'Almacen 200', 'wwwwww', 1),
+(6, 'Almacen 300', 'eeeeeeeeeeeeee', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -60,8 +82,8 @@ CREATE TABLE `articulo` (
   `codigo` varchar(50) DEFAULT NULL,
   `codigo_barra` varchar(50) DEFAULT NULL,
   `caracteristicas` text,
-  `precio_compra` decimal(10,0) DEFAULT NULL,
-  `precio_produccion` decimal(10,0) DEFAULT NULL,
+  `precio_compra` decimal(10,2) DEFAULT NULL,
+  `precio_produccion` decimal(10,2) NOT NULL,
   `estatus` char(1) DEFAULT NULL,
   `imagen` char(254) DEFAULT NULL,
   `fecha_registro` date DEFAULT NULL,
@@ -75,7 +97,38 @@ CREATE TABLE `articulo` (
 --
 
 INSERT INTO `articulo` (`id_articulo`, `nombre`, `codigo`, `codigo_barra`, `caracteristicas`, `precio_compra`, `precio_produccion`, `estatus`, `imagen`, `fecha_registro`, `divisible`, `id_categoria`, `id_fabricante`) VALUES
-(454, 'hjnwjhwqehjk', '4654654654', '46546556465', 'kjwhekjqhwkejhwqejkqhhjejkqwhejkqwh', '44', '454', '1', '‰PNG\r\n\Z\n\0\0\0\rIHDR\0\0\0²\0\0\0\0\0\0^\r§à\0\0\0tEXtSoftware\0Adobe ImageReadyqÉe<\0\0ÚIDATxÚì[Anœ0©rÐ\rQÕìÉ&êä\0¤7€#¹@3s„Aê\Zv•ª$\nG]5]„M÷#Ðÿ§Ï‘ã°IH`ä/Y0c??¿ÿ=™]OÈª‰¡}ÿúcjSŸlú!û9qæ¬O{çºÀÙ>ØÁÐ\Z4NÝ¨ì¹UUÐá’ŠG%¡1O;ú.#üö§B™ÖÄ3/Õ’[>¯cçz¯\0„¨Ò›ÿŸ²Ýöü	b', '2018-12-25', 1, NULL, NULL);
+(15, 'jhkjhjkh', 'kj', 'hjk', 'hkjhk', '546545.00', '0.00', '1', 'images/1545922268favicon.png', '2018-12-27', 0, 39, 1),
+(16, 'SEÑOR DE LAS TINTAS', '2255', '32568525', 'Melaminico 3255', '150.00', '3.00', '1', NULL, '2019-01-10', 1, 30, 1),
+(17, 'Madera Roble plano', '100', '2333556545', 'Madena para puertas', '150.00', '0.00', '1', NULL, '2019-01-16', 1, 30, 1),
+(18, 'Melamico 1010', '101', '3526518946513', 'para escritorios', '10.00', '0.00', '1', NULL, '2019-01-16', 0, 30, 1),
+(19, 'Prensa de madera', '456', '456465', '', '12.00', '0.00', '1', NULL, '2019-01-23', 1, 37, 1),
+(20, 'Prensa de cobre', '4645', '454564', '', '54.00', '0.00', '1', NULL, '2019-01-23', 1, 31, 1),
+(21, 'Articulo 2', '4654', '45', '', '10.00', '0.00', '1', NULL, '2019-01-23', 1, NULL, NULL),
+(22, 'Articulo 3', '45', '455', '', '445.00', '0.00', '1', NULL, '2019-01-23', 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `articulos_sucursales`
+--
+
+CREATE TABLE `articulos_sucursales` (
+  `id_articulo` int(11) NOT NULL,
+  `id_sucursal` int(11) NOT NULL,
+  `precio_1` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `precio_2` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `precio_3` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `precio_4` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `precio_5` decimal(10,2) NOT NULL DEFAULT '0.00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `articulos_sucursales`
+--
+
+INSERT INTO `articulos_sucursales` (`id_articulo`, `id_sucursal`, `precio_1`, `precio_2`, `precio_3`, `precio_4`, `precio_5`) VALUES
+(17, 1, '0.00', '0.00', '0.00', '0.00', '0.00'),
+(17, 4, '534.45', '545.64', '456.10', '456.66', '545.00');
 
 -- --------------------------------------------------------
 
@@ -99,10 +152,17 @@ CREATE TABLE `bitacora` (
 CREATE TABLE `caja` (
   `id_caja` int(11) NOT NULL,
   `nombre` varchar(50) DEFAULT NULL,
-  `estatus` char(1) DEFAULT NULL,
-  `id_empleado` int(11) DEFAULT NULL,
-  `id_sucursal` int(11) DEFAULT NULL
+  `status` char(1) DEFAULT NULL,
+  `id_empleado` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `caja`
+--
+
+INSERT INTO `caja` (`id_caja`, `nombre`, `status`, `id_empleado`) VALUES
+(1, 'Caja 1', NULL, 17),
+(2, 'Caja 2', NULL, 17);
 
 -- --------------------------------------------------------
 
@@ -173,9 +233,8 @@ CREATE TABLE `cargo` (
 --
 
 INSERT INTO `cargo` (`id_cargo`, `nombre`) VALUES
-(2, 'Contador'),
-(1, 'Gerente general'),
-(3, 'Secretaria');
+(20, 'cargo 12'),
+(19, 'cargo 13');
 
 -- --------------------------------------------------------
 
@@ -233,7 +292,17 @@ INSERT INTO `ciudad` (`id_ciudad`, `nombre`, `id_pais`) VALUES
 (7, 'Beni', 1),
 (8, 'Tarija', 1),
 (9, 'Cochabamba', 1),
-(10, '-', 1);
+(10, '-', 1),
+(11, 'jghkjhkjhkj', 1),
+(12, 'ooopppp', 1),
+(13, 'jhkjhkjh', 3),
+(14, 'qweqweqw', 3),
+(15, 'qweqwe', 3),
+(16, 'qweqw', 3),
+(17, 'qweqwe', 3),
+(18, 'qeqwe', 3),
+(19, 'q', 5),
+(20, 'e', 5);
 
 -- --------------------------------------------------------
 
@@ -253,6 +322,19 @@ CREATE TABLE `cliente` (
   `id_ciudad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`id_cliente`, `razon_social`, `nit`, `actividad`, `telefono`, `celular`, `correo`, `direccion`, `id_ciudad`) VALUES
+(1, 'jkhkjhk', '76786786', '678687678', NULL, NULL, NULL, NULL, NULL),
+(2, 'Ernesto', '987654', NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Romulo', '46545646', NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'Rosa Fernandes', '165432215', NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 'Ramiro Ramires', '64654', 'jkdgjkhj', '4565456', '545646', 'eqweqw', NULL, 1),
+(6, 'Maria Martinez', '465456', 'Cosas', '4564546', '565464454', 'hjkhjkjkjk', '6546546', NULL),
+(7, 'S/N', '0', NULL, NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -262,17 +344,58 @@ CREATE TABLE `cliente` (
 CREATE TABLE `compra` (
   `id_compra` int(11) NOT NULL,
   `fecha` date DEFAULT NULL,
-  `descuento` decimal(10,0) DEFAULT NULL,
-  `costo_total` decimal(10,0) DEFAULT NULL,
+  `descuento` decimal(10,2) DEFAULT NULL,
+  `costo_total` decimal(10,2) DEFAULT NULL,
   `codigo_tarjeta_cheque` varchar(36) DEFAULT NULL,
   `nro_factura` varchar(50) DEFAULT NULL,
   `observaciones` text,
-  `estatus` char(1) DEFAULT NULL,
+  `estatus` char(2) DEFAULT NULL,
   `id_moneda` int(11) DEFAULT NULL,
   `id_empleado` int(11) DEFAULT NULL,
-  `id_contacto` int(11) DEFAULT NULL,
-  `id_tipo_pago` int(11) DEFAULT NULL
+  `id_proveedor` int(11) DEFAULT NULL,
+  `tipo_pago` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `compra`
+--
+
+INSERT INTO `compra` (`id_compra`, `fecha`, `descuento`, `costo_total`, `codigo_tarjeta_cheque`, `nro_factura`, `observaciones`, `estatus`, `id_moneda`, `id_empleado`, `id_proveedor`, `tipo_pago`) VALUES
+(35, '2019-01-17', '0.00', '1311.00', '4564646', '45654564', 'jwwkhfjkwh', NULL, 1, 18, 2, 'ef'),
+(36, '2019-01-17', '0.00', '123.00', NULL, NULL, 'jhgjkhkjhkj', NULL, 1, 18, NULL, 'ef'),
+(37, '2019-01-17', '0.00', '5416.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
+(38, '2019-01-17', '0.00', '260.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
+(39, '2019-01-17', '0.00', '250.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
+(40, '2019-01-21', '0.00', '525.00', NULL, NULL, NULL, NULL, 1, 17, NULL, 'ef'),
+(41, '2019-01-21', '96.00', '396.00', NULL, NULL, NULL, NULL, 1, 17, NULL, 'ef'),
+(42, '2019-01-21', '0.00', '350.00', NULL, NULL, NULL, 'cv', 1, 18, NULL, 'cr'),
+(43, '2019-01-22', '10.00', '300.00', NULL, NULL, NULL, 'cv', 1, 17, NULL, 'cr'),
+(44, '2019-01-22', '0.00', '2988.00', NULL, NULL, NULL, NULL, 1, 18, 1, 'ef'),
+(45, '2019-01-25', '0.00', '667.00', NULL, NULL, NULL, NULL, 1, 17, NULL, 'ef'),
+(46, '2019-01-25', '0.00', '500.00', NULL, NULL, NULL, NULL, 1, 17, NULL, 'ef'),
+(47, '2019-01-25', '0.00', '600.00', NULL, NULL, NULL, NULL, 1, 17, NULL, 'ef');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `compra_credito`
+--
+
+CREATE TABLE `compra_credito` (
+  `id` int(11) NOT NULL,
+  `fecha` datetime DEFAULT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `tipo_pago` char(2) NOT NULL,
+  `observaciones` text,
+  `id_compra` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `compra_credito`
+--
+
+INSERT INTO `compra_credito` (`id`, `fecha`, `monto`, `tipo_pago`, `observaciones`, `id_compra`) VALUES
+(66, '2019-01-22 11:57:34', '34.00', 'ef', NULL, 42);
 
 -- --------------------------------------------------------
 
@@ -292,6 +415,21 @@ CREATE TABLE `contacto` (
   `id_proveedor` int(11) DEFAULT NULL,
   `id_cargo` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `contacto`
+--
+
+INSERT INTO `contacto` (`id_contacto`, `nombre`, `telefono`, `interno`, `celular`, `correo`, `fecha_registro`, `estatus`, `id_proveedor`, `id_cargo`) VALUES
+(1, 'qweweqweqw', '214214', NULL, NULL, NULL, '2019-01-07', NULL, 1, 20),
+(2, 'Bolivia', '214214', '43324', '4232', '23432s', '2019-01-07', NULL, 1, 20),
+(3, 'Bolivia', '21421423', '322323', '4232', '23432wq', '2019-01-07', NULL, 1, 20),
+(4, 'qweweqweqw', '214214', '43324', '4232', '23432e', '2019-01-07', NULL, 2, 20),
+(5, 'Pil', '54564', NULL, NULL, NULL, '2019-01-16', NULL, 1, 20),
+(6, 'Pil dos', '232', NULL, NULL, '41', '2019-01-16', NULL, 1, 20),
+(7, 'pil 3', '41654', NULL, NULL, '234322', '2019-01-16', NULL, 1, 20),
+(8, 'Pil 4', NULL, NULL, NULL, '456', '2019-01-16', NULL, 1, 20),
+(9, 'Pil 5', '4564', NULL, NULL, NULL, '2019-01-16', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -321,6 +459,13 @@ CREATE TABLE `cuenta_proveedor` (
   `id_proveedor` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `cuenta_proveedor`
+--
+
+INSERT INTO `cuenta_proveedor` (`id_cuenta`, `entidad`, `nro_cuenta`, `id_moneda`, `id_proveedor`) VALUES
+(1, 'Banco Sol', '125352545', 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -330,11 +475,39 @@ CREATE TABLE `cuenta_proveedor` (
 CREATE TABLE `detalle_compra` (
   `id_detalle_compra` int(11) NOT NULL,
   `cantidad` int(11) DEFAULT NULL,
-  `costo_total` decimal(10,0) DEFAULT NULL,
+  `precio_unitario` decimal(10,0) DEFAULT NULL,
   `id_articulo` int(11) DEFAULT NULL,
   `id_almacen` int(11) DEFAULT NULL,
   `id_compra` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalle_compra`
+--
+
+INSERT INTO `detalle_compra` (`id_detalle_compra`, `cantidad`, `precio_unitario`, `id_articulo`, `id_almacen`, `id_compra`) VALUES
+(57, 33, '23', 16, 4, 35),
+(58, 29, '19', 15, 4, 35),
+(59, 41, '3', 16, 4, 36),
+(60, 100, '54', 18, 4, 37),
+(61, 4, '4', 15, 4, 37),
+(62, 10, '25', 16, 4, 38),
+(63, 2, '5', 18, 4, 38),
+(64, 10, '25', 18, 4, 39),
+(65, 11, '25', 17, 4, 40),
+(66, 10, '25', 18, 4, 40),
+(67, 12, '12', 17, 2, 41),
+(68, 12, '21', 18, 2, 41),
+(69, 10, '25', 15, 4, 42),
+(70, 10, '10', 18, 4, 42),
+(71, 10, '12', 18, 1, 43),
+(72, 15, '12', 17, 1, 43),
+(73, 12, '15', 17, 1, 44),
+(74, 54, '52', 16, 1, 44),
+(75, 25, '25', 22, 5, 45),
+(76, 21, '2', 21, 5, 45),
+(77, 100, '5', 16, 4, 46),
+(78, 12, '50', 16, 1, 47);
 
 -- --------------------------------------------------------
 
@@ -359,11 +532,30 @@ CREATE TABLE `detalle_produccion` (
 CREATE TABLE `detalle_venta` (
   `id_detalle_venta` int(11) NOT NULL,
   `cantidad` int(11) DEFAULT NULL,
-  `costo_total` decimal(10,0) DEFAULT NULL,
+  `precio_unitario` decimal(10,2) NOT NULL,
   `id_articulo` int(11) DEFAULT NULL,
   `id_almacen` int(11) DEFAULT NULL,
   `id_venta` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalle_venta`
+--
+
+INSERT INTO `detalle_venta` (`id_detalle_venta`, `cantidad`, `precio_unitario`, `id_articulo`, `id_almacen`, `id_venta`) VALUES
+(52, 10, '25.00', 17, NULL, 27),
+(53, 10, '2.00', 18, NULL, 28),
+(54, 10, '25.00', 17, NULL, 28),
+(55, 10, '2.00', 18, NULL, 29),
+(56, 10, '25.00', 17, NULL, 29),
+(57, 10, '525.00', 18, NULL, 30),
+(58, 10, '525.00', 18, NULL, 31),
+(59, 10, '525.00', 18, NULL, 32),
+(60, 10, '525.00', 18, NULL, 33),
+(61, 10, '525.00', 18, NULL, 34),
+(62, 5, '5.00', 20, NULL, 35),
+(63, 5, '5.00', 20, NULL, 36),
+(64, 5, '5.00', 20, NULL, 37);
 
 -- --------------------------------------------------------
 
@@ -378,6 +570,17 @@ CREATE TABLE `dimensiones` (
   `espesor` decimal(10,0) DEFAULT NULL,
   `volumen` decimal(10,0) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `dimensiones`
+--
+
+INSERT INTO `dimensiones` (`id_articulo`, `largo`, `ancho`, `espesor`, `volumen`) VALUES
+(16, '20', '40', '1', '800'),
+(17, '20', '81', '1', '1620'),
+(19, '121', '21', '21', '0'),
+(20, '45', '45', '40', '0'),
+(21, '40', '52', '10', '20800');
 
 -- --------------------------------------------------------
 
@@ -413,20 +616,24 @@ CREATE TABLE `empleado` (
   `celular` varchar(15) DEFAULT NULL,
   `correo` varchar(50) DEFAULT NULL,
   `direccion` varchar(200) DEFAULT NULL,
-  `foto` blob,
+  `foto` char(255) DEFAULT NULL,
   `persona_referencia` varchar(200) DEFAULT NULL,
   `telefono_referencia` varchar(15) DEFAULT NULL,
   `fecha_registro` date DEFAULT NULL,
   `estatus` char(1) DEFAULT NULL,
-  `id_sucursal` int(11) DEFAULT NULL
+  `id_almacen` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
-INSERT INTO `empleado` (`id_empleado`, `nombre`, `ci`, `sexo`, `fecha_nacimiento`, `telefono`, `celular`, `correo`, `direccion`, `foto`, `persona_referencia`, `telefono_referencia`, `fecha_registro`, `estatus`, `id_sucursal`) VALUES
-(1, 'rider', '4654654', 'm', '2018-12-27', '56654654', '4564564', 'rhjkfhhjkwr@jhwkjheq.com', '55454654', '', 'rider ouiouwoie', '5456645456', '2018-12-20', 'X', 1);
+INSERT INTO `empleado` (`id_empleado`, `nombre`, `ci`, `sexo`, `fecha_nacimiento`, `telefono`, `celular`, `correo`, `direccion`, `foto`, `persona_referencia`, `telefono_referencia`, `fecha_registro`, `estatus`, `id_almacen`) VALUES
+(17, 'Bolivia', '87687687', 'm', '2000-01-18', '214214', '4232', '23432', 'iuqhjkhjkhk', '1547042188logo-icon.png', 'hhjgjhghj', '5757576', '2019-01-09', '1', 4),
+(18, 'Rider', '8998696', 'm', '2016-11-29', '4343', '4232', '87896798', 'we', '', 'hhjgjhghj', '5757576', '2019-01-10', '1', 2),
+(19, 'Jose Jose', '549247', 'm', '1995-01-10', '6410244', '73402108', '', 'Japon # 25', '1547157899b1.jpg', 'pedro', '42565566', '2019-01-10', '1', 3),
+(24, 'Empleado', '456564', '', NULL, NULL, NULL, NULL, '', '', '', '', '2019-01-29', '1', 4),
+(25, 'Empleado 2', '56456456', '', NULL, NULL, NULL, NULL, '', '', '', '', '2019-01-29', '1', 1);
 
 -- --------------------------------------------------------
 
@@ -449,7 +656,8 @@ CREATE TABLE `empresa` (
 INSERT INTO `empresa` (`id_empresa`, `razon_social`, `nit`, `propietario`, `actividad`) VALUES
 (1, 'jkhrjkhjwhjkwh', '7468544', 'qwjelwqkj', '4654564'),
 (2, 'qjwelwjk', '744541112', 'Pablo', '5456'),
-(3, 'balbla', '11233', 'oopoo', 'lalalalal');
+(3, 'balbla', '11233', 'oopoo', 'lalalalal'),
+(4, 'Razon Social 1', '1234567023', 'Jose Jose', 'Venta de Muebles - Puertas');
 
 -- --------------------------------------------------------
 
@@ -469,8 +677,8 @@ CREATE TABLE `fabricante` (
 --
 
 INSERT INTO `fabricante` (`id_fabricante`, `nombre`, `contacto`, `sitio_web`) VALUES
-(1, 'kjhwkejhwqejkhwqkj', '2312', 'kjhwqeejkwqhejkhqw'),
-(2, 'qweqweqwe', NULL, 'qweqwqwe');
+(1, 'fabricante1', '2312', 'kjhwqeejkwqhejkhqw'),
+(2, 'fabricante2', NULL, 'qweqwqwe');
 
 -- --------------------------------------------------------
 
@@ -550,8 +758,11 @@ CREATE TABLE `kardex` (
 --
 
 INSERT INTO `kardex` (`id_kardex`, `fecha_inicio`, `fecha_baja`, `fecha_registro`, `id_empleado`, `id_cargo`, `id_tipo_empleado`) VALUES
-(1, '2018-12-11', NULL, '2018-12-20', 1, 2, 1),
-(2, '1969-12-31', NULL, '2018-12-20', NULL, NULL, NULL);
+(14, '2019-01-30', NULL, '2019-01-09', 17, 20, NULL),
+(15, '2017-11-29', NULL, '2019-01-10', 18, 19, NULL),
+(16, '2019-01-02', NULL, '2019-01-10', 19, 20, NULL),
+(17, NULL, NULL, '2019-01-29', 24, NULL, NULL),
+(18, NULL, NULL, '2019-01-29', 25, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -571,7 +782,14 @@ CREATE TABLE `kardex_observaciones` (
 --
 
 INSERT INTO `kardex_observaciones` (`id_kardex_observaciones`, `id_kardex`, `fecha`, `observacion`) VALUES
-(1, 1, '2018-12-21', 'buuuuuuuuuu');
+(4, 15, '2019-01-10', 'es normal 4'),
+(5, 15, '2019-01-10', 'es normal'),
+(7, 15, '2019-01-10', 'es normal 6'),
+(8, 15, '2019-01-10', 'es normal 7'),
+(9, 15, '2019-01-10', 'es normal 2'),
+(10, 15, '2019-01-10', 'es normal 8'),
+(11, 14, '2019-01-10', 'es normal 3'),
+(12, 14, '2019-01-10', 'es normal');
 
 -- --------------------------------------------------------
 
@@ -591,7 +809,12 @@ CREATE TABLE `moneda` (
 --
 
 INSERT INTO `moneda` (`id_moneda`, `nombre`, `codigo`, `id_pais`) VALUES
-(1, 'Bs', '1213|1', 1);
+(1, 'Bolivianos', 'BOB', 2),
+(9, 'mnmnbmbn', 'kjbhkjghkjh', 1),
+(22, 'jkhewkjqwhekjqwhe', '42412', 1),
+(27, 'ooooooooooooo', 'ooooooooooooo', 2),
+(28, 'Soles', 'SOL', 3),
+(29, 'Pesos', 'PES', 2);
 
 -- --------------------------------------------------------
 
@@ -611,8 +834,13 @@ CREATE TABLE `pais` (
 INSERT INTO `pais` (`id_pais`, `nombre`) VALUES
 (4, '-'),
 (1, 'Bolivia'),
-(2, 'Olanda'),
-(3, 'Peru');
+(9, 'Chile'),
+(7, 'lor'),
+(2, 'Olanda 3'),
+(3, 'Peru'),
+(8, 'qwewqeq'),
+(5, 'qwewqeqjjjjjjppppwwwwwwwwwwwwwwwwwwwwwwwwwwww'),
+(6, 'wqeqweq');
 
 -- --------------------------------------------------------
 
@@ -625,6 +853,23 @@ CREATE TABLE `permiso` (
   `descripcion` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `permiso`
+--
+
+INSERT INTO `permiso` (`id_permiso`, `descripcion`) VALUES
+(1, 'Articulo'),
+(2, 'Cargo'),
+(3, 'categoria'),
+(4, 'contacto'),
+(5, 'cuenta'),
+(6, 'factura'),
+(7, 'gasto'),
+(8, 'almacen'),
+(9, 'cliente'),
+(11, 'cambio'),
+(12, 'venta');
+
 -- --------------------------------------------------------
 
 --
@@ -634,8 +879,28 @@ CREATE TABLE `permiso` (
 CREATE TABLE `permiso_usuario` (
   `id` int(11) NOT NULL,
   `id_permiso` int(11) DEFAULT NULL,
-  `usuario` varchar(25) DEFAULT NULL
+  `id_acceso` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `permiso_usuario`
+--
+
+INSERT INTO `permiso_usuario` (`id`, `id_permiso`, `id_acceso`) VALUES
+(8, 5, 18),
+(9, 3, 18),
+(10, 11, 18),
+(11, 7, 18),
+(12, 2, 18),
+(13, 12, 19),
+(14, 3, 19),
+(22, 7, 17),
+(23, 5, 17),
+(24, 3, 17),
+(25, 2, 17),
+(26, 11, 17),
+(27, 12, 18),
+(28, 12, 17);
 
 -- --------------------------------------------------------
 
@@ -647,23 +912,6 @@ CREATE TABLE `pieza` (
   `id_pieza` int(11) NOT NULL,
   `id_articulo` int(11) DEFAULT NULL,
   `corte` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `precio`
---
-
-CREATE TABLE `precio` (
-  `id_precio` int(11) NOT NULL,
-  `precio_1` decimal(10,0) DEFAULT NULL,
-  `precio_2` decimal(10,0) DEFAULT NULL,
-  `precio_3` decimal(10,0) DEFAULT NULL,
-  `precio_4` decimal(10,0) DEFAULT NULL,
-  `precio_5` decimal(10,0) DEFAULT NULL,
-  `id_articulo` int(11) DEFAULT NULL,
-  `id_sucursal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -706,6 +954,14 @@ CREATE TABLE `proveedor` (
   `id_ciudad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `proveedor`
+--
+
+INSERT INTO `proveedor` (`id_proveedor`, `razon_social`, `nit`, `telefono`, `fax`, `celular`, `correo`, `sitio_web`, `direccion`, `fecha_registro`, `rubro`, `id_ciudad`) VALUES
+(1, 'EEEEEE', '12321', '214214', NULL, NULL, NULL, NULL, NULL, '2019-01-07', NULL, 5),
+(2, 'Open red', '2242', '4343', '2434', '4232', '23432', '334', 'we', '2019-01-07', 'qrqwrw', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -723,8 +979,11 @@ CREATE TABLE `salario` (
 --
 
 INSERT INTO `salario` (`id_kardex`, `monto`, `id_moneda`) VALUES
-(1, '345', 1),
-(2, NULL, NULL);
+(14, '876866', 22),
+(15, '876866', 22),
+(16, '2500', 27),
+(17, '2000', 1),
+(18, '2500', 1);
 
 -- --------------------------------------------------------
 
@@ -738,6 +997,19 @@ CREATE TABLE `stock` (
   `id_almacen` int(11) DEFAULT NULL,
   `cantidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `stock`
+--
+
+INSERT INTO `stock` (`id_stock`, `id_articulo`, `id_almacen`, `cantidad`) VALUES
+(1, 16, 4, 160),
+(2, 15, 4, 1103),
+(3, 17, 4, 98),
+(7, 18, 1, 0),
+(10, 22, 5, 25),
+(11, 21, 5, 21),
+(12, 16, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -776,7 +1048,9 @@ CREATE TABLE `sucursal` (
 
 INSERT INTO `sucursal` (`id_sucursal`, `nombre`, `casa_matriz`, `direccion`, `telefono`, `fecha_apertura`, `estatus`, `id_ciudad`, `id_empresa`) VALUES
 (1, 'sucursal', 0, 'jkhjkhjkhjk', '45554456', '2018-12-04', 'A', 1, 2),
-(2, '-', 0, 'dir', '12345', '2018-12-20', 'A', 1, 3);
+(2, 'Lo', 1, 'dir', '12345', '2018-12-20', 'A', 1, 3),
+(3, 'qweweqweqw', 1, 'we', '214214', '2019-01-17', NULL, 2, 3),
+(4, 'Mercado Central', 1, 'Japon # 30', '6410244', '2019-01-10', NULL, 8, 3);
 
 -- --------------------------------------------------------
 
@@ -799,17 +1073,6 @@ INSERT INTO `tipo_empleado` (`id_tipo_empleado`, `tipo`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipo_pago`
---
-
-CREATE TABLE `tipo_pago` (
-  `id_tipo_pago` int(11) NOT NULL,
-  `tipo_pago` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `venta`
 --
 
@@ -823,7 +1086,7 @@ CREATE TABLE `venta` (
   `id_moneda` int(11) DEFAULT NULL,
   `id_cliente` int(11) DEFAULT NULL,
   `id_caja` int(11) DEFAULT NULL,
-  `id_tipo_pago` int(11) DEFAULT NULL
+  `tipo_pago` char(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -855,6 +1118,13 @@ ALTER TABLE `articulo`
   ADD KEY `articulo_ibfk_1` (`id_categoria`);
 
 --
+-- Indices de la tabla `articulos_sucursales`
+--
+ALTER TABLE `articulos_sucursales`
+  ADD PRIMARY KEY (`id_articulo`,`id_sucursal`),
+  ADD KEY `id_sucursal` (`id_sucursal`);
+
+--
 -- Indices de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
@@ -866,8 +1136,7 @@ ALTER TABLE `bitacora`
 --
 ALTER TABLE `caja`
   ADD PRIMARY KEY (`id_caja`),
-  ADD KEY `id_empleado` (`id_empleado`),
-  ADD KEY `id_sucursal` (`id_sucursal`);
+  ADD KEY `id_empleado` (`id_empleado`);
 
 --
 -- Indices de la tabla `caja_chica`
@@ -927,8 +1196,14 @@ ALTER TABLE `compra`
   ADD PRIMARY KEY (`id_compra`),
   ADD KEY `id_moneda` (`id_moneda`),
   ADD KEY `id_empleado` (`id_empleado`),
-  ADD KEY `id_contacto` (`id_contacto`),
-  ADD KEY `id_tipo_pago` (`id_tipo_pago`);
+  ADD KEY `compra_ibfk_3` (`id_proveedor`);
+
+--
+-- Indices de la tabla `compra_credito`
+--
+ALTER TABLE `compra_credito`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_compra` (`id_compra`);
 
 --
 -- Indices de la tabla `contacto`
@@ -1000,7 +1275,7 @@ ALTER TABLE `empleado`
   ADD PRIMARY KEY (`id_empleado`),
   ADD UNIQUE KEY `ci` (`ci`),
   ADD UNIQUE KEY `correo` (`correo`),
-  ADD KEY `id_sucursal` (`id_sucursal`);
+  ADD KEY `empleado_ibfk_1` (`id_almacen`);
 
 --
 -- Indices de la tabla `empresa`
@@ -1087,21 +1362,13 @@ ALTER TABLE `permiso`
 ALTER TABLE `permiso_usuario`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_permiso` (`id_permiso`),
-  ADD KEY `usuario` (`usuario`);
+  ADD KEY `id_acceso` (`id_acceso`);
 
 --
 -- Indices de la tabla `pieza`
 --
 ALTER TABLE `pieza`
   ADD PRIMARY KEY (`id_pieza`),
-  ADD KEY `id_articulo` (`id_articulo`);
-
---
--- Indices de la tabla `precio`
---
-ALTER TABLE `precio`
-  ADD PRIMARY KEY (`id_precio`),
-  ADD UNIQUE KEY `id_sucursal` (`id_sucursal`,`id_articulo`),
   ADD KEY `id_articulo` (`id_articulo`);
 
 --
@@ -1157,20 +1424,13 @@ ALTER TABLE `tipo_empleado`
   ADD PRIMARY KEY (`id_tipo_empleado`);
 
 --
--- Indices de la tabla `tipo_pago`
---
-ALTER TABLE `tipo_pago`
-  ADD PRIMARY KEY (`id_tipo_pago`);
-
---
 -- Indices de la tabla `venta`
 --
 ALTER TABLE `venta`
   ADD PRIMARY KEY (`id_venta`),
   ADD KEY `id_moneda` (`id_moneda`),
   ADD KEY `id_cliente` (`id_cliente`),
-  ADD KEY `id_caja` (`id_caja`),
-  ADD KEY `id_tipo_pago` (`id_tipo_pago`);
+  ADD KEY `id_caja` (`id_caja`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1180,12 +1440,12 @@ ALTER TABLE `venta`
 -- AUTO_INCREMENT de la tabla `almacen`
 --
 ALTER TABLE `almacen`
-  MODIFY `id_almacen` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_almacen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT de la tabla `articulo`
 --
 ALTER TABLE `articulo`
-  MODIFY `id_articulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=455;
+  MODIFY `id_articulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT de la tabla `bitacora`
 --
@@ -1195,7 +1455,7 @@ ALTER TABLE `bitacora`
 -- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
-  MODIFY `id_caja` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `caja_chica`
 --
@@ -1215,7 +1475,7 @@ ALTER TABLE `cambio`
 -- AUTO_INCREMENT de la tabla `cargo`
 --
 ALTER TABLE `cargo`
-  MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT de la tabla `categoria`
 --
@@ -1225,22 +1485,27 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `id_ciudad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_ciudad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `compra`
 --
 ALTER TABLE `compra`
-  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+--
+-- AUTO_INCREMENT de la tabla `compra_credito`
+--
+ALTER TABLE `compra_credito`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 --
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
-  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `cuenta`
 --
@@ -1250,12 +1515,12 @@ ALTER TABLE `cuenta`
 -- AUTO_INCREMENT de la tabla `cuenta_proveedor`
 --
 ALTER TABLE `cuenta_proveedor`
-  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `detalle_compra`
 --
 ALTER TABLE `detalle_compra`
-  MODIFY `id_detalle_compra` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detalle_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 --
 -- AUTO_INCREMENT de la tabla `detalle_produccion`
 --
@@ -1265,7 +1530,7 @@ ALTER TABLE `detalle_produccion`
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 --
 -- AUTO_INCREMENT de la tabla `dosificacion`
 --
@@ -1275,12 +1540,12 @@ ALTER TABLE `dosificacion`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `fabricante`
 --
@@ -1310,42 +1575,37 @@ ALTER TABLE `impuesto_articulo`
 -- AUTO_INCREMENT de la tabla `kardex`
 --
 ALTER TABLE `kardex`
-  MODIFY `id_kardex` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_kardex` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT de la tabla `kardex_observaciones`
 --
 ALTER TABLE `kardex_observaciones`
-  MODIFY `id_kardex_observaciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kardex_observaciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `moneda`
 --
 ALTER TABLE `moneda`
-  MODIFY `id_moneda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_moneda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 --
 -- AUTO_INCREMENT de la tabla `pais`
 --
 ALTER TABLE `pais`
-  MODIFY `id_pais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_pais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT de la tabla `permiso`
 --
 ALTER TABLE `permiso`
-  MODIFY `id_permiso` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `permiso_usuario`
 --
 ALTER TABLE `permiso_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT de la tabla `pieza`
 --
 ALTER TABLE `pieza`
   MODIFY `id_pieza` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `precio`
---
-ALTER TABLE `precio`
-  MODIFY `id_precio` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `produccion`
 --
@@ -1355,12 +1615,12 @@ ALTER TABLE `produccion`
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
-  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `subcategoria`
 --
@@ -1370,17 +1630,12 @@ ALTER TABLE `subcategoria`
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
-  MODIFY `id_sucursal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_sucursal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `tipo_empleado`
 --
 ALTER TABLE `tipo_empleado`
   MODIFY `id_tipo_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT de la tabla `tipo_pago`
---
-ALTER TABLE `tipo_pago`
-  MODIFY `id_tipo_pago` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `venta`
 --
@@ -1410,6 +1665,13 @@ ALTER TABLE `articulo`
   ADD CONSTRAINT `articulo_ibfk_2` FOREIGN KEY (`id_fabricante`) REFERENCES `fabricante` (`id_fabricante`) ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `articulos_sucursales`
+--
+ALTER TABLE `articulos_sucursales`
+  ADD CONSTRAINT `articulos_sucursales_ibfk_1` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `articulos_sucursales_ibfk_2` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursal` (`id_sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
@@ -1419,8 +1681,7 @@ ALTER TABLE `bitacora`
 -- Filtros para la tabla `caja`
 --
 ALTER TABLE `caja`
-  ADD CONSTRAINT `caja_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `caja_ibfk_2` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursal` (`id_sucursal`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `caja_ibfk_1` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `caja_chica`
@@ -1460,8 +1721,13 @@ ALTER TABLE `cliente`
 ALTER TABLE `compra`
   ADD CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`id_moneda`) REFERENCES `moneda` (`id_moneda`) ON UPDATE CASCADE,
   ADD CONSTRAINT `compra_ibfk_2` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `compra_ibfk_3` FOREIGN KEY (`id_contacto`) REFERENCES `contacto` (`id_contacto`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `compra_ibfk_4` FOREIGN KEY (`id_tipo_pago`) REFERENCES `tipo_pago` (`id_tipo_pago`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `compra_ibfk_3` FOREIGN KEY (`id_proveedor`) REFERENCES `proveedor` (`id_proveedor`) ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `compra_credito`
+--
+ALTER TABLE `compra_credito`
+  ADD CONSTRAINT `compra_credito_ibfk_1` FOREIGN KEY (`id_compra`) REFERENCES `compra` (`id_compra`);
 
 --
 -- Filtros para la tabla `contacto`
@@ -1518,7 +1784,7 @@ ALTER TABLE `dimensiones`
 -- Filtros para la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursal` (`id_sucursal`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`id_almacen`) REFERENCES `almacen` (`id_almacen`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `factura`
@@ -1565,20 +1831,13 @@ ALTER TABLE `moneda`
 --
 ALTER TABLE `permiso_usuario`
   ADD CONSTRAINT `permiso_usuario_ibfk_1` FOREIGN KEY (`id_permiso`) REFERENCES `permiso` (`id_permiso`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `permiso_usuario_ibfk_2` FOREIGN KEY (`usuario`) REFERENCES `acceso` (`usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `permiso_usuario_ibfk_2` FOREIGN KEY (`id_acceso`) REFERENCES `acceso` (`id_empleado`);
 
 --
 -- Filtros para la tabla `pieza`
 --
 ALTER TABLE `pieza`
   ADD CONSTRAINT `pieza_ibfk_1` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `precio`
---
-ALTER TABLE `precio`
-  ADD CONSTRAINT `precio_ibfk_1` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `precio_ibfk_2` FOREIGN KEY (`id_sucursal`) REFERENCES `sucursal` (`id_sucursal`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `produccion`
@@ -1625,8 +1884,7 @@ ALTER TABLE `sucursal`
 ALTER TABLE `venta`
   ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`id_moneda`) REFERENCES `moneda` (`id_moneda`) ON UPDATE CASCADE,
   ADD CONSTRAINT `venta_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `venta_ibfk_3` FOREIGN KEY (`id_caja`) REFERENCES `caja` (`id_caja`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `venta_ibfk_4` FOREIGN KEY (`id_tipo_pago`) REFERENCES `tipo_pago` (`id_tipo_pago`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `venta_ibfk_3` FOREIGN KEY (`id_caja`) REFERENCES `caja` (`id_caja`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

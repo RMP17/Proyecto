@@ -11,7 +11,7 @@
             <td>NIT / CI</td>
             <td>Sexo</td>
             <td>Edad</td>
-            <td>Sucursal</td>
+            <td>Almacén</td>
             <td>Teléfono</td>
             <td>Celular</td>
             <td>Correo</td>
@@ -33,7 +33,7 @@
                 <span v-else>Femenino</span>
             </td>
             <td>@{{ _empleado.edad }}</td>
-            <td>@{{ _empleado.sucursal.nombre }}</td>
+            <td>@{{ _empleado.almacen.codigo }}</td>
             <td>@{{ _empleado.telefono }}</td>
             <td>@{{ _empleado.celular }}</td>
             <td>@{{ _empleado.correo }}</td>

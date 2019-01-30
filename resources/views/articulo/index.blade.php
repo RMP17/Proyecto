@@ -10,7 +10,7 @@
                 <div class="col-12 d-flex no-block align-items-center">
                     <h4 class="page-title">Artículos</h4>
                     <div class="col-auto">
-                        <a href="#" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" @click="articulo.modeCreate=!articulo.modeCreate">
+                        <a href="javascript:void(0);" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" @click="articulo.modeCreate=!articulo.modeCreate">
                             <span  v-if="!articulo.modeCreate">Nuevo Artículo</span>
                             <span v-else>Lista de Artículos</span>
                         </a>
@@ -39,14 +39,14 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-center mb-3">
-                                <div class="col-lg-12">
+                                <div class="col p-0">
                                     <div class="input-group">
                                         <div class="col-lg-4"><input
-                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    class="form-control"
                                                     @keydown.enter="getArticuloByCodigo($event)"
                                                     placeholder="Código" type="text"></div>
                                         <div class="col-lg-4"><input
-                                                    class="form-control ng-untouched ng-pristine ng-valid"
+                                                    class="form-control"
                                                     @keydown.enter="getArticuloByCodigoBarras($event)"
                                                     placeholder="Código de Barras" type="text"></div>
                                         <div class="col-lg-4">
@@ -56,9 +56,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-outline-secondary" @click="getArticulos">Mostrar todo</button>
                             </div>
                             <div class="table-responsive">
-                                <table id="zero_config" class="table table-striped table-sm table-bordered">
+                                <table class="table table-striped table-sm table-bordered">
                                     <thead>
                                     <tr>
                                         <th>Nombre</th>
@@ -99,30 +100,34 @@
                                                 Volumen:@{{ articulo.dimensiones.volumen }} <br>
                                             </td>
                                             <td>
-                                                <a type="button" href="#"
+                                                <a type="button" href="javascript:void(0);"
                                                    title="Editar"
                                                    @click="changeToEditModeArticulo(articulo)"
                                                    class="btn btn-warning btn-sm">
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
-                                                <a v-if="!!articulo.estatus" type="button" href="#"
+                                                <a type="button"
+                                                   title="Agregar precios de venta"
+                                                   href="javascript:void(0);"
+                                                   data-backdrop="static"
+                                                   data-keyboad="false"
+                                                   data-target="#modal-add-precio"
+                                                   data-toggle="modal"
+                                                   @click="selectArticulo(articulo)"
+                                                   class="btn btn-info btn-sm"><i class="far fa-money-bill-alt"></i>
+                                                </a>
+                                                <a v-if="!!articulo.estatus" type="button" href="javascript:void(0);"
                                                    title="Dar de baja"
                                                    @click="changeStatusOfArticulo(articulo)"
                                                    class="btn btn-secondary btn-sm">
                                                     <i class="fas fa-chevron-down"></i>
                                                 </a>
-                                                <a v-else type="button" href="#"
+                                                <a v-else type="button" href="javascript:void(0);"
                                                    title="Habilitar artículo"
                                                    @click="changeStatusOfArticulo(articulo)"
                                                    class="btn btn-success btn-sm">
                                                     <i class="fas fa-chevron-up"></i>
                                                 </a>
-                                                {{--
-                                                <a href="" data-target="#modal-delete-articulo-{{$a -> id_articulo}}"
-                                                   data-toggle="modal" title="Eliminar">
-                                                    <button type="button" class="btn btn-danger btn-sm"><i
-                                                                class="mdi mdi-thumb-down"></i></button>
-                                                </a>--}}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -218,6 +223,43 @@
                         <template v-else>
                             @include('fabricante.create')
                         </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--===============================================Modal Add Precios======================================--}}
+        <div class="modal fade modal-slide-in-right"
+             {{--@keydown.esc_="cancelModeEditCuentaProveedor"--}}
+             aria-hidden="true" role="dialog" tabindex="-1" id="modal-add-precio">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title pt-1 pr-1">Precios @{{ articulosSucursales.articulo ?articulosSucursales.articulo.nombre:'' }}</h4>
+
+                        <a v-show="!articulosSucursales.modeEdit" href
+                           data-toggle="modal"
+                           class="btn btn-outline-dark w-10em"
+                           @click="articulosSucursales.modeCreate=!articulosSucursales.modeCreate"
+                        >
+                            <span v-show="!articulosSucursales.modeCreate">Nuevo</span>
+                            <span v-show="articulosSucursales.modeCreate">Ver</span>
+                        </a>
+                        <button type="button" class="close"
+                                {{--@click_="cancelModeEditCuentaProveedor"--}}
+                                data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        <div v-if="!articulosSucursales.modeCreate">
+                            @include('articulo.precio.index')
+                        </div>
+                        <div v-else>
+                            @include('articulo.precio.create')
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>

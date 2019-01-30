@@ -50,17 +50,8 @@ class ClienteControlador extends Controller
 	}
 	public function store(ClientePeticion $peticion)
 	{
-		$cliente = new Cliente;
-		$cliente -> razon_social= $peticion -> get('txtRazonSocial');
-		$cliente -> nit= $peticion -> get('txtNit');
-		$cliente -> actividad= $peticion -> get('txtActividad');
-		$cliente -> celular= $peticion -> get('txtCelular');
-		$cliente -> telefono= $peticion -> get('txtTelefono');
-		$cliente -> correo= $peticion -> get('txtCorreo');
-		$cliente -> direccion= $peticion -> get('txtDireccion');
-		$cliente -> id_ciudad= $peticion -> get('cbxCiudad');
-		$cliente -> save();
-		return Redirect :: to ('cliente');
+		$cliente = Cliente::newCliente($peticion->all());
+		return response()->json();
 	}
 	public function show($id_cliente)
 	{
@@ -94,5 +85,14 @@ class ClienteControlador extends Controller
 		$cliente->update();
 		return Redirect :: to ('cliente');
 	}
-	
+    public function suggestionsClients($query)
+    {
+        $clientes = Cliente::suggestionsClients($query);
+        return response()->json($clientes);
+    }
+    public function getClientByNit($nit)
+    {
+        $cliente = Cliente::getClientByNit($nit);
+        return response()->json($cliente);
+    }
 }

@@ -30,6 +30,56 @@ class Articulo extends Model
     public function dimension(){
         return $this->hasOne(Dimensiones::class,'id_articulo', 'id_articulo');
     }
+    public function sucursal(){
+        return $this->belongsToMany(Sucursal::class,'articulos_sucursales','id_articulo', 'id_sucursal')
+            ->withPivot('precio_1','precio_2','precio_3','precio_4','precio_5');
+    }
+    public static function getArticulos(){
+        $array = [];
+        $articulos = Articulo::select('*')->orderBy('nombre')->get();
+        if(count($articulos)>0){
+            foreach ($articulos as &$articulo){
+                $categoria = Categoria::find($articulo['id_categoria']);
+                if(!is_null($categoria)){
+                    $articulo->categoria = $categoria;
+                } else {
+                    $articulo->categoria = ['categoria'=>''];
+                }
+                $fabricante = Fabricante::find($articulo['id_fabricante']);
+                if(!is_null($fabricante)) {
+                    $articulo->fabricante = $fabricante;
+                } else {
+                    $articulo->fabricante = ['nombre'=>''];
+                }
+                $empleado = Empleado::find(auth()->user()->id_empleado);
+                $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
+                $totalStock = 0;
+                foreach ($almacenes as $almacen) {
+                    $stock = Stock::where('id_almacen',$almacen->id_almacen)
+                        ->where('id_articulo',$articulo->id_articulo)->first();
+                    if(!is_null($stock)) {
+                        $totalStock+=$stock->cantidad;
+                    }
+                }
+                $articulo->stock = $totalStock;
+                unset($articulo->id_categoria);
+                unset($articulo->id_fabricante);
+                if(is_null($articulo->dimension)) {
+                    $articulo->dimensiones=[
+                        'largo' => null,
+                        'ancho' => null,
+                        'espesor' => null,
+                        'volumen' => null
+                    ];
+                } else {
+                    $articulo->dimensiones=$articulo->dimension;
+                    unset($articulo->dimension);
+                }
+                $array[]=$articulo;
+            }
+        }
+        return  $array;
+    }
     public function getArticuloBy($key, $codigo){
         $articulo = null;
         $array = [];
@@ -39,10 +89,20 @@ class Articulo extends Model
             $articulo = Articulo::where('codigo_barra',$codigo)->first();
         }
         if(!is_null($articulo)){
-            $articulo->categoria = Categoria::find($articulo['id_categoria']);
-            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $categoria = Categoria::find($articulo['id_categoria']);
+            if(!is_null($categoria)){
+                $articulo->categoria = $categoria;
+            } else {
+                $articulo->categoria = ['categoria'=>''];
+            }
+            $fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(!is_null($fabricante)) {
+                $articulo->fabricante = $fabricante;
+            } else {
+                $articulo->fabricante = ['nombre'=>''];
+            }
             $empleado = Empleado::find(auth()->user()->id_empleado);
-            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
             $totalStock = 0;
             foreach ($almacenes as $almacen) {
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
@@ -74,10 +134,20 @@ class Articulo extends Model
         $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
             ->orderBy('nombre','desc')->take(10)->get();
         foreach ($articulos as &$articulo) {
-            $articulo->categoria = Categoria::find($articulo['id_categoria']);
-            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $categoria = Categoria::find($articulo['id_categoria']);
+            if(!is_null($categoria)){
+                $articulo->categoria = $categoria;
+            } else {
+                $articulo->categoria = ['categoria'=>''];
+            }
+            $fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(!is_null($fabricante)) {
+                $articulo->fabricante = $fabricante;
+            } else {
+                $articulo->fabricante = ['nombre'=>''];
+            }
             $empleado = Empleado::find(auth()->user()->id_empleado);
-            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
             $totalStock = 0;
             foreach ($almacenes as $almacen) {
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
@@ -106,10 +176,20 @@ class Articulo extends Model
 
         $articulo = Articulo::find($id);
         if(!is_null($articulo)){
-            $articulo->categoria = Categoria::find($articulo['id_categoria']);
-            $articulo->fabricante = Fabricante::find($articulo['id_fabricante']);
+            $categoria = Categoria::find($articulo['id_categoria']);
+            if(!is_null($categoria)){
+                $articulo->categoria = $categoria;
+            } else {
+                $articulo->categoria = ['categoria'=>''];
+            }
+            $fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(!is_null($fabricante)) {
+                $articulo->fabricante = $fabricante;
+            } else {
+                $articulo->fabricante = ['nombre'=>''];
+            }
             $empleado = Empleado::find(auth()->user()->id_empleado);
-            $almacenes = Almacen::where('id_sucursal', $empleado->id_sucursal)->get();
+            $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
             $totalStock = 0;
             foreach ($almacenes as $almacen) {
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
@@ -133,5 +213,22 @@ class Articulo extends Model
         }
         $array[]=$articulo;
         return  $array;
+    }
+    public static function getPreciosArticulo($id_articulo){
+        $articulo = Articulo::find($id_articulo);
+        $precios=[];
+        if(count($articulo->sucursal)>0){
+            foreach ( $articulo->sucursal as $sucursal ){
+                $sucursal->pivot->sucursal=Sucursal::find($sucursal->id_sucursal)->nombre;
+                array_push($precios,$sucursal->pivot);
+            }
+        }
+        return  $precios;
+    }
+    public static function newsPrecios($parameters){
+        $articulo = Articulo::find($parameters['id_articulo']);
+        if(!is_null($articulo)){
+            $articulo->sucursal()->attach($parameters['id_sucursal']);
+        }
     }
 }

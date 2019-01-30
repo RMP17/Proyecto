@@ -30,6 +30,10 @@ class Sucursal extends Model
     public function ciudad(){
         return $this->belongsTo(Ciudad::class,'id_ciudad');
     }
+    public function articulo(){
+        return $this->belongsToMany(Articulo::class, 'articulos_sucursales','id_sucursal', 'id_articulo')
+            ->withPivot('precio_1','precio_2','precio_3','precio_4','precio_5');
+    }
     public static function updateSucursal($sucursal, $id_sucursal){
 
         $_sucusal = Sucursal::findOrFail($id_sucursal);

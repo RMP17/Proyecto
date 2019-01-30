@@ -6,6 +6,7 @@ var urlGlobal={
     resourcesCargo:url + 'cargo',
     resourcesCompra:url + 'compra',
     resourcesMoneda:url + 'moneda',
+    resourcesVenta:url + 'venta',
     resourcesCuenta:url + 'cuenta',
     resourcesCaja:url + 'caja',
     resourcesCuentaProveedor:url + 'cuenta-proveedor',
@@ -16,6 +17,7 @@ var urlGlobal={
     resourcesContacto:url + 'contacto',
     resourcesSucursal:url + 'sucursal',
     postCompraCredito:url + 'compra/credito',
+    postArticuPrecios:url + 'articulo/precios',
     getAllCiudades:url + 'ciudades',
     getKardex:url + 'kardex/',
     getCajas:url + 'cajas',
@@ -25,9 +27,14 @@ var urlGlobal={
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
     resourcesArticulo:url + 'articulo',
+    getArticulos:url + 'articulo/all',
+    getPreciosArticulo:url + 'articulo/precios/',
     getAllFabricantes:url + 'fabricantes',
     getAllCategorias:url + 'categorias',
     getArticuloForCodigo:url + 'articulo/codigo/',
+    resourcesCliente:url + 'cliente',
+    getSuggestionsClientes:url + 'cliente/suggestions/',
+    getClienteByNit:url + 'cliente/nit/',
     getArticuloForId:url + 'articulo/id/',
     getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
     getArticuloForName:url + 'articulo/query/',
@@ -349,6 +356,7 @@ Vue.component('app-online-suggestions-objects',{
            @mousedown="indexChange(index)"
         >
             <span v-html="suggestion.detalleShow"></span>
+            <span v-if="suggestion.object.nit" class="float-right">{{suggestion.object.nit}}</span>
         </a>
     </div>
 </div>`,
@@ -594,6 +602,7 @@ Vue.component('app-online-suggestions-objects',{
 
 
 
+/*
 var sharedVariables = new Vue({
     el: '#app-shared',
     created(){
@@ -630,4 +639,4 @@ var sharedVariables = new Vue({
             });
         }
     }
-});
+});*/

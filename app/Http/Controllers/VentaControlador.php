@@ -2,16 +2,14 @@
 
 namespace Allison\Http\Controllers;
 use Allison\Http\Controllers\ConversorImagenes;
+use Allison\Http\Requests\VentaRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use Allison\Http\Requests\VentaPeticion;
-use Allison\Http\Request\VentaDetallePeticion;
 use Allison\Venta;
 use Allison\DetalleVenta;
 use Allison\Articulo;
 use Allison\Cliente;
 use Allison\Caja;
-use DB;
 
 class VentaControlador extends Controller
 {
@@ -32,26 +30,14 @@ class VentaControlador extends Controller
 		return view('venta.create', compact('paises'));
 	}
 	
-	public function store(EmpleadoPeticion $peticion)
+	public function store(VentaRequest $request)
 	{
-		$conversor = new ConversorImagenes;
-		$venta = new Empleado;
-		$venta -> nombre = $peticion -> get('txtNombre');
-		$venta -> ci = $peticion -> get('txtCi');
-		$venta -> sexo = $peticion -> get('rbtSexo');
-		$venta -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
-		$venta -> telefono = $peticion -> get('txtTelefono');
-		$venta -> celular = $peticion -> get('txtCelular');
-		$venta -> correo = $peticion -> get('txtCorreo');
-		$venta -> direccion = $peticion -> get('txtDireccion');
-		$venta -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
-		$venta -> persona_referencia = $peticion -> get('txtPersonaReferencia');
-		$venta -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
-		$venta -> fecha_registro = date('Y-m-d', time());
-		$venta -> estatus = 'A';
-		$venta -> id_sucursal = $peticion -> get('cbxSucursal');
-		$venta -> save();
-		return Redirect :: to ('venta');
+		$venta = Venta::newVenta($request->all());
+		if (!is_null($venta)){
+		    return response()->json($venta['message'], $venta['code']);
+        } else{
+            return response()->json();
+        }
 	}
 	
 	public function show($id_empleado)

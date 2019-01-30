@@ -53,16 +53,7 @@ class ArticuloControlador extends Controller
 		}*/
         return view('articulo.index');
 	}
-	
-	public function create()
-	{
-		$categorias = Categoria::orderBy('categoria', 'asc')
-			->get();
-		$fabricantes = Fabricante::orderBy('nombre','asc')
-			->get();
-		return view('articulo.create', compact('categorias', 'fabricantes'));
-	}
-	
+
 	public function store(/*ArticuloPeticion*/ Request $peticion)
 	{
 
@@ -118,31 +109,7 @@ class ArticuloControlador extends Controller
 	{
 		return view ('articulo.show', ['articulo' => Articulo :: findOrFail($id_articulo)]);
 	}
-	
-	public function edit($id_articulo)
-	{
-		$categorias = Categoria::orderBy('categoria', 'asc')
-			->get();
-		$subcategorias = Subcategoria::orderBy('subcategoria','asc')
-			->get();
-		$fabricantes = Fabricante::orderBy('nombre', 'asc')
-			->get();
-		$articulo = Articulo :: findOrFail($id_articulo);
-		$id_subcategoria = $articulo -> id_subcategoria;
-		$categoria = Categoria::join('subcategoria', 'categoria.id_categoria', '=', 'subcategoria.id_categoria')
-			->where('subcategoria.id_subcategoria', '=', $id_subcategoria)
-			->select('categoria.id_categoria as id_categoria', 'categoria.categoria as categoria')
-			->first();
-		$subcategoria = "";
-		foreach($subcategorias as $s) { if($s->id_subcategoria == $id_subcategoria) { $subcategoria = $s->subcategoria; break; } }
-		$fabricante = Fabricante::where('id_fabricante', '=', $articulo->id_fabricante)
-			->first()
-			->nombre;
-		$dimensiones = Dimensiones::where('id_articulo', '=', $id_articulo)
-			->first();
-		return view ('articulo.edit', compact ('articulo', 'categorias', 'subcategorias', 'fabricantes', 'categoria', 'subcategoria', 'fabricante', 'dimensiones'));
-	}
-	
+
 	public function updateArticulo(/*ArticuloPeticion*/ Request $peticion, $id_articulo)
 	{
         $data = json_decode($peticion->data, true);
@@ -191,6 +158,7 @@ class ArticuloControlador extends Controller
         $articulo->update();
 
         if($articulo->divisible){
+            $data['dimensiones']['volumen'] = $data['dimensiones']['largo']*$data['dimensiones']['ancho']*$data['dimensiones']['espesor'];
             $articulo->dimension()->update($data['dimensiones']);
         }
         return response()->json();
@@ -215,10 +183,20 @@ class ArticuloControlador extends Controller
     public function getArticuloById($id){
         return response()->json((new Articulo)->getArticuloById($id));
     }
+    public function getArticulos(){
+        return response()->json(Articulo::getArticulos());
+    }
+    public function getPreciosArticulo($id_articulo){
+        return response()->json(Articulo::getPreciosArticulo($id_articulo));
+    }
     public function changeStatusOfArticulo(Request $request, $id_articulo){
         $articulo = Articulo::findOrFail($id_articulo);
         $articulo->estatus = !$request->status;
         $articulo->update();
+        return response()->json();
+    }
+    public function storePrecios(Request $request){
+        Articulo::newsPrecios($request->all());
         return response()->json();
     }
 }

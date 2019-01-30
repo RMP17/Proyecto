@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center mb-2" v-if="!compra.hideSuggestionsArticulo">
+<div class="d-flex justify-content-center mb-2" v-if="!venta.hideSuggestionsArticulo">
     <div class="col-lg-4 pr-0"><input
                 class="form-control"
                 ref="input_articulo_codigo"
@@ -11,25 +11,26 @@
                 placeholder="Código de Barras del Artículo" type="text"></div>
     <div class="col-lg-4 pl-0">
         <app-online-suggestions-objects :config="configArticulo"
-                                        :input-value="compra.tempDetalleCompra.nombre"
-                                        @selected-suggestion-event="assignAnIdentificationOfArticuloToDetalleCompra">
+                                        :input-value="venta.tempDetalleVenta.nombre"
+                                        @selected-suggestion-event="assignAnIdentificationOfArticuloToDetalleVenta">
         </app-online-suggestions-objects>
     </div>
 </div>
 <div class="d-flex justify-content-center mb-2">
     <div class="col-lg-4 pr-0">
         <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Categoria: {{ compra.articulo.categoria? compra.articulo.categoria.categoria:'' }}
+            Categoria: @{{ venta.articulo.categoria ? venta.articulo.categoria.categoria:'' }}
         </div>
     </div>
     <div class="col-lg-4 pr-0 pl-0">
         <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Fabricante: {{ compra.articulo.fabricante ? compra.articulo.fabricante.nombre:'' }}
+            Fabricante: @{{ venta.articulo.fabricante ? venta.articulo.fabricante.nombre:'' }}
         </div>
     </div>
     <div class="col-lg-4 pl-0">
         <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Stock de Sucursal Asignado: {{ compra.articulo.stock }}
+            {{--todo:stock muestra los articulos del almacen asignado--}}
+            Stock: @{{ venta.articulo.stock }}
         </div>
     </div>
 </div>
@@ -37,15 +38,15 @@
     <div class="col-lg-4 pr-0"><input
                 class="form-control"
                 ref="txtCantidad"
-                v-model.number ="compra.detalleCompra.cantidad"
+                v-model.number ="venta.detalleVenta.cantidad"
                 placeholder="Cantidad" type="text" @keypress="numberPositiveDirective"></div>
     <div class="col-lg-4 pr-0 pl-0"><input
-                @keypress.enter="addDetalleCompra"
+                @keypress.enter="addDetalleVenta"
                 class="form-control"
-                v-model.number="compra.detalleCompra.precio_unitario"
+                v-model.number="venta.detalleVenta.precio_unitario"
                 placeholder="Precio Unitario" type="text" @keypress="numberFloatDirective"></div>
     <div class="col-lg-4 pl-0">
-        <button type="button" class="btn w-100" :class="compra.detalleCompra.id_articulo ?  'btn-info':'btn-secondary'" @click="addDetalleCompra">Agregar a la lista</button>
+        <button type="button" class="btn w-100" :class="venta.detalleVenta.id_articulo ?  'btn-info':'btn-secondary'" @click="addDetalleVenta">Agregar a la lista</button>
     </div>
 </div>
 <div class="col">
@@ -60,21 +61,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(detalle,index) in compra.attributes.detalles_compra">
+            <tr v-for="(detalle,index) in venta.attributes.detalles_venta">
                 <td>
                     <a href="javascript:void(0)"
-                       @click="removeDetalleCompra(index)"
+                       @click="removeDetalleVenta(index)"
                        class="text-danger" title="Quitar"><i class="fas fa-minus fa-lg"></i></a>
-                    {{ detalle.nombre}}
+                    @{{ detalle.nombre}}
                 </td>
-                <td class="text-right pr-3">{{ detalle.cantidad}}</td>
-                <td class="text-right pr-3">{{ detalle.precio_unitario}}</td>
-                <td class="text-right pr-3">{{ detalle.subtotal}}</td>
+                <td class="text-right pr-3">@{{ detalle.cantidad}}</td>
+                <td class="text-right pr-3">@{{ detalle.precio_unitario}}</td>
+                <td class="text-right pr-3">@{{ detalle.subtotal}}</td>
             </tr>
             <tr>
                 <th>TOTAL</th>
                 <td colspan="3" class="text-right pr-3">
-                    {{ compra.totalDetallesCompra}}
+                    @{{ venta.totalDetallesVenta}}
                 </td>
             </tr>
             </tbody>

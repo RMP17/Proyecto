@@ -13,7 +13,7 @@ class DetalleVenta extends Model
 	
 	protected $fillable = [
 		'cantidad',
-		'costo_total',
+        'precio_unitario',
 		'id_articulo',
 		'id_almacen',
 		'id_venta',

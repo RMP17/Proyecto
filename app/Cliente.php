@@ -24,4 +24,21 @@ class Cliente extends Model
 	protected $guarded = [
 	
 	];
+    public static function newCliente($parameters){
+        $_empleado = new Cliente();
+        $_empleado->fill($parameters);
+        $_empleado->save();
+        return $_empleado;
+    }
+    public static function suggestionsClients($query){
+        $clientes = Cliente::where('razon_social', 'like','%'.$query.'%')->orderBy('razon_social','desc')->take(10)->get();
+        return $clientes;
+    }
+    public static function getClientByNit($nit){
+        $cliente = Cliente::where('nit',$nit)->first();
+        if(is_null($cliente)){
+            $cliente = new Cliente();
+        }
+        return $cliente;
+    }
 }

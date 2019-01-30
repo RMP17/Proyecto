@@ -72,5 +72,4 @@ class ProveedorControlador extends Controller
 		$contactos = Proveedor::getContactosOfProveedor($id_proveedor);
 		return response()->json($contactos);
 	}
-
 }

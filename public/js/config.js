@@ -72,21 +72,21 @@ var appConfig = new Vue({
                 nombre:'',
                 ci:'',
                 sexo:'',
-                fecha_nacimiento:'',
+                fecha_nacimiento:null,
                 telefono:null,
                 celular:null,
-                correo:'',
+                correo:null,
                 direccion:'',
                 foto:null,
                 persona_referencia:'',
                 telefono_referencia:'',
                 fecha_registro:null,
                 estatus:'',
-                id_sucursal:null,
+                id_almacen:null,
                 kardex:{
                     id_kardex:null,
                     id_cargo:null,
-                    fecha_inicio:'',
+                    fecha_inicio:null,
                     salario:{
                         monto:null,
                         id_moneda:null
@@ -94,24 +94,30 @@ var appConfig = new Vue({
                 }
             },
             tempAttributes: {
-                id_proveedor:null,
-                razon_social:'',
-                nit:'',
-                telefono:'',
-                fax:'',
-                celular:'',
-                correo:'',
-                sitio_web:'',
-                direccion: '',
-                fecha_registro: '',
-                rubro: '',
-                ciudad: {
-                    id_ciudad:null,
-                    nombre:'',
-                    pais_ciudad:''
+                id_empleado:null,
+                nombre:'',
+                ci:'',
+                sexo:'',
+                fecha_nacimiento:null,
+                telefono:null,
+                celular:null,
+                correo:null,
+                direccion:'',
+                foto:null,
+                persona_referencia:'',
+                telefono_referencia:'',
+                fecha_registro:null,
+                estatus:'',
+                id_almacen:null,
+                kardex:{
+                    id_kardex:null,
+                    id_cargo:null,
+                    fecha_inicio:null,
+                    salario:{
+                        monto:null,
+                        id_moneda:null
+                    }
                 }
-                ,
-                id_ciudad: ''
             }
         },
         empresa: {
@@ -175,10 +181,8 @@ var appConfig = new Vue({
                 id_empresa:'',
             }
         },
-
         almacen: {
             data: [],
-            sucursales:[],
             attributes: {
                 id_almacen:null,
                 codigo: '',
@@ -192,7 +196,6 @@ var appConfig = new Vue({
                 id_sucursal: null,
             }
         },
-
         kardex: {
             currentTab:10,
             data: [],
@@ -205,7 +208,7 @@ var appConfig = new Vue({
                     id_empleado:null,
                     nombre:''
                 },
-                fecha_inicio:'',
+                fecha_inicio:null,
                 fecha_baja:'',
                 cargo:{
                     id_cargo:null,
@@ -271,14 +274,16 @@ var appConfig = new Vue({
             }*/
         },
     },
-    created:function(){
-        this.getMonedas();
-        this.getCargo();
-        this.getEmpresas();
-        this.getSucursalesAlmacen();
-        this.getAlmacen();
-        this.getEmpleados();
-        this.getPermisos();
+    mounted:function(){
+        this.$nextTick(function () {
+            this.getMonedas();
+            this.getCargo();
+            this.getEmpresas();
+            this.getSucursalesAlmacen();
+            this.getAlmacen();
+            this.getEmpleados();
+            this.getPermisos();
+        })
     },
     methods: {
         //<editor-fold desc="Methods of Pais">
@@ -925,10 +930,10 @@ var appConfig = new Vue({
                     nombre:'',
                     ci:'',
                     sexo:'',
-                    fecha_nacimiento:'',
+                    fecha_nacimiento:null,
                     telefono:null,
                     celular:null,
-                    correo:'',
+                    correo:null,
                     direccion:'',
                     foto:null,
                     persona_referencia:'',
@@ -939,7 +944,7 @@ var appConfig = new Vue({
                     kardex:{
                         id_kardex:null,
                         id_cargo:null,
-                        fecha_inicio:'',
+                        fecha_inicio:null,
                         salario:{
                             monto:null,
                             id_moneda:null
@@ -1045,10 +1050,10 @@ var appConfig = new Vue({
                 nombre:'',
                 ci:'',
                 sexo:'',
-                fecha_nacimiento:'',
+                fecha_nacimiento:null,
                 telefono:null,
                 celular:null,
-                correo:'',
+                correo:null,
                 direccion:'',
                 foto:null,
                 persona_referencia:'',
@@ -1059,7 +1064,7 @@ var appConfig = new Vue({
                 kardex:{
                     id_kardex:null,
                     id_cargo:null,
-                    fecha_inicio:'',
+                    fecha_inicio:null,
                     salario:{
                         monto:null,
                         id_moneda:null
@@ -1071,10 +1076,10 @@ var appConfig = new Vue({
                 nombre:'',
                 ci:'',
                 sexo:'',
-                fecha_nacimiento:'',
+                fecha_nacimiento:null,
                 telefono:null,
                 celular:null,
-                correo:'',
+                correo:null,
                 direccion:'',
                 foto:null,
                 persona_referencia:'',
@@ -1085,7 +1090,7 @@ var appConfig = new Vue({
                 kardex:{
                     id_kardex:null,
                     id_cargo:null,
-                    fecha_inicio:'',
+                    fecha_inicio:null,
                     salario:{
                         monto:null,
                         id_moneda:null

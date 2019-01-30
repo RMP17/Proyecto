@@ -42,6 +42,11 @@ Route::get('kardex/{id_empleado}', 'KardexControlador@getKardesEmpleado');
 Route::get('contacto/suggestions/{query}', 'ContactoControlador@getContactosForSuggestion');
 Route::get('cajas', 'CajaControlador@getCajas');
 
+Route::prefix('cliente')->group(function () {
+    Route::get('suggestions/{query}', 'ClienteControlador@suggestionsClients');
+    Route::get('nit/{nit}', 'ClienteControlador@getClientByNit');
+});
+
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');
 });
@@ -56,10 +61,12 @@ Route::prefix('pais')->group(function () {
     Route::get('id/{id}', 'PaisControlador@getPaisById');
     Route::post('add-ciudad/{id}', 'PaisControlador@addCiudadToPais');
 });
-
 Route::prefix('articulo')->group(function () {
+    Route::get('all', 'ArticuloControlador@getArticulos');
     Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
+    Route::post('precios', 'ArticuloControlador@storePrecios');
+    Route::get('precios/{id_articulo}', 'ArticuloControlador@getPreciosArticulo');
     Route::get('codigo/{codigo}', 'ArticuloControlador@getArticuloByCodigo');
     Route::get('id/{id}', 'ArticuloControlador@getArticuloById');
     Route::get('codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloByCodigoBarra');
@@ -90,12 +97,12 @@ Route::resources([
 	'gasto' => 'GastoControlador',
 	'moneda' => 'MonedaControlador',
 	'pais' => 'PaisControlador',
+    'venta' => 'VentaControlador',
 	'precio' => 'PrecioControlador',
 	//'produccion' => 'ProduccionControlador',
 	'proveedor' => 'ProveedorControlador',
 	'subcategoria' => 'SubcategoriaControlador',
 	'sucursal' => 'SucursalControlador',
-	'venta' => 'VentaControlador',
 	/*'kardex' => 'KardexControlador',*/
 	'compra' => 'CompraControlador',
 	'kardexObservaciones' => 'KardexObservacionesControlador',

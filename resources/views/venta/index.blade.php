@@ -1,10 +1,10 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
-<div id="app-compra">
+<div id="app-venta">
 	<div class="page-breadcrumb mb-2">
 		<div class="row">
 			<div class="col-12 d-flex no-block align-items-center">
-				<h4 class="page-title">Compras</h4>
+				<h4 class="page-title">Ventas</h4>
 				<div class="col-auto">
 					{{--<a type="button" class="btn btn-outline-purple" href="{{url ('compra/create')}}">Registrar nuevo</a>
                     <a href="#" type="button" class="btn btn-outline-dark w-10em">
@@ -14,23 +14,16 @@
 						<div class="nav nav-tabs" id="nav-tab" role="tablist">
 							<a class="nav-item nav-link w-10em active"
 							   id="nav-home-tab" data-toggle="tab"
-							   href="#nav-compra" role="tab"
-							   aria-controls="nav-home"
-							   aria-selected="true">Comprar</a>
-							<a title="Registro de Compras" class="nav-item nav-link w-10em"
+							   href="#nav-vender" role="tab"
+							   aria-controls="nav-vender"
+							   aria-selected="true">Vender</a>
+							{{--<a title="Registro de Compras" class="nav-item nav-link w-10em"
 							   id="nav-profile-tab"
 							   data-toggle="tab"
 							   href="#nav-registro-compras"
 							   role="tab"
 							   aria-controls="nav-register-compra"
-							   aria-selected="false">R. de Compras</a>
-							<a class="nav-item nav-link w-10em"
-							   id="nav-profile-tab"
-							   data-toggle="tab"
-							   href="#nav-proveedores"
-							   role="tab"
-							   aria-controls="nav-profile"
-							   aria-selected="false">Proveedores</a>
+							   aria-selected="false">R. de Compras</a>--}}
 						</div>
 					</nav>
 					{{--<a href="#" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" --}}{{--@click="articulo.modeCreate=!articulo.modeCreate"--}}{{-->
@@ -58,11 +51,11 @@
 						<div class="tab-content" id="nav-tabContent">
 							{{--=================================================NAV TABCONTENT==================================--}}
 							{{--=========================================NAV TABCONTENT==========================--}}
-							<div class="tab-pane fade show active" id="nav-compra" role="tabpanel"
+							<div class="tab-pane fade show active" id="nav-vender" role="tabpanel"
 								 aria-labelledby="nav-home-tab">
-								@include('compra.create')
+								@include('venta.create')
 							</div>
-							<div class="tab-pane fade" id="nav-registro-compras" role="tabpanel"
+							{{--<div class="tab-pane fade" id="nav-registro-compras" role="tabpanel"
 								 aria-labelledby="nav-resgister-compra-tab">
 								<div class="row mb-3">
 									<div class="col-md-8 offset-2 pr-5 pl-5">
@@ -222,12 +215,12 @@
 									</table>
 								</div>
 							</div>
-							{{--=========================================NAV TABCONTENT==========================--}}
-							{{--=========================================TAP PROVEEDORES=========================--}}
+							--}}{{--=========================================NAV TABCONTENT==========================--}}{{--
+							--}}{{--=========================================TAP PROVEEDORES=========================--}}{{--
 							<div class="tab-pane fade" id="nav-proveedores" role="tabpanel"
 								 aria-labelledby="nav-profile-tab">
 								@include('proveedor.index')
-							</div>
+							</div>--}}
 							{{--=========================================END TAP PROVEEDORES=====================--}}
 							{{--=========================================END TAP PAISES==========================--}}
 						</div>
@@ -263,7 +256,7 @@
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					@include('compra.detalle_compra')
+					{{--@include('compra.detalle_compra')--}}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -285,7 +278,7 @@
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					@include('compra.credito_compra')
+					{{--@include('compra.credito_compra')--}}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -296,4 +289,7 @@
 		</div>
 	</div>
 </div>
+@endsection
+@section('scripts')
+	<script src="{{asset('js/venta.js')}}"></script>
 @endsection

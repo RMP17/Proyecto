@@ -81,7 +81,7 @@
             </app-online-suggestions-objects>
         </div>
         <div v-else>
-            <app-online-suggestions-objects v-if="!moneda.hideSuggestions" :config="configProveedor"
+            <app-online-suggestions-objects v-if="!compra.hideSuggestions" :config="configProveedor"
                                             :input-value="compra.tempAttributes.proveedor.razon_social"
                                             @selected-suggestion-event="assignAnIdentificationToContacto">
             </app-online-suggestions-objects>

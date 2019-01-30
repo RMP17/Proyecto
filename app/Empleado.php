@@ -24,13 +24,13 @@ class Empleado extends Model
 		'foto',
 		'persona_referencia',
 		'telefono_referencia',
-		'id_sucursal',
+		'id_almacen',
 	];
 	
 	protected $guarded = [];
 
-    public function sucursal(){
-        return $this->belongsTo(Sucursal::class,'id_sucursal');
+    public function almacen(){
+        return $this->belongsTo(Almacen::class,'id_almacen');
     }
     public function kardex(){
         return $this->hasMany(Kardex::class,'id_empleado','id_empleado');
@@ -58,8 +58,8 @@ class Empleado extends Model
     }
 
     public static function newEmpleado($oarameters){
-        DB::beginTransaction();
-        try {
+       /* DB::beginTransaction();
+        try {*/
             $data = json_decode($oarameters->data, true);
             $urlImage = '';
             $path = public_path().'/images';
@@ -85,15 +85,13 @@ class Empleado extends Model
             $salario = new Salario();
             $salario->fill($data['kardex']['salario']);
             $kardex->salario()->save($salario);
-            DB::commit();
-            return true;
+            /*DB::commit();*/
 
-        } catch (\Exception $e) {
+        /*} catch (\Exception $e) {
             DB::rollBack();
             return false;
-        }
+        }*/
     }
-
     public static function updateEmpleado($parameters_empleado, $id_empleado){
         DB::beginTransaction();
         try {
@@ -147,7 +145,7 @@ class Empleado extends Model
                 $kardex->salario = null;
             }
 
-            $empleado->sucursal;
+            $empleado->almacen;
             $empleado->kardex = $kardex;
             $empleado->edad = $empleado->edad();
         }

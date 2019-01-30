@@ -2,7 +2,9 @@ var appArticulo = new Vue({
     el: '#app-articulo',
     data: {
         //========= categorias =========
-
+        categorias:[],
+        fabricantes:[],
+        sucursales:[],
         categoria: {
             modeCreate: false,
             modeEdit: false,
@@ -16,7 +18,6 @@ var appArticulo = new Vue({
                 current_page: 1
             },
             data: [],
-            allData: [],
             attributes: {
                 id_categoria:null,
                 categoria: '',
@@ -69,7 +70,7 @@ var appArticulo = new Vue({
             modeCreate:false,
             modeEdit:false,
             errors: [],
-            data: null,
+            data: [],
             attributes: {
                 id_articulo:null,
                 nombre: '',
@@ -112,13 +113,52 @@ var appArticulo = new Vue({
                 id_fabricante:null,
                 id_categoria:null
             }
+        },
+        articulosSucursales:{
+            modeEdit:false,
+            modeCreate:false,
+            hiddenSuggestions:false,
+            attributes:{
+                id_articulo:null,
+                id_sucursal:null,
+                precio_1:null,
+                precio_2:null,
+                precio_3:null,
+                precio_4:null,
+                precio_5:null,
+            },
+            articulo:null,
+            precios:[],
+            tempAttributes:{
+                id_articulo:null,
+                id_sucursal:null,
+                precio_1:null,
+                precio_2:null,
+                precio_3:null,
+                precio_4:null,
+                precio_5:null,
+            },
+            model:{
+                id_articulo:null,
+                id_sucursal:null,
+                precio_1:null,
+                precio_2:null,
+                precio_3:null,
+                precio_4:null,
+                precio_5:null,
+            }
         }
         // ============================
 
     },
     mounted(){
-        this.getCategorias(1);
-        this.getFabricantes(1);
+        this.$nextTick(function () {
+            this.getCategorias(1);
+            this.getFabricantes(1);
+            this.getAllCategorias();
+            this.getSucursales();
+            this.getAllFabricantes();
+        });
     },
     computed: {
         pagesNumberCategoria: function () {
@@ -141,6 +181,64 @@ var appArticulo = new Vue({
         },
     },
     methods: {
+        getSucursales() {
+            axios.get(urlGlobal.resourcesSucursal
+            ).then(response => {
+                this.sucursales = response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        getPreciosArticulo(id_articulo) {
+            axios.get(urlGlobal.getPreciosArticulo+id_articulo
+            ).then(response => {
+                this.articulosSucursales.precios = response.data;
+            }).catch(errors => {
+                console.log('errors');
+            });
+        },
+        getAllCategorias(){
+            axios.get(urlGlobal.getAllCategorias)
+                .then((response)=>{
+                    this.categorias=response.data;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
+        getAllFabricantes(){
+            axios.get(urlGlobal.getAllFabricantes)
+                .then((response)=>{
+                    this.fabricantes=response.data;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
+        getArticulos(){
+            axios.get(urlGlobal.getArticulos)
+                .then((response)=>{
+                    this.articulo.data=response.data;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
+        submitFormPrecios(){
+            let input = this.articulosSucursales.attributes;
+            axios.post(urlGlobal.postArticuPrecios, input
+            ).then(response => {
+                this.articulosSucursales.attributes = Object.assign({}, this.articulosSucursales.model);
+                // $("#myModal").modal('hide');
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
+        selectArticulo(articulo){
+            this.articulosSucursales.precios=[];
+            this.articulosSucursales.attributes.id_articulo = articulo.id_articulo;
+            this.articulosSucursales.articulo = articulo;
+            this.getPreciosArticulo(articulo.id_articulo);
+        },
+
         //<editor-fold desc="Methods of Categorias">
         submitFormCategoria(){
 
@@ -464,7 +562,7 @@ var appArticulo = new Vue({
                 this.notificationSuccess();
             }).catch( errors => {
                 console.log('FAILURE!!');
-                this.notificationErrors(errors);
+                this.notificationErrors2(errors);
             });
         },
         getArticuloByCodigoBarras: function(codigoBarras) {
@@ -598,6 +696,42 @@ var appArticulo = new Vue({
 
         },
         //</editor-fold>
+
+        numberFloatDirective(event){
+            let regex = new RegExp(/^[+]?([0-9]{0,})*[.]?([0-9]{1,2})?$/g);
+            let specialKeys = [ 'Enter', 'Backspace', 'Tab', 'End', 'Home', 'Delete', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+
+            if (specialKeys.indexOf(event.key) !== -1) {
+                return true;
+            }
+            let current = event.target.value;
+            let next = current.concat(event.key);
+            if (next && !String(next).match(regex)) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        },
+        numberPositiveDirective(event) {
+            // Allow decimal numbers and negative values
+            let regex = new RegExp(/^([0-9]*)$/gm);
+            // Allow key codes for special events. Reflect :
+            // Backspace, tab, end, home
+            specialKeys = [ 'Enter', 'Backspace', 'Tab', 'End', 'Home', 'Delete',
+                'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+            // Allow Backspace, tab, end, and home keys}
+            if (specialKeys.indexOf(event.key) !== -1) {
+                return true;
+            }
+            let current = event.target.value;
+            let next = current.concat(event.key);
+            if (next && !String(next).match(regex)) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        },
+
         //<editor-fold desc="Methods of Notifications">
         formatErrors: function (errors) {
             let _errors = errors.response.data.errors;

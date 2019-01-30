@@ -16,6 +16,7 @@
 					<label for="txtCi" class="col-sm-5 text-right control-label col-form-label">Cédula de identidad o NIT : </label>
 					<div class="col-sm-7">
 						<input type="text"
+							   autocomplete="off"
 							   class="form-control"
 							   v-model="empleado.attributes.ci"
 							   id="txtCi" placeholder="La cédula de identidad del empleado aquí" name="txtCi">
@@ -104,13 +105,14 @@
 					</div>
 				</div>
 				<div class="form-group mb-2 row">
-					<label for="cbxSucursal" class="col-sm-5 text-right control-label col-form-label">Sucursal : </label>
+					<label for="selectAlmacen" class="col-sm-5 text-right control-label col-form-label">Almacén : </label>
 					<div class="col-sm-7">
-						<select class="custom-select" id="cbxSucursal"
-								v-model="empleado.attributes.id_sucursal"
+						{{--fixme cambiar por almacen--}}
+						<select class="custom-select" id="selectAlmacen"
+								v-model="empleado.attributes.id_almacen"
 								name="cbxCargo">
-							<option v-for="sucursal in almacen.sucursales" :value="sucursal.id_sucursal">
-								@{{ sucursal.nombre }}
+							<option v-for="almacen in almacen.data" :value="almacen.id_almacen">
+								@{{ almacen.codigo }}
 							</option>
 						</select>
 					</div>

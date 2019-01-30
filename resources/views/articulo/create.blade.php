@@ -72,7 +72,7 @@
                             <input type="text" class="custom-select" list="categoriasNames" ref="inputCategoria"
                                    @change="handleDatalistCategoria($event)">
                             <datalist id="categoriasNames">
-                                <option v-for="categoria in categoria.allData" :value="categoria.categoria">
+                                <option v-for="categoria in categorias" :value="categoria.categoria">
                             </datalist>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                             <input type="text" class="custom-select" list="FabricantesNames" ref="inputFabricante"
                                    @change="handleDatalistFabricante($event)">
                             <datalist id="FabricantesNames">
-                                <option v-for="fabricante in fabricante.allData" :value="fabricante.nombre">
+                                <option v-for="fabricante in fabricante" :value="fabricante.nombre">
                             </datalist>
                         </div>
                     </div>
@@ -206,12 +206,12 @@
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label for="txtPrecioProduccion"
+                        <label for="txtPrecioVenta"
                                class="col-sm-4 text-right control-label col-form-label">Precio de venta
                             (producción):</label>
                         <div class="col-sm-8">
                             <div class="input-group mt-2">
-                                <input type="text" class="form-control" id="txtPrecioProduccion" placeholder="00.00"
+                                <input type="text" class="form-control" id="txtPrecioVenta" placeholder="00.00"
                                        name="txtPrecioProduccion"
                                        v-model="articulo.attributes.precio_produccion"
                                        onkeypress="return ValidarDecimalTecleado(event, this.id)"
@@ -238,6 +238,4 @@
             </div>
         </div>
     </form>
-
-
 </div>
