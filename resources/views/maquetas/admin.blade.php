@@ -66,7 +66,7 @@
 						 <div class="col-1"> </div>
                         <span class="logo-text">
                              <!-- dark Logo text -->
-                             <img src="{{asset('nihil/imagenes/OpenRedMarca.png')}}" alt="homepage" class="light-logo" />
+                             <img src="{{asset('nihil/imagenes/OpenredFont.png')}}" alt="homepage" class="light-logo" />
                         </span>
                     </a>
                     <!-- ============================================================== -->
@@ -232,7 +232,7 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark" href="{{ url('config')  }}"
                                aria-expanded="false"><i
-                                        class="mdi mdi-move-resize-variant"></i><span
+                                        class="mdi mdi-settings"></i><span
                                         class="hide-menu">Configuraciones </span></a>
 
                         </li>
@@ -253,6 +253,10 @@
                         <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
                                                     href="{{ url('caja')}}" aria-expanded="false"><i
                                         class="mdi mdi-blur-linear"></i><span class="hide-menu">Cajas</span></a>
+                        </li>
+                        <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                                    href="{{ url('cortes')}}" aria-expanded="false"><i
+                                        class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>
                         </li>
                         <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
                                                     href="javascript:void(0)" aria-expanded="false"><i
