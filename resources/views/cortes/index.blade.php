@@ -24,17 +24,17 @@
 										<div class="border-top">
 												<div class="card-body">
 													<h4 class="card-title"> > Ingrese Cortes</h4>
-													<div class="form-group row">
+													<div class="form-group row" v-for="corte in cortes" v-bind:id="corte.id">
 														<div class="col-sm-3">
-																<input type="number" class="form-control" id="ancho1" placeholder="Ancho">																
+																<input type="number" :value="corte.width" class="form-control" placeholder="Ancho">
 														</div>
 														<label class="col-sm-1 text-right control-label col-form-label">X</label>
 														<div class="col-sm-3">
-																<input type="number" class="form-control" id="alto1" placeholder="Alto">
+																<input type="number" :value="corte.height" v-bind:id="corte.id" class="form-control" placeholder="Alto">
 														</div>
 														<label class="col-sm-1 text-right control-label col-form-label">X</label>
 														<div class="col-sm-3">
-																<input type="number" class="form-control" id="cant1" placeholder="Cantidad">
+																<input type="number" :value="corte.cant" v-bind:id="corte.id" class="form-control" placeholder="Cantidad">
 														</div>
 														<div class="col-sm-1">
 																<input type="button" class="btn btn-primary" id="add" value="+">
