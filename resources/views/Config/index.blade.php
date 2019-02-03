@@ -153,9 +153,6 @@
         <!-- ============================================================== -->
     </div>
 
-
-
-
 @endsection
 @section('scripts')
     <script src="{{asset('js/config.js')}}"></script>

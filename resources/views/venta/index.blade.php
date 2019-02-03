@@ -17,13 +17,13 @@
 							   href="#nav-vender" role="tab"
 							   aria-controls="nav-vender"
 							   aria-selected="true">Vender</a>
-							{{--<a title="Registro de Compras" class="nav-item nav-link w-10em"
+							<a title="Registro de Ventas" class="nav-item nav-link w-10em"
 							   id="nav-profile-tab"
 							   data-toggle="tab"
-							   href="#nav-registro-compras"
+							   href="#nav-registro-ventas"
 							   role="tab"
-							   aria-controls="nav-register-compra"
-							   aria-selected="false">R. de Compras</a>--}}
+							   aria-controls="nav-register-venta"
+							   aria-selected="false">R. de Ventas</a>
 						</div>
 					</nav>
 					{{--<a href="#" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" --}}{{--@click="articulo.modeCreate=!articulo.modeCreate"--}}{{-->
@@ -55,29 +55,21 @@
 								 aria-labelledby="nav-home-tab">
 								@include('venta.create')
 							</div>
-							{{--<div class="tab-pane fade" id="nav-registro-compras" role="tabpanel"
-								 aria-labelledby="nav-resgister-compra-tab">
+							<div class="tab-pane fade" id="nav-registro-ventas" role="tabpanel"
+								 aria-labelledby="nav-registro-ventas-tab">
 								<div class="row mb-3">
 									<div class="col-md-8 offset-2 pr-5 pl-5">
-										<app-dates @date-range="getComprasByRageDate"></app-dates>
+										<app-dates @date-range="getVentasByRageDate"></app-dates>
 									</div>
 								</div>
-								<div class="d-flex flex-row">
-									<div>
-										<a href="javascript:void(0);" type="button"
-										   title="Límpiar filtros"
-										   class="btn btn-outline-secondary"
-										   @click="removeFilters"
-										><i class="fas fa-ban fa-lg"></i>
-										</a>
-									</div>
-									<div v-if="!compra.hideFilters">
-										<app-online-suggestions-objects v-if="!compra.hideSuggestions"
+								<div class="d-md-flex flex-row">
+									<div v-if="!venta.hideFilters">
+										<app-online-suggestions-objects v-if="!venta.hideSuggestions"
 																		:config="configEmpleado"
 																		@selected-suggestion-event="filterByEmpleado">
 										</app-online-suggestions-objects>
 									</div>
-									<div v-if="!compra.hideFilters">
+									<div v-if="!venta.hideFilters">
 										<select class="custom-select"
 												@change="filterByAlmacen"
 												name="cbxFilterAlmacen">
@@ -87,41 +79,52 @@
 											</option>
 										</select>
 									</div>
-									<div v-if="!compra.hideFilters">
-										<app-online-suggestions-objects v-if="!compra.hideSuggestions"
-																		:config="configProveedor"
-																		@selected-suggestion-event="filterByProveedor">
+									<div v-if="!venta.hideFilters" class="col p-0">
+										<app-online-suggestions-objects v-if="!venta.hideSuggestions"
+																		:config="configCliente"
+																		@selected-suggestion-event="filterByCliente">
 										</app-online-suggestions-objects>
 									</div>
 									<div>
 										<button class="btn btn-outline-secondary"
-												@click="getPurchasesOnCreditInForce"
-										>Ver Compras al Credito</button>
+												@click="getSalesOnCreditInForce"
+										>Ventas al crédito vigentes</button>
 									</div>
 									<div class="ml-auto">
-										<a href="javascript:void(0);" type="button"
-										   title="Exportar a PDF"
-										   @click="exportPdf"
-										   class="btn btn-outline-danger btn-sm"
-										><i class="far fa-file-pdf fa-lg"></i>
-										</a>
-										<a href="javascript:void(0);" type="button"
-										   title="Átras"
-										   class="btn btn-outline-secondary btn-sm"
-										   :class="compra.paginated.pageNumber === 0 ? 'disabled':''"
-										   @click="prevPage"
-										><i class="fas fa-arrow-left fa-lg"></i>
-										</a>
-										<span title="Página actual">
-                                                @{{ compra.paginated.pageNumber+1 }}
-                                            </span>
-										<a href="javascript:void(0);" type="button"
-										   title="Siguiente"
-										   class="btn btn-outline-secondary btn-sm"
-										   :class="compra.paginated.pageNumber >= pageCount -1 ? 'disabled':''"
-										   @click="nextPage"
-										><i class="fas fa-arrow-right fa-lg"></i>
-										</a>
+										<div class="input-group">
+											<a href="javascript:void(0);" type="button"
+											   title="Límpiar filtros"
+											   class="btn btn-outline-secondary"
+											   @click="removeFilters"
+											><i class="fas fa-ban fa-lg"></i>
+											</a>
+											<a href="javascript:void(0);" type="button"
+											   title="Exportar a PDF"
+											   @click="exportPdf"
+											   class="btn btn-outline-danger"
+											><i class="far fa-file-pdf fa-lg"></i>
+											</a>
+											<a href="javascript:void(0);" type="button"
+											   title="Átras"
+											   class="btn btn-outline-secondary"
+											   :class="venta.paginated.pageNumber === 0 ? 'disabled':''"
+											   @click="prevPage"
+											><i class="fas fa-arrow-left fa-lg"></i>
+											</a>
+											<div class="input-group-prepend">
+                                                <span title="Página actual" class="input-group-text">
+                                                @{{ venta.paginated.pageNumber+1 }}
+                                                </span>
+											</div>
+
+											<a href="javascript:void(0);" type="button"
+											   title="Siguiente"
+											   class="btn btn-outline-secondary"
+											   :class="venta.paginated.pageNumber >= pageCount -1 ? 'disabled':''"
+											   @click="nextPage"
+											><i class="fas fa-arrow-right fa-lg"></i>
+											</a>
+										</div>
 									</div>
 								</div>
 								<div class="table-responsive" >
@@ -130,50 +133,58 @@
 										<tr>
 											<th>Fecha</th>
 											<th>Empleado</th>
-											<th>Proveedor</th>
+											<th>Cliente</th>
+											<th>Caja</th>
+											<th>Almacen</th>
 											<th>Costo Total</th>
+											<th>Descuento</th>
 											<th>Tipo de pago</th>
 											<th>Código</th>
-											<th>Almacen</th>
-											<th>Observaciones</th>
 											<th>Acciones</th>
 										</tr>
 										</thead>
 										<tbody>
-										<tr v-for="_compra in paginatedData">
-											<td>@{{ _compra.fecha }}</td>
-											<td>@{{ _compra.empleado }}</td>
+										<tr v-for="_venta in paginatedData" :class="_venta.estatus==='vc' ? 'table-danger':''">
+											<td>@{{ _venta.fecha }}</td>
+											<td>@{{ _venta.empleado }}</td>
 											<td>
-												<span v-if="_compra.nit">Nit: @{{ _compra.nit }}<br></span>
-												@{{ _compra.proveedor }}
+												<span v-if="_venta.nit">Nit: @{{ _venta.nit }}<br></span>
+												@{{ _venta.cliente }}
 											</td>
-											<td>@{{ _compra.costo_total+' '+_compra.moneda }}</td>
+                                            <td>@{{ _venta.caja }}</td>
+											<td>@{{ _venta.almacen }}</td>
+											<td>@{{ _venta.costo_total+' '+_venta.moneda }}</td>
+											<td>@{{ _venta.descuento }}</td>
 											<td>
-												<span v-if="_compra.tipo_pago ==='ef'">Efectivo</span>
-												<span v-if="_compra.tipo_pago ==='cr'">Crédito</span>
-												<span v-if="_compra.tipo_pago ==='ch'">Cheque</span>
-												<span v-if="_compra.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
+												<span v-if="_venta.tipo_pago ==='ef'">Efectivo</span>
+												<span v-if="_venta.tipo_pago ==='cr'">Crédito</span>
+												<span v-if="_venta.tipo_pago ==='ch'">Cheque</span>
+												<span v-if="_venta.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
 											</td>
-											<td>@{{ _compra.codigo_tarjeta_cheque }}</td>
-											<td>@{{ _compra.almacen }}</td>
-											<td>@{{ _compra.observaciones}}</td>
+											<td>@{{ _venta.codigo_tarjeta_cheque }}</td>
 											<td>
 												<a href="javascript:void(0)"
 												   title="Ver detalle"
-												   @click="viewDetallesCompra(_compra)"
-												   data-target="#modal-view-detail"
+												   @click="viewDetallesVenta(_venta)"
+												   data-target="#modal-view-detail-venta"
 												   data-toggle="modal"
 												   type="button" class="btn btn-outline-info btn-sm">
 													<i class="fas fa-eye fa-lg"></i>
 												</a>
 												<a href="javascript:void(0)"
-												   v-if="_compra.estatus==='cv'"
-												   title="Ver compra al crédito"
-												   @click="assignAnIdentificationOfCompraToCredito(_compra)"
-												   data-target="#modal-view-credit"
+												   v-if="_venta.tipo_pago==='cr'"
+												   title="Ver venta al crédito"
+												   @click="assignAnIdentificationOfVentaToCredito(_venta)"
+												   data-target="#modal-view-credit-sale"
 												   data-toggle="modal"
 												   type="button" class="btn btn-outline-info btn-sm">
 													<i class="fas fa-hand-holding-usd fa-lg"></i>
+												</a>
+												<a v-if="_venta.estatus==='null' || _venta.estatus!=='vc'" href="javascript:void(0)"
+												   title="Anular Venta"
+                                                   @click="cancelSale(_venta)"
+												   type="button" class="btn btn-outline-danger btn-sm">
+													<i class="far fa-trash-alt fa-lg"></i>
 												</a>
 											</td>
 										</tr>
@@ -184,44 +195,43 @@
 										<tr>
 											<th>Fecha</th>
 											<th>Empleado</th>
-											<th>Proveedor</th>
+											<th>Cliente</th>
+											<th>Caja</th>
+											<th>Almacen</th>
 											<th>Costo Total</th>
+											<th>Descuento</th>
 											<th>Tipo de pago</th>
 											<th>Código</th>
-											<th>Almacen</th>
-											<th>Observaciones</th>
 										</tr>
 										</thead>
 										<tbody>
-										<tr v-for="_compra in paginatedData">
-											<td>@{{ _compra.fecha }}</td>
-											<td>@{{ _compra.empleado }}</td>
+										<tr v-for="_venta in paginatedData">
+											<td>@{{ _venta.fecha }}</td>
+											<td>@{{ _venta.empleado }}</td>
 											<td>
-												<span v-if="_compra.nit">Nit: @{{ _compra.nit }}<br></span>
-												@{{ _compra.proveedor }}
+												<span v-if="_venta.nit">Nit: @{{ _venta.nit }}<br></span>
+												@{{ _venta.cliente }}
 											</td>
-											<td>@{{ _compra.costo_total+' '+_compra.moneda }}</td>
+											<td>@{{ _venta.caja }}</td>
+											<td>@{{ _venta.almacen }}</td>
+											<td>@{{ _venta.costo_total+' '+_venta.moneda }}</td>
+											<td>@{{ _venta.descuento }}</td>
 											<td>
-												<span v-if="_compra.tipo_pago ==='ef'">Efectivo</span>
-												<span v-if="_compra.tipo_pago ==='cr'">Crédito</span>
-												<span v-if="_compra.tipo_pago ==='ch'">Cheque</span>
-												<span v-if="_compra.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
+												<span v-if="_venta.tipo_pago ==='ef'">Efectivo</span>
+												<span v-if="_venta.tipo_pago ==='cr'">Crédito</span>
+												<span v-if="_venta.tipo_pago ==='ch'">Cheque</span>
+												<span v-if="_venta.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
 											</td>
-											<td>@{{ _compra.codigo_tarjeta_cheque }}</td>
-											<td>@{{ _compra.almacen }}</td>
-											<td>@{{ _compra.observaciones}}</td>
+											<td>@{{ _venta.codigo_tarjeta_cheque }}</td>
+											<td>
+                                                <span v-if="_venta.estatus==='vc'">cancelada</span>
+                                            </td>
 										</tr>
 										</tbody>
 									</table>
 								</div>
 							</div>
-							--}}{{--=========================================NAV TABCONTENT==========================--}}{{--
-							--}}{{--=========================================TAP PROVEEDORES=========================--}}{{--
-							<div class="tab-pane fade" id="nav-proveedores" role="tabpanel"
-								 aria-labelledby="nav-profile-tab">
-								@include('proveedor.index')
-							</div>--}}
-							{{--=========================================END TAP PROVEEDORES=====================--}}
+							{{--=========================================NAV TABCONTENT==========================--}}
 							{{--=========================================END TAP PAISES==========================--}}
 						</div>
 					</div>
@@ -244,9 +254,9 @@
 	<!-- ============================================================== -->
 	<!-- End Container fluid  -->
 	<!-- ============================================================== -->
-	{{--===============================================Modal View Detail======================================--}}
+	{{--===============================================Modal View Detail Venta======================================--}}
 	<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
-		 id="modal-view-detail">
+		 id="modal-view-detail-venta">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -256,7 +266,7 @@
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					{{--@include('compra.detalle_compra')--}}
+					@include('venta.show_detalle_venta')
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -268,17 +278,17 @@
 	</div>
 	{{--===============================================Modal Credits======================================--}}
 	<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
-		 id="modal-view-credit">
+		 id="modal-view-credit-sale">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title pt-1 pr-1">Compra al crédito</h4>
+					<h4 class="modal-title pt-1 pr-1">Venta al crédito</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
 						<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					{{--@include('compra.credito_compra')--}}
+					@include('venta.credito_venta')
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">

@@ -11,7 +11,7 @@ var appVenta = new Vue({
             filters:{
               empleado:'',
               almacen:'',
-              proveedor:''
+              cliente:''
             },
             credito:{
                 attributes:{
@@ -19,18 +19,18 @@ var appVenta = new Vue({
                     monto:null,
                     observaciones:'',
                     tipo_pago:'ef',
-                    id_compra:null
+                    id_venta:null
                 },
                 model:{
                     id:null,
                     monto:null,
                     observaciones:'',
                     tipo_pago:'ef',
-                    id_compra:null
-
+                    id_venta:null
                 },
                 data:[],
                 total:0,
+                hideTotal:false
             },
             cliente:{
                 attributes:{
@@ -81,21 +81,35 @@ var appVenta = new Vue({
                 fabricante:{
                     nombre:''
                 },
+                precios: {},
                 stock:null
             },
+            tempArticulo:{
+                categoria:{
+                    categoria:''
+                },
+                fabricante:{
+                    nombre:''
+                },
+                precios: {},
+                stock:null
+            },
+            detallesVenta:[],
             detalleVenta:{
-                cantidad:number=null,
+                cantidad:null,
                 precio_unitario:null,
                 id_articulo:null,
                 id_almacen:null,
+                id_sucursal:null,
                 subtotal:null,
                 nombre: '',
             },
             tempDetalleVenta:{
-                cantidad:number=null,
+                cantidad:null,
                 precio_unitario:null,
                 id_articulo:null,
                 id_almacen:null,
+                id_sucursal:null,
                 subtotal:null,
                 nombre: '',
             },
@@ -114,7 +128,7 @@ var appVenta = new Vue({
                 detalles_venta:[]
             },
             tempAttributes: {
-                id_compra: null,
+                id_venta: null,
                 descuento: null,
                 costo_total: '',
                 codigo_tarjeta_cheque: '',
@@ -126,7 +140,7 @@ var appVenta = new Vue({
                 detalles_venta:[]
             },
             model: {
-                id_compra: null,
+                id_venta: null,
                 descuento: null,
                 costo_total: '',
                 codigo_tarjeta_cheque: '',
@@ -166,11 +180,11 @@ var appVenta = new Vue({
     mounted() {
         this.$nextTick(function () {
             this.getMonedas();
+            this.getAlmacenes();
         })
         /*this.getProveedores();
         this.getMonedas();
         this.getCargos();
-        this.getAlmacenes();
         this.compra.attributes.fecha=this.dateNow();*/
     },
     methods: {
@@ -230,18 +244,6 @@ var appVenta = new Vue({
         },
 
         //<editor-fold desc="Methods of Venta">
-        assignAnIdentificationToProveedor(response){
-            if (response && response.id_proveedor) {
-                this.compra.attributes.id_proveedor = response.id_proveedor;
-                this.compra.attributes.proveedor = response;
-            } else {
-                this.compra.attributes.id_proveedor = null;
-                this.compra.attributes.proveedor = {
-                    id_proveedor:null,
-                    razon_social:''
-                };
-            }
-        },
         assignAnIdentificationOfArticuloToDetalleVenta(response) {
             if (response && response.id_articulo) {
                 this.venta.detalleVenta.id_articulo = response.id_articulo;
@@ -251,8 +253,15 @@ var appVenta = new Vue({
                 this.$refs.input_articulo_codigo_barra.value = response.codigo_barra;
                 this.$refs.txtCantidad.select();
             } else {
-                this.venta.detalleVenta.id_articulo = null;
-                this.venta.detalleVenta.nombre = '';
+                this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
+                this.venta.articulo = Object.assign({},this.venta.tempArticulo);
+                this.$refs.input_articulo_codigo.value = '';
+                this.$refs.input_articulo_codigo_barra.value = '';
+            }
+        },
+        selectIdSucursal() {
+            if (Object.keys(this.venta.articulo.precios).length>0) {
+                this.venta.detalleVenta.id_sucursal = this.venta.articulo.precios.id_sucursal;
             }
         },
         getAlmacenes: function(){
@@ -267,13 +276,16 @@ var appVenta = new Vue({
             if (!codigoBarras.target.value.length <= 0) {
                 axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
                 ).then(response => {
+                    this.venta.detalleVenta.precio_unitario=null;
                     if( Object.keys(response.data).length === 0){
-                        this.venta.detalleVenta.id_articulo = null;
-                        this.venta.detalleVenta.nombre = '';
+                        this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
+                        this.venta.articulo = Object.assign({},this.venta.tempArticulo);
+                        this.venta.tempDetalleVenta.nombre = '';
+                        this.$refs.input_articulo_codigo.value = '';
                     } else {
                         this.venta.detalleVenta.id_articulo = response.data[0].id_articulo;
                         this.venta.detalleVenta.nombre = response.data[0].nombre;
-                        this.venta.articulo = response.data[0];
+                        this.venta.articulo = response.data;
                         this.venta.tempDetalleVenta.nombre = response.data[0].nombre;
                         this.$refs.input_articulo_codigo.value = response.data[0].codigo;
                         this.$refs.txtCantidad.select();
@@ -287,9 +299,12 @@ var appVenta = new Vue({
             if (!codigo.target.value.length <= 0) {
                 axios.get(urlGlobal.getArticuloForCodigo + codigo.target.value
                 ).then(response => {
+                    this.venta.detalleVenta.precio_unitario=null;
                     if( Object.keys(response.data).length === 0){
-                        this.venta.detalleVenta.id_articulo = null;
-                        this.venta.detalleVenta.nombre = '';
+                        this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
+                        this.venta.articulo = Object.assign({},this.venta.tempArticulo);
+                        this.venta.tempDetalleVenta.nombre = '';
+                        this.$refs.input_articulo_codigo.value = '';
                     } else {
                         this.venta.detalleVenta.id_articulo = response.data[0].id_articulo;
                         this.venta.detalleVenta.nombre = response.data[0].nombre;
@@ -303,43 +318,58 @@ var appVenta = new Vue({
                 });
             }
         },
-        getComprasByRageDate(event){
-            axios.post(urlGlobal.getComprasByRageDate, event
+        getVentasByRageDate(event){
+            axios.post(urlGlobal.getVentasByRageDate, event
             ).then(response => {
-                this.compra.data = response.data;
-                this.compra.data_with_filters = this.compra.data;
-                this.compra.paginated.pageNumber = 0;
+                this.venta.data = response.data;
+                this.venta.data_with_filters = this.venta.data;
+                this.venta.paginated.pageNumber = 0;
             }).catch(errors => {
                 console.log(errors);
             });
         },
-        assignAnIdentificationOfCompraToCredito(compra){
-            Object.assign(this.compra.credito, this.compra.modelcredito);
-            this.compra.credito.id_compra = compra.id_compra;
-            this.compra.tempAttributes = compra;
-            this.compra.compra_credito_total=0;
-            this.getCompraCredito(compra.id_compra);
+        assignAnIdentificationOfVentaToCredito(venta){
+            Object.assign(this.venta.credito.attributes, this.venta.credito.model);
+            this.venta.credito.attributes.id_venta = venta.id_venta;
+            this.venta.tempAttributes = venta;
+            this.getVentaCredito(venta.id_venta);
         },
-        getCompraCredito(id){
-            axios.get(urlGlobal.getCompraCredito+id
+        getVentaCredito(id_venta){
+            this.venta.credito.hideTotal=true;
+            axios.get(urlGlobal.getVentaCredito+id_venta
             ).then(response => {
-                this.compra.compra_credito_data=response.data;
-                response.data.forEach(value=> this.compra.compra_credito_total+=value.monto);
+                this.venta.credito.total=0;
+                this.venta.credito.data=response.data;
+                response.data.forEach(value=> this.venta.credito.total+= parseFloat(value.monto));
+                this.venta.credito.hideTotal=false;
             }).catch(errors => {
                 console.log(errors);
             });
         },
-        registerCompraCredito: function() {
-            let inputs = this.compra.credito;
-            axios.post(urlGlobal.postCompraCredito, inputs)
-                .then(response => {
-                    let id_compra = this.compra.credito.id_compra;
-                    let tipo_pago = this.compra.credito.tipo_pago;
-                    Object.assign(this.compra.credito, this.compra.modelcredito);
-                    this.compra.credito.id_compra = id_compra;
-                    this.compra.credito.tipo_pago =tipo_pago;
+        cancelSale(venta){
+            let isConfirmed=confirm("¡Está seguro de cancelar la venta!");
+            if(isConfirmed){
+                axios.patch(urlGlobal.cancelSale+venta.id_venta
+                ).then(response => {
+                    venta.estatus='vc';
                     this.notificationSuccess();
                 }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+        registerVentaCredito: function() {
+            let inputs = this.venta.credito.attributes;
+            axios.post(urlGlobal.postVentaCredito, inputs
+            ).then(response => {
+                let id_venta = this.venta.credito.attributes.id_venta;
+                let tipo_pago = this.venta.credito.attributes.tipo_pago;
+                Object.assign(this.venta.credito.attributes, this.venta.credito.attributes.model);
+                this.venta.credito.attributes.id_venta = id_venta;
+                this.venta.credito.attributes.tipo_pago = tipo_pago;
+                this.getVentaCredito(id_venta);
+                this.notificationSuccess();
+            }).catch(errors => {
                 console.log('errors');
                 this.notificationErrors2(errors);
             });
@@ -365,13 +395,7 @@ var appVenta = new Vue({
                 this.venta.articulo.categoria.categoria ='';
                 this.venta.articulo.fabricante.nombre ='';
                 this.venta.articulo.stock = null;
-                this.venta.detalleVenta = {
-                    cantidad:null,
-                    precio_unitario:null,
-                    id_articulo:null,
-                    subtotal:null,
-                    nombre: '',
-                };
+                this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
                 this.venta.hideSuggestionsArticulo = true;
                 setTimeout(()=>{this.venta.hideSuggestionsArticulo = false;},1);
             } else {
@@ -401,12 +425,12 @@ var appVenta = new Vue({
             let inputs = Object.assign({}, this.venta.attributes);
             axios.post(urlGlobal.resourcesVenta, inputs
             ).then(response => {
-                this.venta.attributes.detalles_compra = [];
+                this.venta.attributes.detalles_venta = [];
                 this.venta.totalDetallesVenta = 0;
                 this.notificationSuccess();
             }).catch(errors => {
                 console.log('errors');
-                this.notificationErrors(errors);
+                this.notificationErrors2(errors);
             });
         },
         focusButtonYes(){
@@ -415,12 +439,12 @@ var appVenta = new Vue({
                 this.$refs.btnSi.focus();
             },400);
         },
-        getPurchasesOnCreditInForce(){
-            axios.get(urlGlobal.getPurchasesOnCreditInForce
+        getSalesOnCreditInForce(){
+            axios.get(urlGlobal.getSalesOnCreditInForce
             ).then(response => {
-                this.compra.data = response.data;
-                this.compra.data_with_filters = this.compra.data;
-                this.compra.paginated.pageNumber = 0;
+                this.venta.data = response.data;
+                this.venta.data_with_filters = this.venta.data;
+                this.venta.paginated.pageNumber = 0;
             }).catch(errors => {
                 console.log(errors);
             });
@@ -429,10 +453,10 @@ var appVenta = new Vue({
 
         //<editor-fold desc="Methods paginated">
         nextPage(){
-            this.compra.paginated.pageNumber++;
+            this.venta.paginated.pageNumber++;
         },
         prevPage(){
-            this.compra.paginated.pageNumber--;
+            this.venta.paginated.pageNumber--;
         },
         //</editor-fold>
 
@@ -471,55 +495,55 @@ var appVenta = new Vue({
         //<editor-fold desc="Methods of Filters">
         filterByEmpleado(empleado){
             if(empleado && empleado.nombre) {
-                this.compra.filters.empleado = empleado.nombre;
+                this.venta.filters.empleado = empleado.nombre;
                 this.goThroughFilters();
             }
         },
         filterByAlmacen: function(almacen){
             if(almacen.target.options.selectedIndex > -1) {
                 let index = almacen.target.options.selectedIndex;
-                this.compra.filters.almacen = almacen.target.options[index].text;
+                this.venta.filters.almacen = almacen.target.options[index].text;
                 this.goThroughFilters();
             }
         },
-        filterByProveedor: function(proveedor){
-            if(proveedor && proveedor.razon_social) {
-                this.compra.filters.proveedor = proveedor.razon_social;
+        filterByCliente: function(cliente){
+            if(cliente && cliente.razon_social) {
+                this.venta.filters.cliente = cliente.razon_social;
                 this.goThroughFilters();
             }
         },
 
         removeFilters(){
-            this.compra.filters.proveedor='';
-            this.compra.filters.almacen='';
-            this.compra.filters.empleado='';
-            this.compra.hideFilters = true;
-            this.compra.paginated.pageNumber = 0;
-            setTimeout(()=>this.compra.hideFilters = false,1);
+            this.venta.filters.cliente='';
+            this.venta.filters.almacen='';
+            this.venta.filters.empleado='';
+            this.venta.hideFilters = true;
+            this.venta.paginated.pageNumber = 0;
+            setTimeout(()=>this.venta.hideFilters = false,1);
             this.goThroughFilters();
         },
-        viewDetallesCompra(detalle){
-            this.compra.detallesCompra = detalle.detalle_compra;
+        viewDetallesVenta(detalles){
+            this.venta.detallesVenta = detalles.detalles_venta;
         },
         goThroughFilters(){
-            let filtered_data = this.compra.data;
-            if(this.compra.filters.empleado.length>0){
+            let filtered_data = this.venta.data;
+            if(this.venta.filters.empleado.length>0){
                 filtered_data = filtered_data.filter( _empleado =>{
-                    return _empleado.empleado === this.compra.filters.empleado;
+                    return _empleado.empleado === this.venta.filters.empleado;
                 });
             }
-            if(this.compra.filters.almacen.length>0){
+            if(this.venta.filters.almacen.length>0){
                 filtered_data = filtered_data.filter( _almacen =>{
-                    return _almacen.almacen === this.compra.filters.almacen;
+                    return _almacen.almacen === this.venta.filters.almacen;
                 });
             }
-            if(this.compra.filters.proveedor.length>0){
-                filtered_data = filtered_data.filter( _proveedor =>{
-                    return _proveedor.proveedor === this.compra.filters.proveedor;
+            if(this.venta.filters.cliente.length>0){
+                filtered_data = filtered_data.filter( _cliente =>{
+                    return _cliente.cliente === this.venta.filters.cliente;
                 });
             }
-            this.compra.paginated.pageNumber = 0;
-            this.compra.data_with_filters=filtered_data;
+            this.venta.paginated.pageNumber = 0;
+            this.venta.data_with_filters=filtered_data;
         },
 
         //</editor-fold>
@@ -584,14 +608,14 @@ var appVenta = new Vue({
     },
     computed: {
         pageCount: function(){
-            let l = this.compra.data_with_filters.length,
-                s = this.compra.paginated.size;
+            let l = this.venta.data_with_filters.length,
+                s = this.venta.paginated.size;
             return Math.ceil(l/s);
         },
         paginatedData: function(){
-            const start = this.compra.paginated.pageNumber * this.compra.paginated.size,
-                end = start + this.compra.paginated.size;
-            return this.compra.data_with_filters
+            const start = this.venta.paginated.pageNumber * this.venta.paginated.size,
+                end = start + this.venta.paginated.size;
+            return this.venta.data_with_filters
                 .slice(start, end);
         }
     }

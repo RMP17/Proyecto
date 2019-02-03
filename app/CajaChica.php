@@ -14,11 +14,10 @@ class CajaChica extends Model
 		'fecha_apertura',
 		'fecha_cierre',
 		'monto_apertura',
-		'monto_estado',
+		'diferencia',
 		'monto_declarado',
 		'observaciones',
-		'id_empleado',
-		'id_sucursal',
+		'id_caja',
 	];
 	
 	protected $guarded = [

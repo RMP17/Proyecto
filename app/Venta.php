@@ -18,22 +18,46 @@ class Venta extends Model
 		'costo_total',
 		'costo_tarjeta_cheque',
 		'descuento',
-		'estatus',
 		'id_moneda',
 		'id_cliente',
+        // Tipo de pago trabaja con estos valores:
+        // ef=Efectivo; cr=al credito; ch=cheque; tc=Tarjeta de crédito o débito.
 		'tipo_pago',
 	];
 	
 	protected $guarded = [
         'id_caja',
+        'id_empleado',
+        'id_almacen',
+        // null=vensta en efectivo; cv= credito vigente; cc= credito cancelado; vc=venta cancelada
+        'estatus',
 	];
     public function detallesVenta(){
         return $this->hasMany(DetalleVenta::class,'id_venta', 'id_venta');
+    }
+    public function ventaCredito(){
+        return $this->hasMany(VentaCredito::class,'id_venta', 'id_venta');
+    }
+    public function cliente(){
+        return $this->belongsTo(Cliente::class,'id_cliente');
+    }
+    public function empleado(){
+        return $this->belongsTo(Empleado::class,'id_empleado');
+    }
+    public function moneda(){
+        return $this->belongsTo(Moneda::class,'id_moneda');
+    }
+    public function almacen(){
+        return $this->belongsTo(Almacen::class,'id_almacen');
+    }
+    public function caja(){
+        return $this->belongsTo(Caja::class,'id_caja');
     }
 	public static function newVenta($parameters){
         DB::beginTransaction();
         try {
             $parameters['descuento'] = !is_null($parameters['descuento']) ? $parameters['descuento'] : 0;
+            $empleado = Empleado::find(auth()->user()->id_empleado);
             if (!$parameters['id_cliente']) {
                 $cliente = Cliente::where('razon_social', 'S/N')->first();
                 if (is_null($cliente)) {
@@ -44,15 +68,44 @@ class Venta extends Model
                 }
                 $parameters['id_cliente'] = $cliente->id_cliente;
             }
-            $empleado = Empleado::find(auth()->user()->id_empleado);
             $_venta = new Venta();
             $_venta->fill($parameters);
+            $_venta->id_empleado=$empleado->id_empleado;
+            $_venta->id_almacen=$empleado->id_almacen;
             $_venta->fecha = Carbon::now();
             $caja = Caja::where('id_empleado', $empleado->id_empleado)->first();
             if (is_null($caja)) {
-                return ['message' => 'No está asignado a ninguna caja', 'code' => 400];
+                return [
+                    'message' => [
+                        'caja'=>['No está asignado a ninguna caja']
+                    ],
+                    'code' => 400
+                ];
             }
             $_venta->id_caja = $caja->id_caja;
+            foreach ($parameters['detalles_venta'] as $detalle) {
+                 $precios= DB::table('articulos_sucursales')
+                     ->where('id_articulo',$detalle['id_articulo'])
+                     ->where('id_sucursal', $detalle['id_sucursal'])->first();
+
+                 if ( !($precios->precio_1==$detalle['precio_unitario']
+                    || $precios->precio_2==$detalle['precio_unitario']
+                    || $precios->precio_3==$detalle['precio_unitario']
+                    || $precios->precio_4==$detalle['precio_unitario']
+                    || $precios->precio_5==$detalle['precio_unitario'])
+                ){
+                    return [
+                        'message' => [
+                            'errors' => [
+                                'precio' => [
+                                    'precios no encontrados'
+                                ]
+                            ]
+                        ],
+                        'code' => 400
+                    ];
+                }
+            }
             $_venta->costo_total = self::calcularTotal($parameters['detalles_venta']);
             if ($_venta->costo_total < $parameters['descuento']) {
                 return [
@@ -78,12 +131,10 @@ class Venta extends Model
             $_venta->save();
             $_venta->detallesVenta()->createMany($parameters['detalles_venta']);
 
-//        todo: preguntar si solo se manejara un solo almacen por sucursal
-            $almacen = Almacen::where('id_sucursal', $empleado->id_sucursal)->first();
             foreach ($parameters['detalles_venta'] as $detalle) {
                 $productoInsuficiente = Articulo::find($detalle['id_articulo'])->nombre;
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
-                    ->where('id_almacen', $almacen->id_almacen)->lockForUpdate()->first();
+                    ->where('id_almacen', $empleado->id_almacen)->lockForUpdate()->first();
                 if (!is_null($stock)) {
                     if ($stock->cantidad - $detalle['cantidad'] < 0) {
                         DB::rollback();
@@ -98,7 +149,7 @@ class Venta extends Model
                             'code' => 400
                         ];
                     }
-                    $stock->cantidad -= (int)$detalle['cantidad'];
+                    $stock->cantidad = $stock->cantidad -(int)$detalle['cantidad'];
                     $stock->update();
                 } else {
                     return [
@@ -138,5 +189,86 @@ class Venta extends Model
         }
         return $costo_total;
     }
-	
+    public static function getVentasByRageDate($date1, $date2) {
+
+        $ventas = Venta::whereBetween('fecha', [$date1.' 00:00:00',$date2.' 23:59:59'])
+            ->orderBy('fecha', 'desc')->get();
+        foreach ($ventas as $venta) {
+            if (isset($venta->cliente->razon_social)) {
+                $cliente = $venta->cliente->razon_social;
+                $venta->nit = $venta->cliente->nit;
+            } else {
+                $venta->nit = '';
+                $cliente = '';
+            }
+            unset($venta->cliente);
+            $venta->cliente = $cliente;
+            $empleado = $venta->empleado->nombre;
+            unset($venta->empleado);
+            $venta->empleado = $empleado;
+            $caja = $venta->caja->nombre;
+            unset($venta->caja);
+            $venta->caja = $caja;
+            $moneda = $venta->moneda->codigo;
+            unset($venta->moneda);
+            $venta->moneda= $moneda;
+            $almacen = $venta->almacen;
+            unset($venta->almacen);
+            $venta->almacen= $almacen->codigo;
+            $venta->detallesVenta;
+            foreach ($venta->detallesVenta as $detalle) {
+                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+            }
+        }
+        return $ventas;
+    }
+    public static function getSalesOnCreditInForce() {
+
+        $ventas = Venta::where('estatus', 'cv')
+            ->orderBy('fecha', 'desc')->get();
+        foreach ($ventas as $venta) {
+            if (isset($venta->cliente->razon_social)) {
+                $cliente = $venta->cliente->razon_social;
+                $venta->nit = $venta->cliente->nit;
+            } else {
+                $venta->nit = '';
+                $cliente = '';
+            }
+            unset($venta->cliente);
+            $venta->cliente = $cliente;
+            $empleado = $venta->empleado->nombre;
+            unset($venta->empleado);
+            $venta->empleado = $empleado;
+            $caja = $venta->caja->nombre;
+            unset($venta->caja);
+            $venta->caja = $caja;
+            $moneda = $venta->moneda->codigo;
+            unset($venta->moneda);
+            $venta->moneda= $moneda;
+            $venta->detallesVenta;
+            $almacen = $venta->almacen;
+            unset($venta->almacen);
+            $venta->almacen= $almacen->codigo;
+            $venta->detallesVenta;
+            foreach ($venta->detallesVenta as $detalle) {
+                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+            }
+        }
+        return $ventas;
+    }
+    public static function cancelSale($id_venta) {
+        $venta = Venta::find($id_venta);
+        $venta->estatus='vc';
+        $venta->detallesVenta;
+        foreach ($venta->detallesVenta as $detalle) {
+            $stock = Stock::where('id_articulo', $detalle['id_articulo'])
+                ->where('id_almacen', $venta->id_almacen)->lockForUpdate()->first();
+            if (!is_null($stock)) {
+                $stock->cantidad = $stock->cantidad +(int)$detalle['cantidad'];
+                $stock->update();
+            }
+        }
+        $venta->update();
+        return null;
+    }
 }

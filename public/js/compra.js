@@ -769,7 +769,7 @@ var appCompra = new Vue({
             axios.get(urlGlobal.getCompraCredito+id
             ).then(response => {
                 this.compra.compra_credito_data=response.data;
-                response.data.forEach(value=> this.compra.compra_credito_total+=value.monto);
+                response.data.forEach(value=> this.compra.compra_credito_total+= parseFloat(value.monto));
             }).catch(errors => {
                 console.log(errors);
             });

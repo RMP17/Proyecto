@@ -11,18 +11,18 @@
 								<a class="nav-item nav-link w-10em active"
 								   id="nav-profile-tab"
 								   data-toggle="tab"
-								   href="#nav-config"
+								   href="#nav-caja-tab"
 								   role="tab"
 								   aria-controls="nav-profile"
 								   aria-selected="false">Ver Cajas</a>
-								{{--<a class="nav-item nav-link w-10em"
-								   id="nav-profile-tab"
+								<a class="nav-item nav-link w-10em"
+								   id="nav-gasto"
 								   data-toggle="tab"
-								   href="#nav-empleados"
+								   href="#nav-gasto-tab"
 								   role="tab"
 								   aria-controls="nav-profile"
-								   aria-selected="false">Empleados</a>
-								<a class="nav-item nav-link w-10em"
+								   aria-selected="false">Gastos</a>
+								{{--<a class="nav-item nav-link w-10em"
 								   id="nav-profile-tab"
 								   data-toggle="tab"
 								   href="#nav-empresa"
@@ -65,8 +65,8 @@
 						<div class="card-body">
 							<div class="tab-content" id="nav-tabContent">
 								{{--=================================================NAV TABCONTENT==================================--}}
-								{{--=========================================TAP CONFIG==========================--}}
-								<div class="tab-pane fade show active" id="nav-config" role="tabpanel"
+								{{--=========================================TAP CAJA==========================--}}
+								<div class="tab-pane fade show active" id="nav-caja-tab" role="tabpanel"
 									 aria-labelledby="nav-profile-tab">
 									<div class="container-fluid">
 										<div class="card-group mb-0 ">
@@ -79,39 +79,29 @@
 											<div class="card border-0">
 												<div class="card-body pr-0">
 													<h5 class="card-title text-center">Caja Chica</h5>
-													@include('cajachica.index')
+													<a href data-target="#modal-registro-caja" data-toggle="modal"
+													   title="Ver Resumen de Caja">
+														<button type="button"
+																class="btn btn-outline-success btn-sm"><i class="fas fa-dollar-sign fa-lg"></i></button>
+													</a>
+													@include('cajachica.create')
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								{{--=========================================END TAP CONFIG==========================--}}
-								{{--=========================================TAP PAISES==========================--}}
-								<div class="tab-pane fade" id="nav-paises" role="tabpanel" aria-labelledby="nav-contact-tab">
-									{{--@include('pais.index')--}}
+								{{--=========================================END TAP CAJA==========================--}}
+								{{--=========================================TAP GASTOS==========================--}}
+								<div class="tab-pane fade" id="nav-gasto-tab" role="tabpanel" aria-labelledby="nav-contact-tab">
+									@include('cajachica.gasto.show')
 								</div>
-								{{--=========================================END TAP PAISES==================================--}}
+								{{--=========================================END TAP GASTOS==================================--}}
 							</div>
 						</div>
 					</div>
-					{{--{{$compras -> render()}}--}}
 				</div>
 			</div>
-
-			<!-- ============================================================== -->
-			<!-- End PAge Content -->
-			<!-- ============================================================== -->
-			<!-- ============================================================== -->
-			<!-- Right sidebar -->
-			<!-- ============================================================== -->
-			<!-- .right-sidebar -->
-			<!-- ============================================================== -->
-			<!-- End Right sidebar -->
-			<!-- ============================================================== -->
 		</div>
-		<!-- ============================================================== -->
-		<!-- End Container fluid  -->
-		<!-- ============================================================== -->
 	</div>
 @endsection
 @section('scripts')

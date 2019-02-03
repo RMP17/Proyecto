@@ -232,7 +232,7 @@
         </div>
         {{--===============================================Modal Add Precios======================================--}}
         <div class="modal fade modal-slide-in-right"
-             {{--@keydown.esc_="cancelModeEditCuentaProveedor"--}}
+             @keydown.esc="cancelModeEditPrecios"
              aria-hidden="true" role="dialog" tabindex="-1" id="modal-add-precio">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -248,7 +248,7 @@
                             <span v-show="articulosSucursales.modeCreate">Ver</span>
                         </a>
                         <button type="button" class="close"
-                                {{--@click_="cancelModeEditCuentaProveedor"--}}
+                                @click="cancelModeEditPrecios"
                                 data-dismiss="modal" aria-label="Cerrar">
                             <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                         </button>
@@ -262,7 +262,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditPrecios"> Cerrar</button>
                     </div>
                 </div>
             </div>

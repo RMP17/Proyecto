@@ -222,23 +222,42 @@ var appArticulo = new Vue({
             });
         },
         submitFormPrecios(){
-            let input = this.articulosSucursales.attributes;
-            axios.post(urlGlobal.postArticuPrecios, input
+            let inputs = this.articulosSucursales.attributes;
+            axios.post(urlGlobal.postArticuPrecios, inputs
             ).then(response => {
+                let id_articulo=this.articulosSucursales.attributes.id_articulo;
                 this.articulosSucursales.attributes = Object.assign({}, this.articulosSucursales.model);
-                // $("#myModal").modal('hide');
+                this.articulosSucursales.attributes.id_articulo = id_articulo;
+                if(this.articulosSucursales.modeEdit) {
+                    this.articulosSucursales.modeEdit=false;
+                    this.articulosSucursales.modeCreate=false;
+                }
                 this.notificationSuccess();
+                this.getPreciosArticulo(this.articulosSucursales.attributes.id_articulo)
             }).catch(errors => {
                 console.log(errors);
             });
+        },
+        changeEditModePrecios(precios){
+            this.articulosSucursales.modeCreate = true;
+            this.articulosSucursales.modeEdit = true;
+            this.articulosSucursales.attributes = precios;
+            this.articulosSucursales.tempAttributes = Object.assign({},precios);
         },
         selectArticulo(articulo){
             this.articulosSucursales.precios=[];
             this.articulosSucursales.attributes.id_articulo = articulo.id_articulo;
             this.articulosSucursales.articulo = articulo;
+            this.articulosSucursales.modeCreate=false;
+            this.articulosSucursales.modeEdit=false;
             this.getPreciosArticulo(articulo.id_articulo);
         },
-
+        cancelModeEditPrecios(){
+            this.articulosSucursales.modeCreate = false;
+            this.articulosSucursales.modeEdit = false;
+            this.articulosSucursales.attributes = Object.assign({},this.articulosSucursales.model);
+            this.articulosSucursales.tempAttributes = Object.assign({},this.articulosSucursales.model);
+        },
         //<editor-fold desc="Methods of Categorias">
         submitFormCategoria(){
 

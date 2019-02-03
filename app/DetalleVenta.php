@@ -15,12 +15,13 @@ class DetalleVenta extends Model
 		'cantidad',
         'precio_unitario',
 		'id_articulo',
-		'id_almacen',
 		'id_venta',
 	];
 	
 	protected $guarded = [
 	
 	];
-	
+    public function venta(){
+        return $this->belongsTo(Venta::class,'id_venta');
+    }
 }

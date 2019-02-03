@@ -177,7 +177,7 @@
                                                         <i class="fas fa-eye fa-lg"></i>
                                                     </a>
                                                     <a href="javascript:void(0)"
-                                                       v-if="_compra.estatus==='cv'"
+                                                       v-if="_compra.tipo_pago==='cr'"
                                                        title="Ver compra al crédito"
                                                        @click="assignAnIdentificationOfCompraToCredito(_compra)"
                                                        data-target="#modal-view-credit"

@@ -40,11 +40,26 @@
                 ref="txtCantidad"
                 v-model.number ="venta.detalleVenta.cantidad"
                 placeholder="Cantidad" type="text" @keypress="numberPositiveDirective"></div>
-    <div class="col-lg-4 pr-0 pl-0"><input
-                @keypress.enter="addDetalleVenta"
+    {{--<div class="col-lg-4 pr-0 pl-0">
+        <input  @keypress.enter="addDetalleVenta"
                 class="form-control"
                 v-model.number="venta.detalleVenta.precio_unitario"
-                placeholder="Precio Unitario" type="text" @keypress="numberFloatDirective"></div>
+                placeholder="Precio Unitario" type="text" @keypress="numberFloatDirective">
+    </div>--}}
+    <div class="col-lg-4 pr-0 pl-0">
+        <select class="custom-select"
+                @change="selectIdSucursal"
+                v-model.numeric="venta.detalleVenta.precio_unitario">
+            <option :value="null" selected disabled>Seleccione un precio...</option>
+            <template v-if="Object.keys(venta.articulo.precios).length>0">
+                <option :value="venta.articulo.precios.precio_1">@{{ venta.articulo.precios.precio_1 }}</option>
+                <option :value="venta.articulo.precios.precio_2">@{{ venta.articulo.precios.precio_2 }}</option>
+                <option :value="venta.articulo.precios.precio_3">@{{ venta.articulo.precios.precio_3 }}</option>
+                <option :value="venta.articulo.precios.precio_4">@{{ venta.articulo.precios.precio_4 }}</option>
+                <option :value="venta.articulo.precios.precio_5">@{{ venta.articulo.precios.precio_5 }}</option>
+            </template>
+        </select>
+    </div>
     <div class="col-lg-4 pl-0">
         <button type="button" class="btn w-100" :class="venta.detalleVenta.id_articulo ?  'btn-info':'btn-secondary'" @click="addDetalleVenta">Agregar a la lista</button>
     </div>

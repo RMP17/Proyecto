@@ -19,6 +19,12 @@
         <td>@{{ precio.precio_4 }}</td>
         <td>@{{ precio.precio_5 }}</td>
         <td>
+            <a type="button" href="javascript:void(0);"
+               title="Editar"
+               @click="changeEditModePrecios(precio)"
+               class="btn btn-warning btn-sm">
+                <i class="mdi mdi-pencil"></i>
+            </a>
         </td>
     </tr>
     </tbody>

@@ -8,7 +8,7 @@ use Allison\Http\Requests\ CajaPeticion;
 use Allison\Caja;
 use Allison\Empleado;
 use Allison\Sucursal;
-use DB;
+use Illuminate\Support\Facades\Validator;
 
 
 class CajaControlador extends Controller
@@ -52,5 +52,27 @@ class CajaControlador extends Controller
 	{
 	    $cajas = Caja::getCajas();
         return response()->json($cajas);
+	}
+	public function getCaja()
+	{
+	    $caja = Caja::getCaja();
+	    if(isset($caja['messages'])){
+            return response()->json($caja['messages'],$caja['code']);
+        }
+        return response()->json($caja);
+	}
+	public function closedAndOpenCashier(Request $request)
+	{
+        $validator = Validator::make($request->all(), [
+            'monto' => 'required|min:1|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+	    $caja=Caja::closedAndOpenCashier($request->all());
+        if(!is_null($caja)){
+            return response()->json($caja['messages'],$caja['code']);
+        }
+        return response()->json();
 	}
 }

@@ -89,6 +89,10 @@ class Articulo extends Model
             $articulo = Articulo::where('codigo_barra',$codigo)->first();
         }
         if(!is_null($articulo)){
+            if(count($articulo->sucursal)>0){
+                $sucursal= $articulo->sucursal->first();
+            }
+            $articulo->precios = $sucursal->pivot;
             $categoria = Categoria::find($articulo['id_categoria']);
             if(!is_null($categoria)){
                 $articulo->categoria = $categoria;
@@ -135,6 +139,11 @@ class Articulo extends Model
             ->orderBy('nombre','desc')->take(10)->get();
         foreach ($articulos as &$articulo) {
             $categoria = Categoria::find($articulo['id_categoria']);
+            $articulo->precios=(Object)[];
+            if(count($articulo->sucursal)>0){
+                $sucursal= $articulo->sucursal->first();
+                $articulo->precios = $sucursal->pivot;
+            }
             if(!is_null($categoria)){
                 $articulo->categoria = $categoria;
             } else {
@@ -177,6 +186,10 @@ class Articulo extends Model
         $articulo = Articulo::find($id);
         if(!is_null($articulo)){
             $categoria = Categoria::find($articulo['id_categoria']);
+            if(count($articulo->sucursal)>0){
+                $sucursal= $articulo->sucursal->first();
+            }
+            $articulo->precios = $sucursal->pivot;
             if(!is_null($categoria)){
                 $articulo->categoria = $categoria;
             } else {
@@ -227,8 +240,17 @@ class Articulo extends Model
     }
     public static function newsPrecios($parameters){
         $articulo = Articulo::find($parameters['id_articulo']);
+        $modelPrecios=[
+            'precio_1',
+            'precio_2',
+            'precio_3',
+            'precio_4',
+            'precio_5'
+        ];
+        $modelPrecios=array_intersect_key($parameters,array_flip($modelPrecios));
+        $precios[$parameters['id_sucursal']]=$modelPrecios;
         if(!is_null($articulo)){
-            $articulo->sucursal()->attach($parameters['id_sucursal']);
+            $articulo->sucursal()->syncWithoutDetaching($precios);
         }
     }
 }
