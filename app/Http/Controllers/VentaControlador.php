@@ -47,41 +47,6 @@ class VentaControlador extends Controller
 		return view ('venta.show', ['venta' => Empleado :: findOrFail($id_empleado)]);
 	}
 	
-	public function edit($id_empleado)
-	{
-		$paises = Pais::orderBy('nombre', 'asc')
-			->get();
-		$venta = Empleado :: findOrFail($id_empleado);
-		$id_sucursal = $venta -> id_sucursal;
-		$sucursal = Sucursal :: findOrFail($id_sucursal);
-		$id_ciudad = $sucursal -> id_ciudad;
-		$ciudad = Ciudad :: findOrFail($id_ciudad);
-		$id_pais = $ciudad -> id_pais;
-		$pais = Pais :: findOrFail ($id_pais);
-		return view ('venta.edit', compact ('venta', 'paises', 'pais', 'ciudad', 'sucursal'));
-	}
-	
-	public function update(EmpleadoPeticion $peticion, $id_empleado)
-	{
-		$conversor = new ConversorImagenes;
-		$venta = Empleado :: findOrFail($id_empleado);
-		$venta -> nombre = $peticion -> get('txtNombre');
-		$venta -> ci = $peticion -> get('txtCi');
-		$venta -> sexo = $peticion -> get('rbtSexo');
-		$venta -> fecha_nacimiento = date("Y-m-d", strtotime($peticion -> get('dtmFechaNacimiento')));   // datepicker-autoclose" placeholder="mm/dd/yyyy" name="dtmFechaNacimiento
-		$venta -> telefono = $peticion -> get('txtTelefono');
-		$venta -> celular = $peticion -> get('txtCelular');
-		$venta -> correo = $peticion -> get('txtCorreo');
-		$venta -> direccion = $peticion -> get('txtDireccion');
-		if ($peticion -> get('imgFoto') != null)
-			$venta -> foto = $conversor->ImagenABinario($peticion -> get('imgFoto'));
-		$venta -> persona_referencia = $peticion -> get('txtPersonaReferencia');
-		$venta -> telefono_referencia = $peticion -> get('txtTelefonoReferencia');
-		$venta -> id_sucursal = $peticion -> get('cbxSucursal');
-		$venta->update();
-		return Redirect :: to ('venta');
-	}
-	
 	public function destroy($id_empleado)
 	{
 		$venta = Empleado :: findOrFail($id_empleado);
@@ -89,17 +54,7 @@ class VentaControlador extends Controller
 		$venta->update();
 		return Redirect :: to ('venta');
 	}
-	
-	public function EmpleadosPorSucursal(Request $peticion, $id_sucursal)
-	{
-		if($peticion->ajax())
-		{
-			$empleados = Empleado::where('id_sucursal', '=', $id_sucursal)
-				->where('estatus', '=', 'A')
-				->get();
-			return response()->json($empleados);
-		}
-	}
+
 	public function getVentasByRageDate(Request $request)
 	{
         $dates = ['date_start' => $request['date1'], 'date_end'=> $request['date2']];
@@ -115,7 +70,7 @@ class VentaControlador extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-        $ventas = Venta::getVentasByRageDate($d1, $d2);
+        $ventas = Venta::getVentasByRageDate($dates['date_start'], $dates['date_end']);
         return response()->json($ventas);
 	}
 	public function getSalesOnCreditInForce()

@@ -430,7 +430,7 @@ var appVenta = new Vue({
                 this.notificationSuccess();
             }).catch(errors => {
                 console.log('errors');
-                this.notificationErrors2(errors);
+                this.notificationErrors(errors);
             });
         },
         focusButtonYes(){

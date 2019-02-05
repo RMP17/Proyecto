@@ -48,6 +48,10 @@ class Caja extends Model
         }
         return $cajas;
     }
+    public static function simpleSuggestionsCajas($query){
+        $cajas = Caja::select('nombre','id_caja')->where('nombre', 'like','%'.$query.'%')->orderBy('nombre','desc')->take(10)->get();
+        return $cajas;
+    }
     public static function getCaja(){
         $cajas = Caja::where('id_empleado', auth()->user()->id_empleado)->first();
         if(!is_null($cajas)){
@@ -60,6 +64,53 @@ class Caja extends Model
                 'code'=>400
             ];
         }
+    }
+    public static function getSummary(){
+        $date1 = Carbon::now()->format('Y-m-d');
+        $caja = Caja::where('id_empleado',auth()->user()->id_empleado)->first();
+        $resumenCaja = [
+            'caja' => '',
+            'ventas_total' => 0,
+            'ventas_credito_monto_pagado_total' => 0,
+            'ventas_credito_total' => 0,
+            'gastos_total' => 0,
+            'monto_apertura' => 0
+        ];
+        if(!is_null($caja)){
+            $ventaTotal = Venta::whereBetween('fecha', [$date1.' 00:00:00',$date1.' 23:59:59'])
+                ->where('id_caja',$caja->id_caja)
+                ->where(function ($query) {
+                    $query->where('estatus', '=', null)
+                        ->orWhere('estatus', '=', 'cc');
+                })->sum('costo_total');
+
+            $ventasCreditoMontoPagadoTotal=Venta::where('venta.id_caja',$caja->id_caja)
+                ->where(function ($query) {
+                    $query->where('venta.estatus', '=', 'cv');
+                })->join('venta_credito', 'venta.id_venta', '=', 'venta_credito.id_venta')
+                ->whereBetween('venta_credito.fecha', [$date1.' 00:00:00',$date1.' 23:59:59'])
+                ->sum('venta_credito.monto');
+            $ventasCreditoTotal=Venta::where('id_caja',$caja->id_caja)
+                ->where('estatus', '=', 'cv')
+                ->whereBetween('fecha', [$date1.' 00:00:00',$date1.' 23:59:59'])
+                ->sum('costo_total');
+            $montoApertura=CajaChica::where('id_caja',$caja->id_caja)
+                ->whereBetween('fecha_apertura', [$date1.' 00:00:00',$date1.' 23:59:59'])
+                ->sum('monto_apertura');
+            $gastosTotal=Gasto::where('id_caja',$caja->id_caja)
+                ->whereBetween('fecha', [$date1.' 00:00:00',$date1.' 23:59:59'])
+                ->sum('monto');
+
+            $resumenCaja = [
+                'caja' => $caja->nombre,
+                'ventas_total' => (float)$ventaTotal,
+                'ventas_credito_monto_pagado_total' => (float)$ventasCreditoMontoPagadoTotal,
+                'ventas_credito_total' => (float)$ventasCreditoTotal,
+                'gastos_total' => (float)$gastosTotal,
+                'monto_apertura' => (float)$montoApertura
+            ];
+        }
+        return $resumenCaja;
     }
     public static function closedAndOpenCashier($parameters){
         $caja = Caja::where('id_empleado',auth()->user()->id_empleado)->first();

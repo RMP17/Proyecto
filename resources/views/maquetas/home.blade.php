@@ -40,10 +40,12 @@
                                 <!-- Column -->
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <div class="box bg-cyan text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-cart-outline"></i></h1>
-                                            <h6 class="text-white">Compras</h6>
-                                        </div>
+                                        <a href="{{url ('compra')}}">
+                                            <div class="box bg-cyan text-center">
+                                                <h1 class="font-light text-white"><i class="mdi mdi-cart-outline"></i></h1>
+                                                <h6 class="text-white">Compras</h6>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <!-- Column -->

@@ -91,7 +91,7 @@ class CompraControlador extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-        $compras = Compra::getComprasByRageDate($d1, $d2);
+        $compras = Compra::getComprasByRageDate($dates['date_start'], $dates['date_end']);
         return response()->json($compras);
     }
     public function getPurchasesOnCreditInForce()

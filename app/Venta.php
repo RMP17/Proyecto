@@ -29,7 +29,7 @@ class Venta extends Model
         'id_caja',
         'id_empleado',
         'id_almacen',
-        // null=vensta en efectivo; cv= credito vigente; cc= credito cancelado; vc=venta cancelada
+        // null=venta en efectivo; cv= credito vigente; cc= credito cancelado; vc=venta cancelada
         'estatus',
 	];
     public function detallesVenta(){

@@ -24,14 +24,7 @@ class GastoPeticion extends FormRequest
     public function rules()
     {
         return [
-            'txtMonto' => 'required',
+            'monto' => 'required|numeric|min:1',
         ];
     }
-	
-	public function messages()
-	{
-		return [
-			'txtMonto.required' => 'Debe especificar un monto de gasto.',
-		];
-	}
 }

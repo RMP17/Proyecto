@@ -3,7 +3,20 @@ var appCompra = new Vue({
     data: {
         caja: {
             hideSuggestions:false,
+            summary:null,
             data: [],
+            registro:{
+                data:[],
+                paginated: {
+                    size: 15,
+                    pageNumber: 0,
+                },
+                data_with_filters:[],
+                hideFilters:false,
+                filters:{
+                    caja:'',
+                },
+            },
             oneCaja:null,
             attributes: {
                 id_caja:null,
@@ -24,7 +37,37 @@ var appCompra = new Vue({
                 monto:null,
                 diferencia:null,
                 observaciones:null,
-            }
+            },
+            gasto: {
+                hideFilters:false,
+                attributes: {
+                    id: null,
+                    monto: null,
+                    descripcion: ''
+                },
+                model: {
+                    id: null,
+                    monto: null,
+                    descripcion: ''
+                },
+                data:[],
+                data_with_filters:[],
+                paginated: {
+                    size: 15,
+                    pageNumber: 0,
+                },
+                filters:{
+                    empleado:'',
+                    almacen:'',
+                    cliente:''
+                },
+            },
+        },
+        configCaja:{
+            url:urlGlobal.suggestionsOfCajas,
+            placeholder:'Nombre de la Caja',
+            variableForSuggestions:'nombre',
+            variableForSuggestionsId:'id_caja'
         },
         configEmpleado:{
             url:urlGlobal.simpleSuggestionsEmpleados,
@@ -37,9 +80,11 @@ var appCompra = new Vue({
         this.$nextTick(function () {
             this.getCajas();
             this.getCaja();
+            this.getSummary();
         })
     },
     methods: {
+        //<editor-fold desc="Methods of Caja">
         submitFormCaja(){
             if (!this.caja.attributes.id_caja) {
                 this.registerCaja();
@@ -126,13 +171,109 @@ var appCompra = new Vue({
                 this.notificationErrors2(errors);
             });
         },
+        //</editor-fold>,
+        getSummary(){
+            axios.get(urlGlobal.getSummary
+            ).then(response => {
+                this.caja.summary = response.data;
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
+        getCajaChicaByRangeDate(event){
+            axios.post(urlGlobal.getCajaChicaByRangeDate, event
+            ).then(response => {
+                this.caja.registro.data = response.data;
+                this.caja.registro.data_with_filters = this.caja.registro.data;
+                this.caja.registro.paginated.pageNumber = 0;
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
+
+        submitFormGasto(){
+            let inputs = Object.assign({},this.caja.gasto.attributes);
+            axios.post(urlGlobal.resourcesGasto, inputs
+            ).then(response => {
+                Object.assign(this.caja.gasto.attributes, this.caja.gasto.model);
+                this.notificationSuccess();
+            }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
+        getGastosByRangeDate(event){
+            axios.post(urlGlobal.getGastoByRangeDate, event
+            ).then(response => {
+                this.caja.gasto.data = response.data;
+                this.caja.gasto.data_with_filters = this.caja.gasto.data;
+                this.caja.gasto.paginated.pageNumber = 0;
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
+
+        //<editor-fold desc="Methods of Filters">
+        filterByEmpleado(empleado){
+            if(empleado && empleado.nombre) {
+                this.caja.gasto.filters.empleado = empleado.nombre;
+                this.goThroughFilters();
+            }
+        },
+        filterByCaja(caja){
+            if(caja && caja.nombre) {
+                this.caja.registro.filters.caja = caja.nombre;
+                this.registerOfBoxesPassGoThroughFilters();
+            }
+        },
+        removeFilters(){
+            this.caja.gasto.filters.empleado='';
+            this.caja.gasto.hideFilters = true;
+            this.caja.gasto.paginated.pageNumber = 0;
+            setTimeout(()=>this.caja.gasto.hideFilters = false,1);
+            this.goThroughFilters();
+        },
+        removeFiltersOfCaja(){
+            this.caja.registro.filters.caja='';
+            this.caja.registro.hideFilters = true;
+            this.caja.registro.paginated.pageNumber = 0;
+            setTimeout(()=>this.caja.registro.hideFilters = false,1);
+            this.registerOfBoxesPassGoThroughFilters();
+        },
+        goThroughFilters(){
+            let filtered_data = this.caja.gasto.data;
+            if(this.caja.gasto.filters.empleado.length>0){
+                filtered_data = filtered_data.filter( _empleado =>{
+                    return _empleado.empleado === this.caja.gasto.filters.empleado;
+                });
+            }
+            this.caja.gasto.paginated.pageNumber = 0;
+            this.caja.gasto.data_with_filters=filtered_data;
+        },
+        registerOfBoxesPassGoThroughFilters(){
+            let filtered_data = this.caja.registro.data;
+            if(this.caja.registro.filters.caja.length>0){
+                filtered_data = filtered_data.filter( _caja =>{
+                    return _caja.caja === this.caja.registro.filters.caja;
+                });
+            }
+            this.caja.registro.paginated.pageNumber = 0;
+            this.caja.registro.data_with_filters=filtered_data;
+        },
+
+        //</editor-fold>
 
         //<editor-fold desc="Methods paginated">
         nextPage(){
-            this.compra.paginated.pageNumber++;
+            this.caja.gasto.paginated.pageNumber++;
+        },
+        nextPageOfCaja(){
+            this.caja.registro.paginated.pageNumber++;
         },
         prevPage(){
-            this.compra.paginated.pageNumber--;
+            this.caja.gasto.paginated.pageNumber--;
+        },
+        prevPageOfCaja(){
+            this.caja.registro.paginated.pageNumber--;
         },
         //</editor-fold>
 
@@ -222,20 +363,36 @@ var appCompra = new Vue({
 
         exportPdf() {
             const doc = new jsPDF('l','mm', 'letter', true);
-            doc.autoTable({html: '#content'});
+            doc.autoTable({html: '#print-gastos'});
+            doc.save('table.pdf');
+        },
+        exportPdfCajasChicas() {
+            const doc = new jsPDF('l','mm', 'letter', true);
+            doc.autoTable({html: '#print-cajas'});
             doc.save('table.pdf');
         }
     },
     computed: {
         pageCount: function(){
-            let l = this.compra.data_with_filters.length,
-                s = this.compra.paginated.size;
+            let l = this.caja.gasto.data_with_filters.length,
+                s = this.caja.gasto.paginated.size;
             return Math.ceil(l/s);
         },
         paginatedData: function(){
-            const start = this.compra.paginated.pageNumber * this.compra.paginated.size,
-                end = start + this.compra.paginated.size;
-            return this.compra.data_with_filters
+            const start = this.caja.gasto.paginated.pageNumber * this.caja.gasto.paginated.size,
+                end = start + this.caja.gasto.paginated.size;
+            return this.caja.gasto.data_with_filters
+                .slice(start, end);
+        },
+        pageCountOfRegisterBox: function(){
+            let l = this.caja.registro.data_with_filters.length,
+                s = this.caja.registro.paginated.size;
+            return Math.ceil(l/s);
+        },
+        paginatedRegisterBox: function(){
+            const start = this.caja.registro.paginated.pageNumber * this.caja.registro.paginated.size,
+                end = start + this.caja.registro.paginated.size;
+            return this.caja.registro.data_with_filters
                 .slice(start, end);
         }
     }

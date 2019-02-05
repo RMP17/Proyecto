@@ -15,6 +15,7 @@ var urlGlobal={
     resourcesEmpleado:url + 'empleado',
     resourcesEmpresa:url + 'empresa',
     resourcesContacto:url + 'contacto',
+    resourcesGasto:url + 'gasto',
     resourcesSucursal:url + 'sucursal',
     postCompraCredito:url + 'compra/credito',
     postVentaCredito:url + 'venta/credito',
@@ -24,6 +25,7 @@ var urlGlobal={
     getCajas:url + 'cajas',
     closedAndOpenCashier:url + 'caja/closedAndOpenCashier',
     getCaja:url + 'caja/one',
+    getSummary:url + 'caja/summary',
     getPermisos:url + 'permiso',
     resourcesAcceso:url + 'acceso',
     resourcesKardexObservaciones:url + 'kardexObservaciones',
@@ -45,6 +47,8 @@ var urlGlobal={
     getPaisesByName:url + 'pais/query/',
     getComprasByRageDate:url + 'compra/date_range',
     getVentasByRageDate:url + 'venta/date_range',
+    getGastoByRangeDate:url + 'gasto/date_range',
+    getCajaChicaByRangeDate:url + 'caja/caja-chica/date_range',
     getPurchasesOnCreditInForce:url + 'compra/creditos',
     getSalesOnCreditInForce:url + 'venta/creditos',
     cancelSale:url + 'venta/cancel/',
@@ -55,6 +59,7 @@ var urlGlobal={
     suggestionsOfCiudades:url + 'ciudades/',
     suggestionsOfProveedores:url + 'proveedores/',
     suggestionsOfContactos:url + 'contacto/suggestions/',
+    suggestionsOfCajas:url + 'caja/suggestions/',
     simpleSuggestionsEmpleados:url + 'empleado/suggestions/',
     addCiudadToPais:url + 'pais/add-ciudad/',
     addSucursalToEmpresa:url + 'empresa/add-suscursal/',
@@ -77,7 +82,7 @@ Vue.component('app-online-suggestions',{
     @mouseleave="mouseOverSuggestions=false"
     >
     <!--(mouseout)="mouseOverSuggestions = false;"-->
-    <input type="text" class="form-control" ref="suggestionInput"
+    <input type="text" class="form-control" ref="suggestionInput" autocomplete="off"
            @input='change($event.target.value)'
            @keydown.enter='enter($event)'
            @keydown.tab='tab'
@@ -346,7 +351,7 @@ Vue.component('app-online-suggestions-objects',{
     @mouseleave="mouseOverSuggestions=false"
     >
     <!--(mouseout)="mouseOverSuggestions = false;"-->
-    <input type="text" class="form-control" ref="suggestionInput"
+    <input type="text" class="form-control" ref="suggestionInput" autocomplete="off"
            @input='change($event.target.value)'
            @keydown.enter='enter($event)'
            @keydown.tab='tab'

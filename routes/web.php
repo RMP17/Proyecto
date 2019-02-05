@@ -48,6 +48,9 @@ Route::prefix('cliente')->group(function () {
 });
 Route::prefix('caja')->group(function () {
     Route::get('one', 'CajaControlador@getCaja');
+    Route::post('caja-chica/date_range', 'CajaChicaControlador@getCajaChicaByRangeDate');
+    Route::get('summary', 'CajaControlador@getSummary');
+    Route::get('suggestions/{query}', 'CajaControlador@simpleSuggestionsCajas');
     Route::patch('closedAndOpenCashier', 'CajaControlador@closedAndOpenCashier');
     Route::get('nit/{nit}', 'ClienteControlador@getClientByNit');
 });
@@ -67,6 +70,9 @@ Route::prefix('venta')->group(function () {
     Route::patch('cancel/{id_venta}', 'VentaControlador@cancelSale');
     Route::post('credito', 'VentaCreditoController@store');
     Route::post('date_range', 'VentaControlador@getVentasByRageDate');
+});
+Route::prefix('gasto')->group(function () {
+    Route::post('date_range', 'GastoControlador@getGastoByRangeDate');
 });
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');
@@ -94,7 +100,7 @@ Route::resources([
 	'articulo' => 'ArticuloControlador',
 	'acceso' => 'AccesoController',
 	'caja' => 'CajaControlador',
-	'cajachica' => 'CajaChicaControlador',
+	/*'cajachica' => 'CajaChicaControlador',*/
 	'cargo' => 'CargoControlador',
 	'categoria' => 'CategoriaControlador',
 	'ciudad' => 'CiudadControlador',

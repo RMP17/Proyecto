@@ -75,4 +75,14 @@ class CajaControlador extends Controller
         }
         return response()->json();
 	}
+	public function getSummary(Request $request)
+	{
+        $resumen = Caja::getSummary();
+        return response()->json($resumen);
+	}
+	public function simpleSuggestionsCajas($query)
+	{
+        $cajas = Caja::simpleSuggestionsCajas($query);
+        return response()->json($cajas);
+	}
 }

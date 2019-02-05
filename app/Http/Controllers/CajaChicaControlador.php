@@ -8,36 +8,14 @@ use Allison\CajaChica;
 use Allison\Sucursal;
 use Allison\Empleado;
 use DB;
+use Carbon\Carbon;
 
 class CajaChicaControlador extends Controller
 {
    
    public function index()
 	{
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$caja_chica = DB::table('caja_chica as c')
-				->join('empleado as e', 'e.id_empleado','=','c.id_empleado')
-				->join('sucursal as s', 's.id_sucursal', '=', 'c.id_sucursal')
-				->orderBy('c.fecha_cierre', 'asc')
-				->select('c.id_caja_chica as id_caja_chica',
-						'c.fecha_apertura as fecha_apertura',
-						'c.fecha_cierre as fecha_cierre',
-						'c.monto_apertura as monto_apertura',
-						'c.monto_estado as monto_estado',
-						'c.monto_declarado as monto_declarado',
-						'c.observaciones as observaciones',
-						'c.id_sucursal as id_sucursal',
-						'c.id_empleado as id_empleado',
-						's.nombre as sucursal',
-						'e.nombre as empleado' )
-				->get();
-			$sucursales = Sucursal::orderBy('nombre', 'asc')
-				->get();
 
-		}
-        return view('cajachica.index', compact('caja_chica', 'consulta', 'sucursales'));
 	}
 	
 	public function create()
@@ -88,6 +66,24 @@ class CajaChicaControlador extends Controller
 		$caja_chica -> observaciones = $peticion -> get('txtObservaciones');
 		$caja_chica->update();
 		return Redirect :: to ('cajachica');
+	}
+	public function getCajaChicaByRangeDate(Request $request)
+	{
+        $dates = ['date_start' => $request['date1'], 'date_end'=> $request['date2']];
+        $validator = validator()->make($dates, [
+            'date_start' => ['required', 'date_format:Y-m-d'],
+            'date_end' => ['required', 'date_format:Y-m-d'],
+        ]);
+        $d1 = Carbon::parse($dates['date_start']);
+        $d2 = Carbon::parse($dates['date_end']);
+        if ($d1 > $d2) {
+            return response()->json(['errors' => 'Fecha de inicio debe ser menor o igual a la fecha final'],400);
+        }
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $cajasChicas = CajaChica::getCajaChicaByRangeDate($dates['date_start'], $dates['date_end']);
+		return response()->json($cajasChicas);
 	}
 }
 

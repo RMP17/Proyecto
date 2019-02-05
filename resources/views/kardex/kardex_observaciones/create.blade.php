@@ -1,27 +1,20 @@
-<form @submit.prevent="submitFormAcceso">
+<form @submit.prevent="submitFormKardexObservaciones">
+	<input type="hidden" id="cbxKardex" name="cbxKardex" >
 	<div class="form-group row">
-		<div class="col">
-			<label for="txtUsuario">Usuario</label>
-			<input type="text"
-				   class="form-control"
-				   id="txtUsuario"
-				   v-model="acceso.attributes.usuario"
-				   placeholder="Nombre de Usuario">
-		</div>
-		<div class="col">
-			<label for="txtUsuario">Contraseña</label>
+		<label for="txtObservacion" class="col-sm-2 text-right control-label col-form-label">Observación : </label>
+		<div class="col-sm-6">
 			<input type="text"
 				   class="form-control"
 				   id="txtObservacion"
-				   v-model="acceso.attributes.pass"
-				   placeholder="Contraseña">
+				   v-model="kardex.kardex_observaciones.attributes.observacion"
+				   placeholder="La observación aquí" name="txtObservacion">
 		</div>
-		<div class="col">
-			<label class="invisible">-</label>
-            <button v-if="!acceso.attributes.id_empleado" type="submit" class="btn btn-primary w-100">Registrar</button>
-            <div v-else>
-                <button type="submit" class="btn btn-primary w-100">Actualizar</button>
-            </div>
-        </div>
+		<div class="col-sm-4">
+			<button v-if="!kardex.kardex_observaciones.attributes.id_kardex_observaciones" type="submit" class="btn btn-primary">Registrar</button>
+			<div v-else>
+				<button type="submit" class="btn btn-primary">Actualizaar</button>
+				<button type="button" class="btn btn-warning" @click="cancelModeEditKardexObserbacion" >Cancelar</button>
+			</div>
+		</div>
 	</div>
 </form>

@@ -14,22 +14,23 @@
 								   href="#nav-caja-tab"
 								   role="tab"
 								   aria-controls="nav-profile"
-								   aria-selected="false">Ver Cajas</a>
-								<a class="nav-item nav-link w-10em"
+                                   aria-selected="false">Ver Cajas</a>
+                                <a class="nav-item nav-link w-10em"
+                                   id="nav-registro-caja-tab"
+                                   title="Registro de caja"
+                                   data-toggle="tab"
+                                   href="#nav-registro-caja"
+                                   role="tab"
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">R. de Caja</a>
+                                <a class="nav-item nav-link w-10em"
 								   id="nav-gasto"
 								   data-toggle="tab"
 								   href="#nav-gasto-tab"
 								   role="tab"
 								   aria-controls="nav-profile"
-								   aria-selected="false">Gastos</a>
+                                   aria-selected="false">Gastos</a>
 								{{--<a class="nav-item nav-link w-10em"
-								   id="nav-profile-tab"
-								   data-toggle="tab"
-								   href="#nav-empresa"
-								   role="tab"
-								   aria-controls="nav-profile"
-								   aria-selected="false">Empresa</a>
-								<a class="nav-item nav-link w-10em"
 								   id="nav-profile-tab"
 								   data-toggle="tab"
 								   href="#nav-almacen"
@@ -79,11 +80,40 @@
 											<div class="card border-0">
 												<div class="card-body pr-0">
 													<h5 class="card-title text-center">Caja Chica</h5>
-													<a href data-target="#modal-registro-caja" data-toggle="modal"
-													   title="Ver Resumen de Caja">
-														<button type="button"
-																class="btn btn-outline-success btn-sm"><i class="fas fa-dollar-sign fa-lg"></i></button>
-													</a>
+													<div v-if="caja.summary">
+														<div class="col-md-12 form-control">
+															<h4 class="m-0">
+																Monto Apertura de la @{{ caja.summary.caja }} :  <span class="float-right">@{{ caja.summary.monto_apertura }}</span>
+															</h4>
+														</div>
+														<div class="col-md-12 form-control">
+															<h4 class="m-0">
+																Total Ventas:  <span class="float-right">@{{ caja.summary.ventas_total }}</span>
+															</h4>
+														</div>
+														<div class="col-md-12 form-control">
+															<h4 class="m-0">
+																Total Pagos de Ventas al Créditos : <span class="float-right">@{{ caja.summary.ventas_credito_monto_pagado_total }}</span>
+															</h4>
+														</div>
+														<div class="col-md-12 form-control">
+															<h4 class="m-0">
+																Total Gastos: <span class="float-right">@{{ caja.summary.gastos_total }}</span>
+															</h4>
+														</div>
+														<div class="col-md-12 form-control mb-3 bg-success text-white">
+															<h4 class="m-0">
+																Total :
+																<span class="float-right">@{{ caja.summary.monto_apertura + caja.summary.ventas_total + caja.summary.ventas_credito_monto_pagado_total - caja.summary.gastos_total }}</span>
+															</h4>
+														</div>
+														<hr>
+														<div class="col-md-12 form-control mb-3 bg-warning text-white">
+															<h4 class="m-0" title="Este cálculo no toma en cuenta los pagos realizados de las ventas al créditos">
+																Total Ventas al Crédito : <span class="float-right">@{{ caja.summary.ventas_credito_total }}</span>
+															</h4>
+														</div>
+													</div>
 													@include('cajachica.create')
 												</div>
 											</div>
@@ -91,7 +121,12 @@
 									</div>
 								</div>
 								{{--=========================================END TAP CAJA==========================--}}
-								{{--=========================================TAP GASTOS==========================--}}
+								{{--=========================================TAP REGISTRO CAJAS==========================--}}
+								<div class="tab-pane fade" id="nav-registro-caja" role="tabpanel" aria-labelledby="nav-contact-tab">
+									@include('cajachica.show')
+								</div>
+								{{--=========================================END TAP REGISTRO DE CAJAS==================================--}}
+                                {{--=========================================TAP GASTOS==========================--}}
 								<div class="tab-pane fade" id="nav-gasto-tab" role="tabpanel" aria-labelledby="nav-contact-tab">
 									@include('cajachica.gasto.show')
 								</div>

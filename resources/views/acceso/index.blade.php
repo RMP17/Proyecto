@@ -1,4 +1,4 @@
-@include('kardex.kardex_observaciones.create')
+@include('acceso.create')
 <div class="col-auto text-center">
     <button class="btn btn-primary" @click="changePermisos(1)" style="width: 132px">
         Seleccionar todo
