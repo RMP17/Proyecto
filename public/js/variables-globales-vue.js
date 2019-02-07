@@ -1,4 +1,4 @@
-const url = 'http://127.0.0.1:3000/Proyecto/public/';
+const url = 'http://localhost/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesPais:url + 'pais',
