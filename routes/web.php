@@ -41,6 +41,7 @@ Route::get('empleado/suggestions/{query}', 'EmpleadoControlador@simpleSuggestion
 Route::get('kardex/{id_empleado}', 'KardexControlador@getKardesEmpleado');
 Route::get('contacto/suggestions/{query}', 'ContactoControlador@getContactosForSuggestion');
 Route::get('cajas', 'CajaControlador@getCajas');
+Route::get('cortes', 'CortesControlador@index');
 
 Route::prefix('cliente')->group(function () {
     Route::get('suggestions/{query}', 'ClienteControlador@suggestionsClients');
