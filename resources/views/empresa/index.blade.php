@@ -33,7 +33,7 @@
                 </a>
                 <a href="javascript:void(0)"
                    title="Ver Sucursales"
-                   @click="seeSucursalesOfEmpresa(_empresa.sucursales, _empresa.id_empresa)"
+                   @click="seeSucursalesOfEmpresa(_empresa)"
                    data-backdrop="static"
                    data-keyboad="false"
                    data-target="#modal-sucursales"
@@ -104,7 +104,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pt-1 pr-1">Sucursales</h4>
+                <h4 class="modal-title pt-1 pr-1">Sucursales de @{{ empresa.oneEmpresa ? empresa.oneEmpresa.razon_social:'' }}</h4>
 
                 <a v-show="!empresa_sucursal.modeEdit" href
                    data-toggle="modal"

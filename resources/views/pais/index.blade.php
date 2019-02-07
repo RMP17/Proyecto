@@ -10,19 +10,20 @@
                             </div>
                         </div>
                         <div class="row ">
-                        <div class="col-md-2 offset-10 pl-0">
-                            <app-online-suggestions :config="pais.config"
-                                                    @selected-suggestion-event="getPaisById">
-                            </app-online-suggestions>
+                            <div class="col-md-4 offset-6 pl-0">
+                                <app-online-suggestions :config="pais.config"
+                                                        @selected-suggestion-event="getPaisById">
+                                </app-online-suggestions>
+                            </div>
+                            <div class="col-md-2 pl-0">
+                                <button class="btn btn-outline-secondary w-100" @click="getPaises">Ver todos los países</button>
+                            </div>
                         </div>
-                        </div>
-                        <table class="table table-sm">
+                        <table class="table table-striped table-bordered table-sm">
                             <thead>
                             <tr>
-                                <th scope="col" width="1%">#</th>
+                                <th scope="col" width="2%">#</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Ciudades</th>
-                                <th scope="col">Agregar Nueva Ciudad</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
@@ -30,19 +31,6 @@
                             <tr v-for="(_pais, index) in pais.data">
                                 <th scope="row">@{{ index+1 }}</th>
                                 <td scope="row">@{{ _pais.nombre }}</td>
-                                <td scope="row">
-                                    <span v-for="ciudad in _pais.ciudades">@{{ ciudad.nombre }}<br></span>
-                                </td>
-                                <td width="35%">
-                                    <form @submit.prevent="addCiudadToPais(_pais)">
-                                        <div class="input-group date">
-                                            <input type="text" placeholder="Nombre de la Ciudad"
-                                                   class="form-control" v-model="pais.ciudad">
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-outline-success btn-sm">Registrar</button></div>
-                                        </div>
-                                    </form>
-                                </td>
                                 <td>
                                     <a href="javascript:void(0)"
                                        @click="modeEditPais(_pais)"
@@ -53,18 +41,16 @@
                                        type="button" class="btn btn-warning btn-sm">
                                         <i class="mdi mdi-pencil"></i>
                                     </a>
-                                    {{--
-                                     <a title="Ver ciudades" href="{{URL::action('CiudadControlador@show', $p -> id_pais)}}">
-                                        <button type="button" class="btn btn-dark btn-sm"><i class="mdi mdi-plus-circle"></i></button>
+                                    <a href="javascript:void(0)"
+                                       @click="showCities(_pais)"
+                                       data-backdrop="static"
+                                       data-keyboad="false"
+                                       data-target="#modal-cities"
+                                       data-toggle="modal"
+                                       type="button" class="btn btn-info btn-sm">
+                                        <i class="mdi mdi-city"></i>
                                     </a>
-                                    @if ($p -> nombre != 'Bolivia' && $p -> nombre != 'Estados Unidos')
-
-
-                                        <a title="Eliminar " href="" data-target="#modal-delete-pais-{{$p -> id_pais}}" data-toggle="modal">
-                                            <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete-forever"></i></button>
-                                        </a>
-                                    @endif
-                                --}}</td>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -90,6 +76,44 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEdit"> Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{--===============================================Modal Show Cities======================================--}}
+    <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog"
+         tabindex="-1"
+         @keydown.esc="cancelModeEditCiudad"
+         id="modal-cities">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title pt-1 pr-1">Ciudades de @{{  pais.onePais? pais.onePais.nombre:'' }}</h4>
+                    <a v-show="!pais.ciudad.modeEdit" href
+                       data-toggle="modal"
+                       class="btn btn-outline-dark w-10em"
+                       @click="pais.ciudad.modeCreate=!pais.ciudad.modeCreate"
+                    >
+                        <span v-show="!pais.ciudad.modeCreate">Nueva</span>
+                        <span v-show="pais.ciudad.modeCreate">Ver</span>
+                    </a>
+
+                    <button type="button" class="close"
+                            @click="cancelModeEditCiudad"
+                            data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                    </button>
+                </div>
+                <div class="modal-body pb-0">
+                    <div v-if="!pais.ciudad.modeCreate">
+                        @include('pais.ciudad.show')
+                    </div>
+                    <div v-else>
+                        @include('pais.ciudad.create')
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditCiudad"> Cerrar</button>
                 </div>
             </div>
         </div>

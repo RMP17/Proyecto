@@ -64,7 +64,7 @@ class CajaControlador extends Controller
 	public function closedAndOpenCashier(Request $request)
 	{
         $validator = Validator::make($request->all(), [
-            'monto' => 'required|min:1|numeric',
+            'monto' => 'required|min:0|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);

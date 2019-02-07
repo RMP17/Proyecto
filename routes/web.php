@@ -77,7 +77,7 @@ Route::prefix('gasto')->group(function () {
 Route::prefix('pais')->group(function () {
     Route::get('query/{query}', 'PaisControlador@searchPais');
     Route::get('id/{id}', 'PaisControlador@getPaisById');
-    Route::post('add-ciudad/{id}', 'PaisControlador@addCiudadToPais');
+    Route::post('add-ciudad', 'PaisControlador@addCiudadToPais');
 });
 Route::prefix('articulo')->group(function () {
     Route::get('all', 'ArticuloControlador@getArticulos');
@@ -126,11 +126,10 @@ Route::resources([
 	'kardexObservaciones' => 'KardexObservacionesControlador',
 	]);
 
-/*// Rutas de control con peticiones ajax
 Route::get('fabricantes', 'FabricanteControlador@getAllFabricantes');
 
 Route::get('categorias', 'CategoriaControlador@getAllCategorias');
-
+/*
 Route::get('almacenes/{id_sucursal}', 'AlmacenControlador@AlmacenesPorSucursal');
 Route::get('empleados/{id_sucursal}', 'EmpleadoControlador@EmpleadosPorSucursal');
 Route::get('subcategorias/{id_categoria}', 'SubcategoriaControlador@SubcategoriasPorCategoria');
