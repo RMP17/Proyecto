@@ -116,7 +116,6 @@
                                     @endphp
                                 </span>
                             </div>
-
                             <a class="dropdown-item" href="{{url ('logout')}}"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"
@@ -211,7 +210,6 @@
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
->>>>>>> medidas
             </div>
         </nav>
     </header>
