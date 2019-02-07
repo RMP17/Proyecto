@@ -46,21 +46,12 @@ class CiudadControlador extends Controller
 	
 	public function update(CiudadPeticion $peticion, $id_ciudad)
 	{
-		$ciudad = Ciudad :: findOrFail($id_ciudad);
-		$ciudad -> nombre = $peticion -> get('txtNombre');
-		$ciudad->update();
-		$id_pais=$peticion -> get('txtIdPais');
-		return Redirect :: to ('ciudad/'.$id_pais);
+        $ciudad = Ciudad::findOrFail($id_ciudad);
+        $ciudad->fill($peticion->all());
+        $ciudad->update();
+		return response()->json();
 	}
-	public function destroy($id_ciudad)
-	{
-		//$peticion= new CiudadPeticion;
-		$ciudad = Ciudad :: findOrFail($id_ciudad);
-		\DB::table('ciudad')->where('id_ciudad', '=', $id_ciudad)->delete();
-		//$id_pais=$peticion -> get('txtIdPais');
-		return Redirect :: to ('pais');
-	}
-	
+
 	public function suggestionsOfCiudades($query)
 	{
 		return response()->json((new Ciudad())->suggestionsOfCiudades($query));

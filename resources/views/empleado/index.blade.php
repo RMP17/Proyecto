@@ -62,7 +62,7 @@
                     <i class="far fa-file-alt"></i>
                 </a>
                 <a href="javascript:void(0)"
-                   title="Ver Kardex"
+                   title="Cuenta de Usuario"
                    @click="getAccesoOf(_empleado)"
                    data-backdrop="static"
                    data-keyboad="false"

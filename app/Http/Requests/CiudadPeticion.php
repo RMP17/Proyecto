@@ -24,16 +24,16 @@ class CiudadPeticion extends FormRequest
     public function rules()
     {
        return [
-            'txtNombre' => 'required|max:50',
-			'txtIdPais' => 'required',
+            'nombre' => 'required|max:50',
+			'id_pais' => 'required',
         ];
     }
 	
 	public function messages()
     {
         return [
-            'txtNombre.required' => 'Debe ingresar el nombre de la ciudad que desea registrar',
-			'txtIdPais.required' => 'Error de referencia con el país',
+            'nombre' => 'required|max:50',
+            'id_pais' => 'required',
         ];
     }
 }

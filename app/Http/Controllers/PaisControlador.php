@@ -17,17 +17,15 @@ class PaisControlador extends Controller
 		
 	}
 	
-	public function index(Request $peticion)
+	public function index()
 	{
-		
-		if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$paises = Pais::where('nombre', 'like', '%'.$consulta.'%')
-				->orderBy('nombre', 'asc')
-				->paginate(10);
-			return view('pais.index', compact('paises', 'consulta'));
-		}
+        $paises = Pais::all();
+        if(count($paises)>0) {
+            foreach ($paises as $pais){
+                $pais->ciudades;
+            }
+        }
+        return response()->json($paises);
 	}
 	
 	public function store(Request $peticion)
@@ -86,7 +84,7 @@ class PaisControlador extends Controller
         $array[] = $pais;
 	    return response()->json($array);
 	}
-	public function addCiudadToPais($id, Request $request)
+	public function addCiudadToPais(Request $request)
 	{
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|max:50',
@@ -94,12 +92,12 @@ class PaisControlador extends Controller
         if($validator->fails()) {
             return response()->json($validator->errors(), 400);
         };
-	    $pais = Pais::findOrfail($id);
+	    $pais = Pais::find($request['id_pais']);
 	    if(!is_null($pais)) {
 	        $ciudad = new Ciudad();
             $ciudad->fill($request->all());
 	        $pais->ciudades()->save($ciudad);
         }
-	    return response()->json();
+	    return response()->json($ciudad);
 	}
 }

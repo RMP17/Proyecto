@@ -11,6 +11,7 @@ var appConfig = new Vue({
             modeCreate: false,
             modeEdit: false,
             errors: [],
+            onePais:null,
             data: [],
             suggestionData: [],     //Estos datos se cargar desde variables-globales-vue.js
             attributes: {
@@ -21,7 +22,26 @@ var appConfig = new Vue({
                 id_pais:null,
                 nombre: '',
             },
-            ciudad:''
+            ciudad:{
+                modeCreate:false,
+                modeEdit:false,
+                data:[],
+                attributes:{
+                    id_ciudad:null,
+                    nombre:'',
+                    id_pais:null
+                },
+                tempAttributes:{
+                    id_ciudad:null,
+                    nombre:'',
+                    id_pais:null
+                },
+                model:{
+                    id_ciudad:null,
+                    nombre:'',
+                    id_pais:null
+                }
+            }
         },
         moneda:{
             hideSuggestions:false,
@@ -122,6 +142,7 @@ var appConfig = new Vue({
         },
         empresa: {
             data: [],
+            oneEmpresa:null,
             attributes: {
                 id_empresa:null,
                 razon_social:'',
@@ -283,6 +304,7 @@ var appConfig = new Vue({
             this.getAlmacen();
             this.getEmpleados();
             this.getPermisos();
+            this.getPaises();
         })
     },
     methods: {
@@ -344,20 +366,58 @@ var appConfig = new Vue({
                 });
             }
         },
-        addCiudadToPais(pais) {
-            console.log(pais);
-            axios.post(urlGlobal.addCiudadToPais + pais.id_pais, {nombre: this.pais.ciudad}
+        getPaises() {
+            axios.get(urlGlobal.resourcesPais
             ).then(response => {
-                pais.ciudades.push({nombre: this.pais.ciudad});
-                this.pais.ciudad = '';
+                this.pais.data = response.data;
             }).catch(errors => {
                 console.log(errors);
             });
+        },
+        submitFormCiudad(){
+            if (!this.pais.ciudad.attributes.id_ciudad) {
+                this.addCiudadToPais();
+            } else {
+                this.updateCiudad();
+            }
+        },
+        addCiudadToPais() {
+            let inputs = Object.assign({},this.pais.ciudad.attributes);
+            inputs.id_pais=this.pais.onePais.id_pais;
+            axios.post(urlGlobal.addCiudadToPais, inputs
+            ).then(response => {
+                inputs.id_ciudad=response.data.id_ciudad;
+                this.pais.onePais.ciudades.push(inputs);
+                this.pais.ciudad.attributes = Object.assign({},this.pais.ciudad.model);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors2(errors);
+            });
 
+        },
+        updateCiudad() {
+            let inputs = Object.assign({},this.pais.ciudad.attributes);
+            axios.put(urlGlobal.resourcesCiudad + '/'+ inputs.id_ciudad, inputs)
+                .then(response => {
+                    Object.assign(this.pais.ciudad.tempAttributes ,this.pais.ciudad.attributes);
+                    this.pais.ciudad.attributes = Object.assign({},this.pais.ciudad.model);
+                    this.pais.ciudad.tempAttributes = Object.assign({},this.pais.ciudad.model);
+                    this.notificationSuccess();
+                    this.cancelModeEditCiudad();
+                }).catch(errors => {
+                this.notificationErrors(errors);
+            });
         },
         modeEditPais(pais) {
             this.pais.tempAttributes = pais;
             this.pais.attributes = Object.assign({}, pais);
+        },
+        modeEditCiudad(ciudad) {
+            this.pais.ciudad.modeCreate=true;
+            this.pais.ciudad.modeEdit=true;
+            this.pais.ciudad.tempAttributes = ciudad;
+            this.pais.ciudad.attributes = Object.assign({}, ciudad);
         },
         cancelModeEdit() {
             this.pais.attributes = new Object({
@@ -370,6 +430,19 @@ var appConfig = new Vue({
             });
         },
         //</editor-fold>
+
+        cancelModeEditCiudad(){
+            this.pais.ciudad.attributes = Object.assign({},this.pais.ciudad.model);
+            this.pais.ciudad.tempAttributes = Object.assign({},this.pais.ciudad.model);
+            this.pais.ciudad.modeEdit = false;
+            this.pais.ciudad.modeCreate = false;
+        },
+
+        showCities(pais) {
+            this.pais.ciudad.data = pais.ciudades;
+            this.pais.onePais = pais;
+        },
+
 
         //<editor-fold desc="Methods Moneda">
         submitFormMoneda() {
@@ -735,9 +808,10 @@ var appConfig = new Vue({
                 }
             }
         },
-        seeSucursalesOfEmpresa(sucursales, id_empresa) {
-            this.empresa_sucursal.sucursales = sucursales;
-            this.empresa_sucursal.attributes.id_empresa = id_empresa;
+        seeSucursalesOfEmpresa(empresa) {
+            this.empresa.oneEmpresa=empresa;
+            this.empresa_sucursal.sucursales = empresa.sucursales;
+            this.empresa_sucursal.attributes.id_empresa = empresa.id_empresa;
         },
         changeModeEditEmpresaSucursal(sucursal){
             console.log(sucursal);
@@ -902,7 +976,6 @@ var appConfig = new Vue({
             axios.get(urlGlobal.resourcesEmpleado
             ).then(response => {
                 this.empleado.data = response.data;
-                console.log(response.data);
             }).catch(errors => {
                 console.log('errors');
             });

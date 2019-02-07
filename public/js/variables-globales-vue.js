@@ -1,7 +1,8 @@
-const url = 'http://127.0.0.1:3000/Proyecto/public/';
+const url = 'http://192.168.1.8:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesPais:url + 'pais',
+    resourcesCiudad:url + 'ciudad',
     resourcesAlmacen:url + 'almacen',
     resourcesCargo:url + 'cargo',
     resourcesCompra:url + 'compra',
@@ -61,7 +62,7 @@ var urlGlobal={
     suggestionsOfContactos:url + 'contacto/suggestions/',
     suggestionsOfCajas:url + 'caja/suggestions/',
     simpleSuggestionsEmpleados:url + 'empleado/suggestions/',
-    addCiudadToPais:url + 'pais/add-ciudad/',
+    addCiudadToPais:url + 'pais/add-ciudad',
     addSucursalToEmpresa:url + 'empresa/add-suscursal/',
 };
 

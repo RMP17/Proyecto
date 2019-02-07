@@ -137,16 +137,18 @@ class Empleado extends Model
 
         foreach ($empleados as $empleado) {
             $kardex = Kardex::where('id_empleado', $empleado->id_empleado)->orderBy('id_kardex','desc')->first();
-            $kardex->kardexObservaciones;
-            $salario = $kardex->salario;
-            if(!is_null($salario)) {
-                $kardex->salario->moneda = Moneda::find($salario->id_moneda)->codigo;
-            } else {
-                $kardex->salario = null;
-            }
+            if(!is_null($kardex)){
+                $kardex->kardexObservaciones;
+                $salario = $kardex->salario;
+                if(!is_null($salario)) {
+                    $kardex->salario->moneda = Moneda::find($salario->id_moneda)->codigo;
+                } else {
+                    $kardex->salario = null;
+                }
+                $empleado->kardex = $kardex;
 
+            }
             $empleado->almacen;
-            $empleado->kardex = $kardex;
             $empleado->edad = $empleado->edad();
         }
 
