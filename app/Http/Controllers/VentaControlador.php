@@ -17,7 +17,7 @@ class VentaControlador extends Controller
 {
     public function __construct()
 	{
-		
+        $this->middleware('permiso_venta', ['only' => ['index']]);
 	}
 	
 	public function index()

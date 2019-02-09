@@ -46,6 +46,7 @@ class Proveedor extends Model
     }
     public function updateProveedor($proveedor, $id){
         $_proveedor = Proveedor::findOrFail($id);
+        Bitacora::insertInBitacora('UPDATE', $_proveedor);
         $_proveedor->fill($proveedor);
         $_proveedor->update();
         return true;

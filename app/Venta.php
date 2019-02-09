@@ -258,6 +258,7 @@ class Venta extends Model
     }
     public static function cancelSale($id_venta) {
         $venta = Venta::find($id_venta);
+        Bitacora::insertInBitacora('DELETE', $venta);
         $venta->estatus='vc';
         $venta->detallesVenta;
         foreach ($venta->detallesVenta as $detalle) {

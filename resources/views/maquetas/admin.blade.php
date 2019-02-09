@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html dir="views" lang="en">
+<html dir="views" lang="es">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
@@ -68,7 +69,7 @@
                     <div class="col-1"></div>
                     <span class="logo-text">
                              <!-- dark Logo text -->
-                             <img src="{{asset('nihil/imagenes/OpenredFont.png')}}" alt="homepage" class="light-logo" />
+                             <img src="{{asset('nihil/imagenes/OpenredFont.png')}}" alt="homepage" class="light-logo"/>
                         </span>
                 </a>
                 <!-- ============================================================== -->
@@ -101,24 +102,20 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">{{ auth()->user()->usuario  }} <i
-                                        class="fa fa-angle-down"></i></span>
+                            <span class="d-none d-md-block">{{ auth()->user()->usuario  }}:
+                                @php
+                                    $caja = Allison\Caja::where('id_empleado',auth()->user()->id_empleado)->first();
+                                    if (!is_null($caja)){
+                                       echo $caja->nombre;
+                                    }
+                                @endphp
+                                <i class="fa fa-angle-down"></i>
+                            </span>
                             <span class="d-block d-md-none"><i class="fa fa-plus"></i></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <div class="dropdown-item">
-                                <span>Caja :
-                                    @php
-                                        $caja = Allison\Caja::where('id_empleado',auth()->user()->id_empleado)->first();
-                                        if (!is_null($caja)){
-                                           echo $caja->nombre;
-                                        }
-                                    @endphp
-                                </span>
-                            </div>
                             <a class="dropdown-item" href="{{url ('logout')}}"
-                               onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                             >Cerrar Sesión</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
@@ -126,10 +123,8 @@
                         </div>
                     </li>
                 </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+            </div>
+        </nav>
     </header>
     <!-- ============================================================== -->
     <!-- End Topbar header -->
@@ -147,7 +142,7 @@
                         <a class="sidebar-link waves-effect waves-dark" href="{{ url('config')  }}"
                            aria-expanded="false"><i
                                     class="mdi mdi-settings"></i><span
-                                    class="hide-menu">Configuraciones </span></a>
+                                    class="hide-menu">Panel de Administración </span></a>
 
                     </li>
                     <li class="sidebar-item">
@@ -172,71 +167,8 @@
                                     class="mdi mdi-square-inc-cash"></i><span class="hide-menu">Cajas</span></a>
                     </li>
                     <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                    href="{{ url('cortes')}}" aria-expanded="false"><i
-                                        class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>
-                    </li>
-                    <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
-                                                href="javascript:void(0)" aria-expanded="false"><i
-                                    class="mdi mdi-receipt"></i><span class="hide-menu">Facturación</span></a>
-                        <ul aria-expanded="false" class="collapse  first-level">
-                            <li class="sidebar-item"><a href="form-basic.html" class="sidebar-link"><i
-                                            class="mdi mdi-note-outline"></i><span
-                                            class="hide-menu"> Form Basic </span></a></li>
-                            <li class="sidebar-item"><a href="form-wizard.html" class="sidebar-link"><i
-                                            class="mdi mdi-note-plus"></i><span
-                                            class="hide-menu"> Form Wizard </span></a></li>
-                        </ul>
-                    </li>
-                    {{--<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-buttons.html" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">Transacciones</span></a></li>--}}
-                    <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
-                                                href="javascript:void(0)" aria-expanded="false"><i
-                                    class="mdi mdi-face"></i><span class="hide-menu">Mediciones </span></a>
-                        <ul aria-expanded="false" class="collapse  first-level">
-                            <li class="sidebar-item"><a href="icon-material.html" class="sidebar-link"><i
-                                            class="mdi mdi-emoticon"></i><span class="hide-menu"> Material Icons </span></a>
-                            </li>
-                            <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i
-                                            class="mdi mdi-emoticon-cool"></i><span class="hide-menu"> Font Awesome Icons </span></a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                                href="pages-elements.html" aria-expanded="false"><i
-                                    class="mdi mdi-pencil"></i><span class="hide-menu">Copia de seguridad</span></a>
-                    </li>
-                    <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
-                                                href="javascript:void(0)" aria-expanded="false"><i
-                                    class="mdi mdi-move-resize-variant"></i><span
-                                    class="hide-menu">Configuraciones </span></a>
-                        <ul aria-expanded="false" class="collapse  first-level">
-                            <li class="sidebar-item"><a href="index2.html" class="sidebar-link"><i
-                                            class="mdi mdi-view-dashboard"></i><span
-                                            class="hide-menu"> Dashboard-2 </span></a></li>
-                            <li class="sidebar-item"><a href="pages-gallery.html" class="sidebar-link"><i
-                                            class="mdi mdi-multiplication-box"></i><span
-                                            class="hide-menu"> Gallery </span></a></li>
-                            <li class="sidebar-item"><a href="pages-calendar.html" class="sidebar-link"><i
-                                            class="mdi mdi-calendar-check"></i><span class="hide-menu"> Calendar </span></a>
-                            </li>
-                            <li class="sidebar-item"><a href="pages-invoice.html" class="sidebar-link"><i
-                                            class="mdi mdi-bulletin-board"></i><span class="hide-menu"> Invoice </span></a>
-                            </li>
-                            <li class="sidebar-item"><a href="pages-chat.html" class="sidebar-link"><i
-                                            class="mdi mdi-message-outline"></i><span
-                                            class="hide-menu"> Chat Option </span></a></li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item"><a class="sidebar-link has-arrow waves-effect waves-dark"
-                                                href="javascript:void(0)" aria-expanded="false"><i
-                                    class="mdi mdi-account-key"></i><span class="hide-menu">Authentication </span></a>
-                        <ul aria-expanded="false" class="collapse  first-level">
-                            <li class="sidebar-item"><a href="authentication-login.html" class="sidebar-link"><i
-                                            class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Login </span></a>
-                            </li>
-                            <li class="sidebar-item"><a href="authentication-register.html" class="sidebar-link"><i
-                                            class="mdi mdi-all-inclusive"></i><span class="hide-menu"> Register </span></a>
-                            </li>
-                        </ul>
+                                                href="{{ url('cortes')}}" aria-expanded="false"><i
+                                    class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>
                     </li>
                 </ul>
             </nav>

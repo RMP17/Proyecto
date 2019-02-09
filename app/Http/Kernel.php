@@ -57,5 +57,11 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \Allison\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'checkstatus' => \Allison\Http\Middleware\CheckStatus::class,
+        'permiso_panel_adm' => \Allison\Http\Middleware\PermisoPanelAdm::class,
+        'permiso_compra' => \Allison\Http\Middleware\PermisoCompra::class,
+        'permiso_venta' => \Allison\Http\Middleware\PermisoVenta::class,
+        'permiso_articulo' => \Allison\Http\Middleware\PermisoArticulo::class,
+        'permiso_caja' => \Allison\Http\Middleware\PermisoCaja::class,
     ];
 }

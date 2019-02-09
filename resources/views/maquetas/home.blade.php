@@ -59,82 +59,33 @@
                                         </a>
                                     </div>
                                 </div>
-                                <!-- Column -->
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <a href="{{url ('empleado')}}">
-                                            <div class="box bg-dark text-center">
-                                                <h1 class="font-light text-white"><i class="mdi mdi-contact-mail"></i></h1>
-                                                <h6 class="text-white">Empleados</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
-                                        <a href="{{url ('cliente')}}">
-                                            <div class="box bg-purple text-center">
-                                                <h1 class="font-light text-white"><i class="mdi mdi-contacts"></i></h1>
-                                                <h6 class="text-white">Clientes</h6>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
-                                        <a href="{{url('cajachica')}}">
+                                        <a href="{{url('caja')}}">
                                             <div class="box bg-danger text-center">
                                                 <h1 class="font-light text-white"><i class="mdi mdi-square-inc-cash"></i></h1>
-                                                <h6 class="text-white">Caja chica</h6>
+                                                <h6 class="text-white">Caja</h6>
                                             </div>
                                         </a>
                                     </div>
                                 </div>
-                                <!-- Column -->
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
-                                        <div class="box bg-warning text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-file-document-box"></i></h1>
-                                            <h6 class="text-white">Facturación</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
-                                        <div class="box bg-theme text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-credit-card-multiple"></i></h1>
-                                            <h6 class="text-white">Transacciones</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Column -->
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
                                         <div class="box bg-teal text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-calculator"></i></h1>
-                                            <h6 class="text-white">Mediciones</h6>
+                                            <h1 class="font-light text-white"><i class="mdi mdi-crop"></i></h1>
+                                            <h6 class="text-white">Cortes</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Column -->
+
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <div class="box bg-indigo text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-database"></i></h1>
-                                            <h6 class="text-white">Copia de seguridad</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Column -->
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
+                                        <a href="{{url('caja')}}">
                                         <div class="box bg-secondary text-center">
                                             <h1 class="font-light text-white"><i class="mdi mdi-wrench"></i></h1>
-                                            <h6 class="text-white">Configuraciones</h6>
+                                            <h6 class="text-white">Panel de Administración</h6>
                                         </div>
+                                        </a>
                                     </div>
                                 </div>
                                 <!-- Column -->
@@ -149,7 +100,7 @@
             <!-- ============================================================== -->
             <!-- Cajas estadísticas -->
             <!-- ============================================================== -->
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
@@ -191,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--}}
             <!-- ============================================================== -->
             <!-- Cajas estadísticas -->
             <!-- ============================================================== -->

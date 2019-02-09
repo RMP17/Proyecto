@@ -35,10 +35,10 @@ class Acceso extends Authenticatable
         return $this->pass;
     }
     public static function newAcceso($parameters_acceso) {
-        $_acceso = new Acceso();
+        $_acceso = new acceso();
         $_acceso->fill($parameters_acceso);
         $_acceso->id_empleado = $parameters_acceso['id_empleado'];
-        $_acceso->pass = $parameters_acceso['pass'];
+        $_acceso->pass = bcrypt($parameters_acceso['pass']);
         $_acceso->estatus = 1;
         $_acceso->save();
         $ids=[];
@@ -48,6 +48,7 @@ class Acceso extends Authenticatable
             }
         }
         $_acceso->permiso()->attach($ids);
+        Bitacora::insertInBitacora('CREATE', $parameters_acceso);
         return true;
     }
 
@@ -65,6 +66,7 @@ class Acceso extends Authenticatable
             }
         }
         $_acceso->permiso()->sync($ids);
+        Bitacora::insertInBitacora('UPDATE', $parameters_acceso);
         return true;
     }
 }

@@ -38,16 +38,19 @@ class CuentaProveedor extends Model
         $cuenta_proveedor = CuentaProveedor::findOrFail($id_cuentaProveedor);
 
         if(!is_null($cuenta_proveedor)) {
+            Bitacora::insertInBitacora('UPDATE', $cuenta_proveedor);
             $cuenta_proveedor->fill($parameters_cuenta);
             $cuenta_proveedor->update();
             return true;
         }
+
         return false;
     }
     public static function deleteCuentaProveedor($id_cuenta) {
         $cuenta_proveedor = CuentaProveedor::findOrFail($id_cuenta);
 
         if(!is_null($cuenta_proveedor)) {
+            Bitacora::insertInBitacora('DELETE', $cuenta_proveedor);
             $cuenta_proveedor->delete();
             return true;
         }

@@ -30,9 +30,11 @@ class Caja extends Model
         $caja = new Caja();
         $caja->fill($parameters);
         $caja->save();
+        Bitacora::insertInBitacora('CREATE', $parameters);
     }
     public static function updateCaja($parameters){
         $caja = Caja::find($parameters['id_caja']);
+        Bitacora::insertInBitacora('UPDATE', $caja);
         $caja->fill($parameters);
         $caja->update();
     }
@@ -141,4 +143,12 @@ class Caja extends Model
             'code'=>400
         ];
     }
+
+    /**
+     * insert in bitacora
+     *
+     * @param  string  $action
+     * @param  string  $descripcion
+     * @void
+     */
 }

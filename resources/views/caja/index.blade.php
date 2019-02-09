@@ -71,12 +71,19 @@
 									 aria-labelledby="nav-profile-tab">
 									<div class="container-fluid">
 										<div class="card-group mb-0 ">
-											<div class="card">
-												<div class="card-body pl-0">
-													<h5 class="card-title text-center">Cajas</h5>
-													@include('caja.show')
+											@php
+												$id_acceso=auth()->user()->id_empleado;
+            									$existsPermission = \DB::table('permiso_usuario')->where('id_acceso',$id_acceso)->where('id_permiso',18)->first();
+											@endphp
+
+												<div class="card">
+													<div class="card-body pl-0">
+														<h5 class="card-title text-center">Cajas</h5>
+														@if($existsPermission)
+														@include('caja.show')
+														@endif
+													</div>
 												</div>
-											</div>
 											<div class="card border-0">
 												<div class="card-body pr-0">
 													<h5 class="card-title text-center">Caja Chica</h5>

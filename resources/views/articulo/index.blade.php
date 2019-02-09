@@ -58,6 +58,30 @@
                                 </div>
                                 <button class="btn btn-outline-secondary" @click="getArticulos">Mostrar todo</button>
                             </div>
+                            <div class="d-md-flex flex-row">
+                                <div class="ml-auto">
+                                    <div class="input-group">
+                                        <a href="javascript:void(0);" type="button"
+                                           title="Átras"
+                                           class="btn btn-outline-secondary"
+                                           :class="articulo.paginated.pageNumber === 0 ? 'disabled':''"
+                                           @click="prevPage"
+                                        ><i class="fas fa-arrow-left fa-lg"></i>
+                                        </a>
+                                        <div class="input-group-prepend"><span title="Página actual" class="input-group-text">
+                                                @{{ articulo.paginated.pageNumber+1 }}</span>
+                                        </div>
+
+                                        <a href="javascript:void(0);" type="button"
+                                           title="Siguiente"
+                                           class="btn btn-outline-secondary"
+                                           :class="articulo.paginated.pageNumber >= pageCount -1 ? 'disabled':''"
+                                           @click="nextPage"
+                                        ><i class="fas fa-arrow-right fa-lg"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-sm table-bordered">
                                     <thead>
@@ -76,7 +100,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="articulo in articulo.data">
+                                        <tr v-for="articulo in paginatedData">
                                             {{--articulo.data.estatus: Verde => Respresnta articulo activo; Gris => Respresnta articulo inactivo --}}
                                             {{--<td :class="articulo.data.estatus>0 ? 'bg-success text-white': 'bg-secondary text-white'" >--}}
                                             <td>

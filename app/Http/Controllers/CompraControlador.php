@@ -24,26 +24,12 @@ class CompraControlador extends Controller
 
     public function __construct()
     {
+        $this->middleware('permiso_compra', ['only' => ['index']]);
     }
 
     public function index()
     {
-        /*if ($peticion)
-        {
-            $consulta = trim($peticion->get('txtBuscar'));
-            $compras = DB::table('compra as c')
-            ->join('tipo_pago as t', 'c.id_tipo_pago', '=', 't.id_tipo_pago')
-            ->join('detalle_compra as d', 'c.id_compra','=','d.id_compra')
-            ->join('almacen as a', 'd.id_almacen', '=', 'a.id_almacen')
-            ->join('sucursal as s', 'a.id_sucursal', '=', 's.id_sucursal')
-            ->join('contacto as cont', 'c.id_contacto', '=', 'cont.id_contacto')
-            ->join('proveedor as p', 'cont.id_proveedor', '=', 'p.id_proveedor')
-            ->join('moneda as m', 'c.id_compra', '=', 'm.id_compra')
-            ->select('c.id_compra as codigo','c.fecha as fecha_compra','c.costo_total as costo_total','t.id_tipo_pago as id_tipo_pago','t.tipo_pago as tipo_pago','s.id_sucursal','s.nombre as nombre_sucursal','a.id_almacen','a.direccion as direccion_almacen', 'cont.id_contacto', 'p.id_proveedor','p.razon_social as razon_social_proveedor')
-            ->paginate(10);
-        }*/
         return view('compra.index');
-
     }
 
     public function create(Request $peticion)

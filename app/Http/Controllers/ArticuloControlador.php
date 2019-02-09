@@ -10,7 +10,7 @@ use Allison\Articulo;
 use Allison\Categoria;
 use Allison\Fabricante;
 use Allison\Dimensiones;
-use Allison\Pieza;
+use Allison\Bitacora;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -19,38 +19,11 @@ class ArticuloControlador extends Controller
 {
     public function __construct()
 	{
-		
+        $this->middleware('permiso_articulo', ['only' => ['index']]);
 	}
 	
 	public function index()
-	{	
-		/*if ($peticion)
-		{
-			$consulta = trim($peticion->get('txtBuscar'));
-			$articulos = DB::table('articulo')
-				->join('subcategoria', 'articulo.id_subcategoria', '=', 'subcategoria.id_subcategoria')
-				->join('fabricante', 'articulo.id_fabricante', '=', 'fabricante.id_fabricante')
-				->where('articulo.nombre', 'like', '%'.$consulta.'%')
-				->orderBy('nombre', 'asc')
-				->select('articulo.id_articulo as id_articulo',
-							'articulo.nombre as nombre',
-							'articulo.codigo as codigo',
-							'articulo.codigo_barra as codigo_barra',
-							'articulo.caracteristicas as caracteristicas',
-							'articulo.precio_compra as precio_compra',
-							'articulo.precio_produccion as precio_produccion',
-							'articulo.estatus as estatus',
-							'articulo.imagen as imagen',
-							'articulo.fecha_registro as fecha_registro',
-							'articulo.divisible as divisible',
-							'articulo.id_subcategoria as id_subcategoria',
-							'articulo.id_fabricante as id_fabricante',
-							'subcategoria.subcategoria as subcategoria',
-							'fabricante.nombre as fabricante'
-							)
-				->get();
-
-		}*/
+	{
         return view('articulo.index');
 	}
 
@@ -114,6 +87,7 @@ class ArticuloControlador extends Controller
 	{
         $data = json_decode($peticion->data, true);
         $articulo = Articulo::findOrFail($id_articulo);
+        Bitacora::insertInBitacora('UPDATE', $articulo);
         if(is_null($articulo)){
             return response()->json('No Existe el Artículo', 400);
         }

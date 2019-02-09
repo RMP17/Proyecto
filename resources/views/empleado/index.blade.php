@@ -12,36 +12,44 @@
             <td>Sexo</td>
             <td>Edad</td>
             <td>Almacén</td>
-            <td>Teléfono</td>
-            <td>Celular</td>
+            <td>Telf/Cel</td>
             <td>Correo</td>
             <td>Dirección</td>
             <td>P/Referencia</td>
             <td>T/Referencia</td>
-            <td>Acciones</td>
+            <td width="10%">Acciones</td>
         </tr>
         </thead>
         <tbody>
         <tr v-for="_empleado in empleado.data">
             <td>@{{ _empleado.nombre }} <br>
-                <span v-if="!!_empleado.estatus" class="waves-effect waves-light btn btn-success btn-sm">Activo</span>
-                <span v-else class="waves-effect waves-light btn btn-secondary btn-sm">Inactivo</span>
+                <div v-if="_empleado.ci!=='admin'">
+                    <span v-if="Number(_empleado.estatus)"
+                          title="Dar de baja"
+                          class="waves-effect waves-light btn btn-success btn-sm" @click="changeStatusEmpleado(_empleado)">Activo</span>
+                    <span v-else
+                          title="Habilitar"
+                          class="waves-effect waves-light btn btn-secondary btn-sm" @click="changeStatusEmpleado(_empleado)">Inactivo</span>
+                </div>
             </td>
             <td>@{{ _empleado.ci }}</td>
             <td>
                 <span v-if="_empleado.sexo==='m'">Masculino</span>
-                <span v-else>Femenino</span>
+                <span v-if="_empleado.sexo==='f'">Femenino</span>
             </td>
             <td>@{{ _empleado.edad }}</td>
             <td>@{{ _empleado.almacen.codigo }}</td>
-            <td>@{{ _empleado.telefono }}</td>
-            <td>@{{ _empleado.celular }}</td>
+            <td>
+                @{{ _empleado.telefono }} <br v-if="_empleado.telefono">
+                @{{ _empleado.celular }}
+            </td>
             <td>@{{ _empleado.correo }}</td>
             <td>@{{ _empleado.direccion }}</td>
             <td>@{{ _empleado.persona_referencia }}</td>
             <td>@{{ _empleado.telefono_referencia }}</td>
             <td>
                 <a href="javascript:void(0)"
+                   v-if="_empleado.ci!=='admin'"
                    title="Editar Empleado"
                    @click="modeEditEmpleado(_empleado)"
                    data-backdrop="static"

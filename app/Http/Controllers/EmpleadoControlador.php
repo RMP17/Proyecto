@@ -65,4 +65,10 @@ class EmpleadoControlador extends Controller
 
 	    return SimpleSuggestionsEmpleadosResource::collection($empleados);
 	}
+	public function changeStatus($id_empleado)
+	{
+        $empleado = Empleado::find($id_empleado);
+        $empleado->changeStatus();
+	    return response()->json();
+	}
 }

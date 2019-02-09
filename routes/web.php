@@ -13,36 +13,24 @@
 
 /*Vistas*/
 
-Route::get('/', function () {
-    return view('auth.login');
-});
-Route::get('/home', function () {
-    return view('maquetas.home');
-});
-
-// Funcional aplicacion del middleware de autenticacion
-
-/*Route::group(['middleware' => ['auth']], function () {
-    Route::get('/home', function () {
-        return view('maquetas.home');
-    });
-});*/
-
+Route::get('/', 'Auth\LoginController@showLoginForm');
 
 /*Controladores*/
-
-Route::get('config', 'ConfigController@index');
 
 Route::get('ciudades/{query}', 'CiudadControlador@suggestionsOfCiudades');
 Route::get('proveedor/contactos/{id_proveedor}', 'ProveedorControlador@getContactosOfProveedor');
 Route::get('proveedores/{query}', 'ProveedorControlador@suggestionsProveedores');
 /*Route::put('empleado/update{id_empleado}', 'EmpleadoControlador@updateEmpleado');*/
-Route::get('empleado/suggestions/{query}', 'EmpleadoControlador@simpleSuggestionsEmpleado');
+
 Route::get('kardex/{id_empleado}', 'KardexControlador@getKardesEmpleado');
 Route::get('contacto/suggestions/{query}', 'ContactoControlador@getContactosForSuggestion');
 Route::get('cajas', 'CajaControlador@getCajas');
 Route::get('cortes', 'CortesControlador@index');
 
+Route::prefix('empleado')->group(function () {
+    Route::get('suggestions/{query}', 'EmpleadoControlador@simpleSuggestionsEmpleado');
+    Route::patch('change-status/{id_empleado}', 'EmpleadoControlador@changeStatus');
+});
 Route::prefix('cliente')->group(function () {
     Route::get('suggestions/{query}', 'ClienteControlador@suggestionsClients');
     Route::get('nit/{nit}', 'ClienteControlador@getClientByNit');
@@ -95,37 +83,42 @@ Route::prefix('permiso')->group(function () {
     Route::get('', 'PermisoController@getPermisos');
 });
 
-
-Route::resources([
-	'almacen' => 'AlmacenControlador',
-	'articulo' => 'ArticuloControlador',
-	'acceso' => 'AccesoController',
-	'caja' => 'CajaControlador',
-	/*'cajachica' => 'CajaChicaControlador',*/
-	'cargo' => 'CargoControlador',
-	'categoria' => 'CategoriaControlador',
-	'ciudad' => 'CiudadControlador',
-	'cliente' => 'ClienteControlador',
-	'contacto' => 'ContactoControlador',
-	'cuenta' => 'CuentaControlador',
-	'cuenta-proveedor' => 'CuentaProveedorControlador',
-	'empleado' => 'EmpleadoControlador',
-	'tipoempleado' => 'TipoEmpleadoControlador',
-	'empresa' => 'EmpresaControlador',
-	'fabricante' => 'FabricanteControlador',
-	'gasto' => 'GastoControlador',
-	'moneda' => 'MonedaControlador',
-	'pais' => 'PaisControlador',
-    'venta' => 'VentaControlador',
-	'precio' => 'PrecioControlador',
-	//'produccion' => 'ProduccionControlador',
-	'proveedor' => 'ProveedorControlador',
-	'subcategoria' => 'SubcategoriaControlador',
-	'sucursal' => 'SucursalControlador',
-	/*'kardex' => 'KardexControlador',*/
-	'compra' => 'CompraControlador',
-	'kardexObservaciones' => 'KardexObservacionesControlador',
-	]);
+Route::group(['middleware' => ['auth','checkstatus']], function () {
+    Route::get('config', 'ConfigController@index');
+    Route::get('/home', function () {
+        return view('maquetas.home');
+    });
+    Route::resources([
+        'almacen' => 'AlmacenControlador',
+        'articulo' => 'ArticuloControlador',
+        'acceso' => 'AccesoController',
+        'caja' => 'CajaControlador',
+        /*'cajachica' => 'CajaChicaControlador',*/
+        'cargo' => 'CargoControlador',
+        'categoria' => 'CategoriaControlador',
+        'ciudad' => 'CiudadControlador',
+        'cliente' => 'ClienteControlador',
+        'contacto' => 'ContactoControlador',
+        'cuenta' => 'CuentaControlador',
+        'cuenta-proveedor' => 'CuentaProveedorControlador',
+        'empleado' => 'EmpleadoControlador',
+        'tipoempleado' => 'TipoEmpleadoControlador',
+        'empresa' => 'EmpresaControlador',
+        'fabricante' => 'FabricanteControlador',
+        'gasto' => 'GastoControlador',
+        'moneda' => 'MonedaControlador',
+        'pais' => 'PaisControlador',
+        'venta' => 'VentaControlador',
+        'precio' => 'PrecioControlador',
+        //'produccion' => 'ProduccionControlador',
+        'proveedor' => 'ProveedorControlador',
+        'subcategoria' => 'SubcategoriaControlador',
+        'sucursal' => 'SucursalControlador',
+        /*'kardex' => 'KardexControlador',*/
+        'compra' => 'CompraControlador',
+        'kardexObservaciones' => 'KardexObservacionesControlador',
+    ]);
+});
 
 Route::get('fabricantes', 'FabricanteControlador@getAllFabricantes');
 

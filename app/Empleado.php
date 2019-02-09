@@ -26,11 +26,34 @@ class Empleado extends Model
 		'telefono_referencia',
 		'id_almacen',
 	];
+    protected $attributes = [
+        'nombre'=> null,
+        'ci'=> null,
+        // Sexo trabaja con estos valores:
+        // f=femenino; m=masculino;
+        'sexo'=> null,
+        'fecha_nacimiento'=> null,
+        'telefono'=> null,
+        'celular'=> null,
+        'correo'=> null,
+        'direccion'=> null,
+        'foto'=> null,
+        'persona_referencia'=> null,
+        'telefono_referencia'=> null,
+        'id_almacen'=> null,
+    ];
 	
-	protected $guarded = [];
+	protected $guarded = [
+        'estatus'
+    ];
 
     public function almacen(){
-        return $this->belongsTo(Almacen::class,'id_almacen');
+        return $this->belongsTo(Almacen::class,'id_almacen')->withDefault([
+            'id_almacen'=>null,
+            'codigo'=>null,
+            'direccion'=>null,
+            'id_sucursal'=>null,
+        ]);
     }
     public function kardex(){
         return $this->hasMany(Kardex::class,'id_empleado','id_empleado');
@@ -124,6 +147,7 @@ class Empleado extends Model
             $salario = Salario::find($data['kardex']['id_kardex']);
             $salario->fill($data['kardex']['salario']);
             $salario->update();
+            Bitacora::insertInBitacora('UPDATE', $_empleado);
             DB::commit();
             return true;
 
@@ -133,8 +157,7 @@ class Empleado extends Model
         }
     }
     public static function getEmpleados(){
-        $empleados = Empleado::select('*')->orderBy('nombre','desc')->get();
-
+        $empleados = Empleado::select('*')->orderBy('nombre','asc')->get();
         foreach ($empleados as $empleado) {
             $kardex = Kardex::where('id_empleado', $empleado->id_empleado)->orderBy('id_kardex','desc')->first();
             if(!is_null($kardex)){
@@ -158,5 +181,12 @@ class Empleado extends Model
         $empleados = Empleado::where('nombre', 'like','%'.$query.'%')->orderBy('nombre','desc')->take(10)->get();
 
         return $empleados;
+    }
+    public function changeStatus(){
+        $this->estatus= $this->estatus==1 ? 0:1;
+        $acceso = Acceso::find($this->id_empleado);
+        $acceso->estatus = $acceso->estatus==1 ? 0:1;
+        $acceso->update();
+        $this->update();
     }
 }

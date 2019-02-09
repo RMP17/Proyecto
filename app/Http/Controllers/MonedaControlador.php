@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\MonedaPeticion;
 use Allison\Moneda;
+use Allison\Bitacora;
 
 
 class MonedaControlador extends Controller
@@ -47,6 +48,7 @@ class MonedaControlador extends Controller
 	public function update(MonedaPeticion $peticion, $id_moneda)
 	{
 		$moneda = Moneda :: findOrFail($id_moneda);
+        Bitacora::insertInBitacora('UPDATE', $moneda);
 		$moneda->fill($peticion->all());
 		$moneda -> update();
 		return response()->json();

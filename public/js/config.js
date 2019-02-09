@@ -1111,6 +1111,15 @@ var appConfig = new Vue({
                 this.notificationErrors(errors);
             });
         },
+        changeStatusEmpleado(empleado){
+            axios.patch(urlGlobal.changeStatusEmpleado+empleado.id_empleado
+            ).then(response => {
+                empleado.estatus= Number(empleado.estatus)===1 ? 0:1;
+                this.notificationSuccess();
+            }).catch(errors => {
+                this.notificationErrors(errors);
+            });
+        },
 
         modeEditEmpleado(empleado) {
             this.empleado.tempAttributes = empleado;
@@ -1372,6 +1381,9 @@ var appConfig = new Vue({
             });
         },
         getAccesoOf(empleado){
+            this.acceso.permisos.forEach(permisos_disponibles =>{
+                permisos_disponibles.permitir = 0;
+            });
             this.getAccesoOfEmpleadoServer(empleado);
             this.acceso.empleado.id_empleado=empleado.id_empleado;
             this.acceso.empleado.nombre=empleado.nombre;

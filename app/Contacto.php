@@ -47,6 +47,7 @@ class Contacto extends Model
     }
     public static function updateContacto($parameters_contacto, $id_contacto){
         $_contacto = Contacto::findOrFail($id_contacto);
+        Bitacora::insertInBitacora('UPDATE', $_contacto);
         $_contacto->fill($parameters_contacto);
         $_contacto->update();
         return true;

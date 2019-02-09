@@ -39,6 +39,7 @@ class Sucursal extends Model
         $_sucusal = Sucursal::findOrFail($id_sucursal);
         $_sucusal->fill($sucursal);
         $_sucusal->update();
+        Bitacora::insertInBitacora('UPDATE', $_sucusal);
         return true;
     }
 }

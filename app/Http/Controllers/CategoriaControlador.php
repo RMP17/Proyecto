@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\CategoriaPeticion;
 use Allison\Categoria;
+use Allison\Bitacora;
 
 class CategoriaControlador extends Controller
 {
@@ -58,6 +59,7 @@ class CategoriaControlador extends Controller
 	public function update(CategoriaPeticion $peticion, $id_categoria)
 	{
 		$categoria = Categoria :: findOrFail($id_categoria);
+        Bitacora::insertInBitacora('UPDATE', $categoria);
 		$categoria -> categoria = $peticion -> get('categoria');
 		$categoria -> descripcion = $peticion -> get ('descripcion');
 		$categoria -> update();
@@ -67,6 +69,7 @@ class CategoriaControlador extends Controller
 	public function destroy($id_categoria)
 	{
 		$categoria = Categoria::findOrFail($id_categoria);
+        Bitacora::insertInBitacora('DELETE', $categoria);
 		$categoria->delete();
 		return response()->json();
 	}

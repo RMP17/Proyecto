@@ -1,4 +1,4 @@
-const url = 'http://localhost/Proyecto/public/';
+const url = 'http://192.168.1.4:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesPais:url + 'pais',
@@ -32,6 +32,7 @@ var urlGlobal={
     resourcesKardexObservaciones:url + 'kardexObservaciones',
     getAllSucursales:url + 'sucursales',
     getAllEmpleados:url + 'empleados',
+    changeStatusEmpleado:url + 'empleado/change-status/',
     resourcesArticulo:url + 'articulo',
     getArticulos:url + 'articulo/all',
     getPreciosArticulo:url + 'articulo/precios/',

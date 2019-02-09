@@ -34,6 +34,7 @@ class Almacen extends Model
         $_almacen = new Almacen();
         $_almacen->fill($parameters_almacen);
         $_almacen->save();
+        Bitacora::insertInBitacora('UPDATE', $_almacen);
         return true;
     }
     public static function updateAlmacen($almacen, $id_almacen){

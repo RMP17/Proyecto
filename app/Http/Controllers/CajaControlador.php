@@ -9,13 +9,14 @@ use Allison\Caja;
 use Allison\Empleado;
 use Allison\Sucursal;
 use Illuminate\Support\Facades\Validator;
+use Allison\Bitacora;
 
 
 class CajaControlador extends Controller
 {
     public function __construct()
 	{
-		
+        $this->middleware('permiso_caja', ['only' => ['index']]);
 	}
 	
 	public function index()

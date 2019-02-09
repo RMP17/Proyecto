@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Allison\Http\Requests\FabricantePeticion;
 use Allison\Fabricante;
 use DB;
+use Allison\Bitacora;
 
 
 
@@ -58,6 +59,7 @@ class FabricanteControlador extends Controller
 	public function update(FabricantePeticion $peticion, $id_fabricante)
 	{
 		$fabricante = Fabricante :: findOrFail($id_fabricante);
+        Bitacora::insertInBitacora('UPDATE', $fabricante);
 		$fabricante -> nombre = $peticion -> get('nombre');
 		$fabricante-> contacto= $peticion -> get('contacto');
 		$fabricante-> sitio_web= $peticion -> get('sitio_web');
@@ -68,7 +70,8 @@ class FabricanteControlador extends Controller
 	public function destroy($id_fabricante)
 	{
 		$fabricante = Fabricante :: findOrFail($id_fabricante);
-		$fabricante->delete();
+        Bitacora::insertInBitacora('DELETE', $fabricante);
+        $fabricante->delete();
 		return response()->json();
 	}
     public function getAllFabricantes(){

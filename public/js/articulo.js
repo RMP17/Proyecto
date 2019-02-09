@@ -112,7 +112,11 @@ var appArticulo = new Vue({
                 },
                 id_fabricante:null,
                 id_categoria:null
-            }
+            },
+            paginated: {
+                size: 15,
+                pageNumber: 0,
+            },
         },
         articulosSucursales:{
             modeEdit:false,
@@ -161,6 +165,16 @@ var appArticulo = new Vue({
         });
     },
     computed: {
+        pageCount: function(){
+            let l = this.articulo.data.length,
+                s = this.articulo.paginated.size;
+            return Math.ceil(l/s);
+        },
+        paginatedData: function(){
+            const start = this.articulo.paginated.pageNumber * this.articulo.paginated.size,
+                end = start + this.articulo.paginated.size;
+            return this.articulo.data.slice(start, end);
+        },
         pagesNumberCategoria: function () {
             let pagesArray = [];
             let from = 1;
@@ -216,6 +230,7 @@ var appArticulo = new Vue({
         getArticulos(){
             axios.get(urlGlobal.getArticulos)
                 .then((response)=>{
+                    this.articulo.paginated.pageNumber=0;
                     this.articulo.data=response.data;
                 }).catch((errors)=>{
                 console.log(errors);
@@ -588,8 +603,9 @@ var appArticulo = new Vue({
             if (!codigoBarras.target.value.length <= 0) {
                 axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
                 ).then(response => {
+                    this.articulo.paginated.pageNumber=0;
                     if( Object.keys(response.data).length === 0){
-                        this.articulo.data = null;
+                        this.articulo.data = [];
                     } else {
                         this.articulo.data = response.data;
                     }
@@ -602,8 +618,9 @@ var appArticulo = new Vue({
             if (!codigo.target.value.length <= 0) {
                 axios.get(urlGlobal.getArticuloForCodigo + codigo.target.value
                 ).then(response => {
+                    this.articulo.paginated.pageNumber=0;
                     if( Object.keys(response.data).length === 0){
-                        this.articulo.data = null;
+                        this.articulo.data
                     } else {
                         this.articulo.data = response.data;
                     }
@@ -616,6 +633,7 @@ var appArticulo = new Vue({
             if (result && result.id) {
                 axios.get(urlGlobal.getArticuloForId + result.id
                 ).then(response => {
+                    this.articulo.paginated.pageNumber=0;
                     this.articulo.data = response.data;
                 }).catch(errors => {
                     console.log(errors);
@@ -713,6 +731,14 @@ var appArticulo = new Vue({
                 }
             }
 
+        },
+        //</editor-fold>
+        //<editor-fold desc="Methods paginated">
+        nextPage(){
+            this.articulo.paginated.pageNumber++;
+        },
+        prevPage(){
+            this.articulo.paginated.pageNumber--;
         },
         //</editor-fold>
 

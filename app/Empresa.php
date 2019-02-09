@@ -34,6 +34,7 @@ class Empresa extends Model
         $_empresa = Empresa::findOrFail($id_empresa);
         $_empresa->fill($empresa);
         $_empresa->update();
+        Bitacora::insertInBitacora('UPDATE', $_empresa);
         return true;
     }
     public static function addSucursalToEmpresa($parameters_sucursal, $id_empresa){

@@ -91,8 +91,8 @@ class Articulo extends Model
         if(!is_null($articulo)){
             if(count($articulo->sucursal)>0){
                 $sucursal= $articulo->sucursal->first();
+                $articulo->precios = $sucursal->pivot;
             }
-            $articulo->precios = $sucursal->pivot;
             $categoria = Categoria::find($articulo['id_categoria']);
             if(!is_null($categoria)){
                 $articulo->categoria = $categoria;
@@ -137,7 +137,7 @@ class Articulo extends Model
 
         $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
             ->orderBy('nombre','desc')->take(10)->get();
-        foreach ($articulos as &$articulo) {
+        foreach ($articulos as $articulo) {
             $categoria = Categoria::find($articulo['id_categoria']);
             $articulo->precios=(Object)[];
             if(count($articulo->sucursal)>0){
@@ -188,8 +188,8 @@ class Articulo extends Model
             $categoria = Categoria::find($articulo['id_categoria']);
             if(count($articulo->sucursal)>0){
                 $sucursal= $articulo->sucursal->first();
+                $articulo->precios = $sucursal->pivot;
             }
-            $articulo->precios = $sucursal->pivot;
             if(!is_null($categoria)){
                 $articulo->categoria = $categoria;
             } else {
@@ -251,6 +251,7 @@ class Articulo extends Model
         $precios[$parameters['id_sucursal']]=$modelPrecios;
         if(!is_null($articulo)){
             $articulo->sucursal()->syncWithoutDetaching($precios);
+            Bitacora::insertInBitacora('UPDATE', $parameters);
         }
     }
 }
