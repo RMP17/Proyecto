@@ -1,4 +1,4 @@
-const url = 'http://192.168.1.4:3000/Proyecto/public/';
+const url = 'http://127.0.0.1:3000/Proyecto/public/';
 var urlGlobal={
     resourcesCategorias:url + 'categoria',
     resourcesPais:url + 'pais',
@@ -49,6 +49,7 @@ var urlGlobal={
     getPaisesByName:url + 'pais/query/',
     getComprasByRageDate:url + 'compra/date_range',
     getVentasByRageDate:url + 'venta/date_range',
+    getVentaById:url + 'venta/id/',
     getGastoByRangeDate:url + 'gasto/date_range',
     getCajaChicaByRangeDate:url + 'caja/caja-chica/date_range',
     getPurchasesOnCreditInForce:url + 'compra/creditos',

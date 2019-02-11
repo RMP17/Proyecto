@@ -90,11 +90,11 @@
                                         <th>Codigo</th>
                                         <th>Codigo de barra</th>
                                         <th>Características</th>
-                                        <th>Precio Compra</th>
-                                        <th>Precio Producción</th>
+                                        <th title="Precio de Compra">P. Comp.</th>
+                                        <th title="Precio de Producción">P. Prod.</th>
                                         <th>Categoría</th>
                                         <th>Fabricante</th>
-                                        <th>Registrado en fecha</th>
+                                        {{--<th>Registrado en fecha</th>--}}
                                         <th>Dimensiones</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -116,42 +116,54 @@
                                             <td>@{{ articulo.precio_produccion }}</td>
                                             <td><span v-if="articulo.categoria">@{{ articulo.categoria.categoria }}</span></td>
                                             <td><span v-if="articulo.fabricante">@{{ articulo.fabricante.nombre }}</span></td>
-                                            <td>@{{ articulo.fecha_registro }}</td>
+                                            {{--<td>@{{ articulo.fecha_registro }}</td>--}}
                                             <td>
                                                 Largo:@{{ articulo.dimensiones.largo }}<br>
                                                 Ancho:@{{ articulo.dimensiones.ancho }} <br>
                                                 Espesor:@{{ articulo.dimensiones.espesor }} <br>
                                                 Volumen:@{{ articulo.dimensiones.volumen }} <br>
                                             </td>
-                                            <td>
-                                                <a type="button" href="javascript:void(0);"
-                                                   title="Editar"
-                                                   @click="changeToEditModeArticulo(articulo)"
-                                                   class="btn btn-warning btn-sm">
-                                                    <i class="mdi mdi-pencil"></i>
-                                                </a>
-                                                <a type="button"
-                                                   title="Agregar precios de venta"
-                                                   href="javascript:void(0);"
-                                                   data-backdrop="static"
-                                                   data-keyboad="false"
-                                                   data-target="#modal-add-precio"
-                                                   data-toggle="modal"
-                                                   @click="selectArticulo(articulo)"
-                                                   class="btn btn-info btn-sm"><i class="far fa-money-bill-alt"></i>
-                                                </a>
-                                                <a v-if="!!articulo.estatus" type="button" href="javascript:void(0);"
-                                                   title="Dar de baja"
-                                                   @click="changeStatusOfArticulo(articulo)"
-                                                   class="btn btn-secondary btn-sm">
-                                                    <i class="fas fa-chevron-down"></i>
-                                                </a>
-                                                <a v-else type="button" href="javascript:void(0);"
-                                                   title="Habilitar artículo"
-                                                   @click="changeStatusOfArticulo(articulo)"
-                                                   class="btn btn-success btn-sm">
-                                                    <i class="fas fa-chevron-up"></i>
-                                                </a>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                    <a type="button" href="javascript:void(0);"
+                                                       title="Editar"
+                                                       @click="changeToEditModeArticulo(articulo)"
+                                                       class="btn btn-warning btn-sm">
+                                                        <i class="mdi mdi-pencil"></i>
+                                                    </a>
+                                                    <a type="button"
+                                                       title="Agregar precios de venta"
+                                                       href="javascript:void(0);"
+                                                       data-backdrop="static"
+                                                       data-keyboad="false"
+                                                       data-target="#modal-add-precio"
+                                                       data-toggle="modal"
+                                                       @click="selectArticulo(articulo)"
+                                                       class="btn btn-info btn-sm"><i class="far fa-money-bill-alt"></i>
+                                                    </a>
+                                                    <a type="button"
+                                                       title="Transferir"
+                                                       href="javascript:void(0);"
+                                                       data-backdrop="static"
+                                                       data-keyboad="false"
+                                                       data-target="#modal-add-precio"
+                                                       data-toggle="modal"
+                                                       @click="selectArticulo(articulo)"
+                                                       class="btn btn-info btn-sm lh-1"><i class="mdi mdi-transfer mdi-18px"></i>
+                                                    </a>
+                                                    <a v-if="!!articulo.estatus" type="button" href="javascript:void(0);"
+                                                       title="Dar de baja"
+                                                       @click="changeStatusOfArticulo(articulo)"
+                                                       class="btn btn-secondary btn-sm">
+                                                        <i class="fas fa-chevron-down"></i>
+                                                    </a>
+                                                    <a v-else type="button" href="javascript:void(0);"
+                                                       title="Habilitar artículo"
+                                                       @click="changeStatusOfArticulo(articulo)"
+                                                       class="btn btn-success btn-sm">
+                                                        <i class="fas fa-chevron-up"></i>
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -185,10 +197,6 @@
         <!-- ============================================================== -->
         <!--  Container fluid de articulo create -->
         <!-- ============================================================== -->
-
-
-
-
 
         {{--===============================================Modal Articulos======================================--}}
         <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-articulo">
@@ -261,7 +269,8 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title pt-1 pr-1">Precios @{{ articulosSucursales.articulo ?articulosSucursales.articulo.nombre:'' }}</h4>
+                        <h4 class="modal-title pt-1 pr-1">Precios @{{ articulosSucursales.articulo
+                            ?articulosSucursales.articulo.nombre:'' }}</h4>
 
                         <a v-show="!articulosSucursales.modeEdit" href
                            data-toggle="modal"
@@ -286,12 +295,47 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click="cancelModeEditPrecios"> Cerrar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                @click="cancelModeEditPrecios"> Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--===============================================Modal Transferir======================================--}}
+        <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-Transferir">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title pt-1 pr-1">Categorías</h4>
+                        <a v-show="!categoria.modeEdit" href data-target="#modal-create-categoria"
+                           data-toggle="modal"
+                           class="btn btn-outline-dark w-10em"
+                           @click="categoria.modeCreate=!categoria.modeCreate"
+                        >
+                            <span v-show="!categoria.modeCreate">Nueva</span>
+                            <span v-show="categoria.modeCreate">Ver</span>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pt-0 pb-0">
+                        <div v-if="!categoria.modeCreate">
+                            @include('categoria.index')
+                        </div>
+                        <template v-else>
+                            @include('categoria.create')
+                        </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 @endsection
 @section('scripts')

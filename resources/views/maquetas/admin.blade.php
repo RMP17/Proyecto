@@ -11,22 +11,22 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('nihil/imagenes/OpenRedLogo.png')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/select2/dist/css/select2.min.css')}}">
+    {{--<link rel="stylesheet" type="text/css" href="{{asset('assets/libs/select2/dist/css/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/jquery-minicolors/jquery.minicolors.css')}}">
     <link rel="stylesheet" type="text/css"
-          href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/quill/dist/quill.snow.css')}}">
+          href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">--}}
+    {{--<link rel="stylesheet" type="text/css" href="{{asset('assets/libs/quill/dist/quill.snow.css')}}">--}}
     <title>Sistema de administración de ferretería</title>
     <!-- Custom CSS -->
-    <link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">
-    <link href="{{asset('dist/css/style.min.css')}}" rel="stylesheet">
+    {{--<link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">--}}
+    <link rel="stylesheet" type="text/css" href="{{asset('dist/css/style.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/custom-styles.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/toastr.min.css')}}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <!--  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
 
     <![endif]-->
 </head>
@@ -210,10 +210,10 @@
 <script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
 <script src="{{asset('js/toastr.min.js')}}"></script>
 <!-- Bootstrap tether Core JavaScript -->
-<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
 <script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
+{{--<script src="{{asset('assets/extra-libs/sparkline/sparkline.js')}}"></script>--}}
 <script src="{{asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
-<script src="{{asset('assets/extra-libs/sparkline/sparkline.js')}}"></script>
 <!--Wave Effects -->
 <script src="{{asset('dist/js/waves.js')}}"></script>
 <!--Menu sidebar -->
@@ -223,16 +223,17 @@
 <!--This page JavaScript -->
 <!-- <script src="{{asset('dist/js/pages/dashboards/dashboard1.js')}}"></script> -->
 <!-- Charts js Files -->
-<script src="{{asset('assets/libs/flot/excanvas.js')}}"></script>
+{{--TODO: SI DA ERRORES REVISAR ESTE BLOQUE--}}
+{{--<script src="{{asset('assets/libs/flot/excanvas.js')}}"></script>
 <script src="{{asset('assets/libs/flot/jquery.flot.js')}}"></script>
 <script src="{{asset('assets/libs/flot/jquery.flot.pie.js')}}"></script>
 <script src="{{asset('assets/libs/flot/jquery.flot.time.js')}}"></script>
 <script src="{{asset('assets/libs/flot/jquery.flot.stack.js')}}"></script>
 <script src="{{asset('assets/libs/flot/jquery.flot.crosshair.js')}}"></script>
 <script src="{{asset('assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js')}}"></script>
-<script src="{{asset('dist/js/pages/chart/chart-page-init.js')}}"></script>
+<script src="{{asset('dist/js/pages/chart/chart-page-init.js')}}"></script>--}}
 
-<script src="{{asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
+{{--<script src="{{asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
 <script src="{{asset('dist/js/pages/mask/mask.init.js')}}"></script>
 <script src="{{asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
 <script src="{{asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
@@ -241,8 +242,8 @@
 <script src="{{asset('assets/libs/jquery-asColorPicker/dist/jquery-asColorPicker.min.js')}}"></script>
 <script src="{{asset('assets/libs/jquery-minicolors/jquery.minicolors.min.js')}}"></script>
 <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{asset('assets/libs/quill/dist/quill.min.js')}}"></script>
-<script src="{{asset('nihil/js/desplegable_pais_ciudad.js')}}"></script> {{--aqui esta la urlGlobal--}}
+--}}{{--<script src="{{asset('assets/libs/quill/dist/quill.min.js')}}"></script>--}}{{--
+<script src="{{asset('nihil/js/desplegable_pais_ciudad.js')}}"></script>
 <script src="{{asset('nihil/js/desplegable_ciudad_sucursal.js')}}"></script>
 <script src="{{asset('nihil/js/validadores.js')}}"></script>
 <script src="{{asset('nihil/js/datepicker.js')}}"></script>
@@ -284,7 +285,7 @@
         autoclose: true,
         todayHighlight: true
     });
-</script>
+</script>--}}
 <script src="{{asset('js/vue.js')}}"></script>
 <script src="{{asset('js/axios.js')}}"></script>
 <script src="{{asset('js/variables-globales-vue.js')}}"></script>

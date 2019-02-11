@@ -148,8 +148,7 @@
                                 <input type="text" class="form-control" id="txtLargo" placeholder="00.00"
                                        name="txtLargo"
                                        v-model="articulo.attributes.dimensiones.largo"
-                                       onkeypress="return ValidarDecimalTecleado(event, this.id)"
-                                       onblur="ValidarDecimalPegado(event, this.id)">
+                                       @keypress="numberFloatDirective">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
@@ -159,8 +158,7 @@
                                 <input type="text" class="form-control" id="txtAncho" placeholder="00.00"
                                        name="txtAncho"
                                        v-model="articulo.attributes.dimensiones.ancho"
-                                       onkeypress="return ValidarDecimalTecleado(event, this.id)"
-                                       onblur="ValidarDecimalPegado(event, this.id)">
+                                       @keypress="numberFloatDirective">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
@@ -170,8 +168,7 @@
                                 <input type="text" class="form-control" id="txtEspesor" placeholder="00.00"
                                        name="txtEspesor"
                                        v-model="articulo.attributes.dimensiones.espesor"
-                                       onkeypress="return ValidarDecimalTecleado(event, this.id)"
-                                       onblur="ValidarDecimalPegado(event, this.id)">
+                                       @keypress="numberFloatDirective">
                             </div>
                         </div>
                         {{--<div class="form-group row mb-2">
@@ -197,8 +194,7 @@
                                 <input type="text" class="form-control" id="txtPrecioCompra" placeholder="00.00"
                                        name="txtPrecioCompra"
                                        v-model="articulo.attributes.precio_compra"
-                                       onkeypress="return ValidarDecimalTecleado(event, this.id)"
-                                       onblur="ValidarDecimalPegado(event, this.id)">
+                                       @keypress="numberFloatDirective">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">Bs.</span>
                                 </div>
@@ -214,8 +210,7 @@
                                 <input type="text" class="form-control" id="txtPrecioVenta" placeholder="00.00"
                                        name="txtPrecioProduccion"
                                        v-model="articulo.attributes.precio_produccion"
-                                       onkeypress="return ValidarDecimalTecleado(event, this.id)"
-                                       onblur="ValidarDecimalPegado(event, this.id)">
+                                       @keypress="numberFloatDirective">
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">Bs.</span>
                                 </div>

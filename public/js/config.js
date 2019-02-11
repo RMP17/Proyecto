@@ -295,7 +295,7 @@ var appConfig = new Vue({
             }*/
         },
     },
-    mounted:function(){
+    created:function(){
         this.$nextTick(function () {
             this.getMonedas();
             this.getCargo();

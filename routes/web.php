@@ -59,6 +59,7 @@ Route::prefix('venta')->group(function () {
     Route::patch('cancel/{id_venta}', 'VentaControlador@cancelSale');
     Route::post('credito', 'VentaCreditoController@store');
     Route::post('date_range', 'VentaControlador@getVentasByRageDate');
+    Route::get('id/{id_venta}', 'VentaControlador@getVentasById');
 });
 Route::prefix('gasto')->group(function () {
     Route::post('date_range', 'GastoControlador@getGastoByRangeDate');

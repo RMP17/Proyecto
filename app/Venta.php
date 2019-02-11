@@ -16,6 +16,7 @@ class Venta extends Model
 	protected $fillable = [
 		'fecha',
 		'costo_total',
+        'importe',
 		'costo_tarjeta_cheque',
 		'descuento',
 		'id_moneda',
@@ -72,7 +73,7 @@ class Venta extends Model
             $_venta->fill($parameters);
             $_venta->id_empleado=$empleado->id_empleado;
             $_venta->id_almacen=$empleado->id_almacen;
-            $_venta->fecha = Carbon::now();
+            $_venta->fecha = Carbon::now()->toDateTimeString();
             $caja = Caja::where('id_empleado', $empleado->id_empleado)->first();
             if (is_null($caja)) {
                 return [
@@ -107,6 +108,20 @@ class Venta extends Model
                 }
             }
             $_venta->costo_total = self::calcularTotal($parameters['detalles_venta']);
+            if(is_null($parameters['importe']) || $parameters['importe'] == 0 ){
+                $parameters['importe'] = $_venta->costo_total;
+            } else if( $parameters['importe'] < $_venta->costo_total ){
+                return [
+                    'message' => [
+                        'errors' => [
+                            'importe' => [
+                                'Importe debe ser igual o mayor al total por pagar'
+                            ]
+                        ]
+                    ],
+                    'code' => 400
+                ];
+            }
             if ($_venta->costo_total < $parameters['descuento']) {
                 return [
                     'message' => [
@@ -136,7 +151,7 @@ class Venta extends Model
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
                     ->where('id_almacen', $empleado->id_almacen)->lockForUpdate()->first();
                 if (!is_null($stock)) {
-                    if ($stock->cantidad - $detalle['cantidad'] < 0) {
+                    /*if ($stock->cantidad - $detalle['cantidad'] < 0) {
                         DB::rollback();
                         return [
                             'message' => [
@@ -148,7 +163,7 @@ class Venta extends Model
                             ],
                             'code' => 400
                         ];
-                    }
+                    }*/
                     $stock->cantidad = $stock->cantidad -(int)$detalle['cantidad'];
                     $stock->update();
                 } else {
@@ -165,7 +180,32 @@ class Venta extends Model
                 }
             }
             DB::commit();
-            return null;
+            $cliente = $_venta->cliente;
+            $empleado = $_venta->empleado;
+            $caja = $_venta->caja;
+            $almacen = $_venta->almacen;
+            $moneda = $_venta->moneda;
+            $sucursal = Sucursal::find($almacen->id_sucursal);
+            unset($_venta->cliente);
+            unset($_venta->empleado);
+            unset($_venta->caja);
+            unset($_venta->moneda);
+            unset($_venta->almacen);
+            $sucursal->empresa;
+            $_venta->cliente = ['razon_social'=>$cliente->razon_social,'nit'=>$cliente->nit];
+            $_venta->empleado = $empleado->nombre;
+            $_venta->caja = $caja->nombre;
+            $_venta->moneda = $moneda->codigo;
+            $_venta->almacen = $almacen;
+            $_venta->sucursal = $sucursal;
+            $_venta->detallesVenta;
+            foreach ($_venta->detallesVenta as $detalle) {
+                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+            }
+            return [
+                'data' => $_venta,
+                'code' => 200
+            ];
         } catch (\Exception $e) {
             DB::rollBack();
             return [
@@ -221,6 +261,32 @@ class Venta extends Model
             }
         }
         return $ventas;
+    }
+    public static function getVentaById($id_venta) {
+        $venta = Venta::find($id_venta);
+        $cliente = $venta->cliente;
+        $empleado = $venta->empleado;
+        $caja = $venta->caja;
+        $almacen = $venta->almacen;
+        $moneda = $venta->moneda;
+        $sucursal = Sucursal::find($almacen->id_sucursal);
+        unset($venta->cliente);
+        unset($venta->empleado);
+        unset($venta->caja);
+        unset($venta->moneda);
+        unset($venta->almacen);
+        $sucursal->empresa;
+        $venta->cliente = ['razon_social'=>$cliente->razon_social,'nit'=>$cliente->nit];
+        $venta->empleado = $empleado->nombre;
+        $venta->caja = $caja->nombre;
+        $venta->moneda = $moneda->codigo;
+        $venta->almacen = $almacen;
+        $venta->sucursal = $sucursal;
+        $venta->detallesVenta;
+        foreach ($venta->detallesVenta as $detalle) {
+            $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+        }
+        return $venta;
     }
     public static function getSalesOnCreditInForce() {
 

@@ -48,44 +48,39 @@
             <td>@{{ _empleado.persona_referencia }}</td>
             <td>@{{ _empleado.telefono_referencia }}</td>
             <td>
-                <a href="javascript:void(0)"
-                   v-if="_empleado.ci!=='admin'"
-                   title="Editar Empleado"
-                   @click="modeEditEmpleado(_empleado)"
-                   data-backdrop="static"
-                   data-keyboad="false"
-                   data-target="#modal-edit-empleado"
-                   data-toggle="modal"
-                   type="button" class="btn btn-warning btn-sm">
-                    <i class="mdi mdi-pencil"></i>
-                </a>
-                <a href="javascript:void(0)"
-                   title="Ver Kardex"
-                   @click="getKardex(_empleado)"
-                   data-backdrop="static"
-                   data-keyboad="false"
-                   data-target="#modal-kardex"
-                   data-toggle="modal"
-                   type="button" class="btn btn-info btn-sm">
-                    <i class="far fa-file-alt"></i>
-                </a>
-                <a href="javascript:void(0)"
-                   title="Cuenta de Usuario"
-                   @click="getAccesoOf(_empleado)"
-                   data-backdrop="static"
-                   data-keyboad="false"
-                   data-target="#modal-add-acceso"
-                   data-toggle="modal"
-                   type="button" class="btn btn-info btn-sm">
-                    <i class="far fa-user-circle fa-lg"></i>
-                </a>
-               {{-- <a title="Editar" href="{{URL::action('EmpleadoControlador@edit', $e -> id_empleado)}}">
-                    <button type="button" class="btn btn-warning btn-sm"><i class="mdi mdi-pencil"></i></button>
-                </a>
-                <a title="Dar de baja" href="" data-target="#modal-delete-empleado-{{$e -> id_empleado}}"
-                   data-toggle="modal">
-                    <button type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-thumb-down"></i></button>
-                </a>--}}
+                <div class="btn-group">
+                    <a href="javascript:void(0)"
+                       v-if="_empleado.ci!=='admin'"
+                       title="Editar Empleado"
+                       @click="modeEditEmpleado(_empleado)"
+                       data-backdrop="static"
+                       data-keyboad="false"
+                       data-target="#modal-edit-empleado"
+                       data-toggle="modal"
+                       type="button" class="btn btn-warning btn-sm">
+                        <i class="mdi mdi-pencil"></i>
+                    </a>
+                    <a href="javascript:void(0)"
+                       title="Ver Kardex"
+                       @click="getKardex(_empleado)"
+                       data-backdrop="static"
+                       data-keyboad="false"
+                       data-target="#modal-kardex"
+                       data-toggle="modal"
+                       type="button" class="btn btn-info btn-sm ">
+                        <i class="far fa-file-alt fa-lg"></i>
+                    </a>
+                    <a href="javascript:void(0)"
+                       title="Cuenta de Usuario"
+                       @click="getAccesoOf(_empleado)"
+                       data-backdrop="static"
+                       data-keyboad="false"
+                       data-target="#modal-add-acceso"
+                       data-toggle="modal"
+                       type="button" class="btn btn-info btn-sm">
+                        <i class="far fa-user-circle fa-lg"></i>
+                    </a>
+                </div>
             </td>
         </tr>
         </tbody>

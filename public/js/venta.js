@@ -13,6 +13,7 @@ var appVenta = new Vue({
               almacen:'',
               cliente:''
             },
+            oneVenta:null,
             credito:{
                 attributes:{
                     id:null,
@@ -118,19 +119,21 @@ var appVenta = new Vue({
             attributes: {
                 id_venta: null,
                 descuento: null,
-                costo_total: '',
+                costo_total: 0,
+                importe: 0,
                 codigo_tarjeta_cheque: '',
                 estatus: '',
                 id_moneda: null,
                 id_cliente: null,
                 id_caja: null,
-                tipo_pago: '',
+                tipo_pago: 'ef',
                 detalles_venta:[]
             },
             tempAttributes: {
                 id_venta: null,
                 descuento: null,
-                costo_total: '',
+                costo_total: null,
+                importe: 0,
                 codigo_tarjeta_cheque: '',
                 estatus: '',
                 id_moneda: null,
@@ -177,7 +180,7 @@ var appVenta = new Vue({
             variableForSuggestionsId:'id_ciudad'
         },
     },
-    mounted() {
+    created() {
         this.$nextTick(function () {
             this.getMonedas();
             this.getAlmacenes();
@@ -223,6 +226,11 @@ var appVenta = new Vue({
             axios.get(urlGlobal.resourcesMoneda)
                 .then(response => {
                     this.monedas = response.data;
+                    this.monedas.forEach(moneda=>{
+                        if(moneda.nombre==='Bolivianos' || moneda.nombre==='bolivianos'){
+                            this.venta.attributes.id_moneda = moneda.id_moneda;
+                        }
+                    });
                 }).catch(errors => {
                 console.log('errors');
             });
@@ -328,6 +336,17 @@ var appVenta = new Vue({
                 console.log(errors);
             });
         },
+        getVentaById(venta){
+            axios.get(urlGlobal.getVentaById+venta.id_venta,
+            ).then(response => {
+                this.venta.oneVenta=response.data;
+                this.$nextTick(function () {
+                    this.printVenta();
+                })
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
         assignAnIdentificationOfVentaToCredito(venta){
             Object.assign(this.venta.credito.attributes, this.venta.credito.model);
             this.venta.credito.attributes.id_venta = venta.id_venta;
@@ -427,6 +446,11 @@ var appVenta = new Vue({
             ).then(response => {
                 this.venta.attributes.detalles_venta = [];
                 this.venta.totalDetallesVenta = 0;
+                this.venta.attributes.importe = 0;
+                this.venta.oneVenta = response.data;
+                this.$nextTick(function () {
+                    this.printVenta();
+                });
                 this.notificationSuccess();
             }).catch(errors => {
                 console.log('errors');
@@ -604,6 +628,10 @@ var appVenta = new Vue({
             const doc = new jsPDF('l','mm', 'letter', true);
             doc.autoTable({html: '#content'});
             doc.save('table.pdf');
+        },
+        printVenta(){
+            /*$.print("#myPrintArea");*/
+            window.print();
         }
     },
     computed: {

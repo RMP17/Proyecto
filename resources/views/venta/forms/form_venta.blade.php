@@ -101,6 +101,27 @@
             </div>
             <div class="modal-body">
                 <p>¿Está seguro que desea realizar la venta?</p>
+                <div class="input-group">
+                    <div class="input-group-prepend col-md-3 p-0">
+                        <span class="input-group-text w-100" id="basic-addon1">Total a pagar</span>
+                    </div>
+                    <div class="form-control text-right">@{{ venta.totalDetallesVenta }}</div>
+                </div>
+                <div class="input-group border border-info">
+                    <div class="input-group-prepend col-md-3 p-0">
+                        <span class="input-group-text w-100" id="txtImporte">Importe</span>
+                    </div>
+                    <input type="text"
+                           class="form-control text-right"
+                           v-model.number="venta.attributes.importe"
+                           placeholder="00.00" aria-label="txtImporte" aria-describedby="txtImporte">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend col-md-3 p-0">
+                        <span class="input-group-text w-100" id="basic-addon1">Cambio</span>
+                    </div>
+                    <div class="form-control text-right">@{{ venta.attributes.importe-Number(venta.totalDetallesVenta)}}</div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger w-25" data-dismiss="modal">NO</button>

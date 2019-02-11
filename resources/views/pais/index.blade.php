@@ -47,8 +47,8 @@
                                        data-keyboad="false"
                                        data-target="#modal-cities"
                                        data-toggle="modal"
-                                       type="button" class="btn btn-info btn-sm">
-                                        <i class="mdi mdi-city"></i>
+                                       type="button" class="btn btn-info btn-sm lh-1">
+                                        <i class="mdi mdi-city mdi-18px"></i>
                                     </a>
                                 </td>
                             </tr>

@@ -35,10 +35,10 @@ class VentaControlador extends Controller
 	public function store(VentaRequest $request)
 	{
 		$venta = Venta::newVenta($request->all());
-		if (!is_null($venta)){
+		if ($venta['code']!==200){
 		    return response()->json($venta['message'], $venta['code']);
         } else{
-            return response()->json();
+            return response()->json($venta['data']);
         }
 	}
 	
@@ -71,6 +71,11 @@ class VentaControlador extends Controller
             return response()->json($validator->errors(), 400);
         }
         $ventas = Venta::getVentasByRageDate($dates['date_start'], $dates['date_end']);
+        return response()->json($ventas);
+	}
+	public function getVentasById($id_venta)
+	{
+        $ventas = Venta::getVentaById($id_venta);
         return response()->json($ventas);
 	}
 	public function getSalesOnCreditInForce()

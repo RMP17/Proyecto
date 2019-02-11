@@ -197,7 +197,7 @@ var appCompra = new Vue({
                     razon_social:''
                 },
                 detalles_compra:[],
-                tipo_pago: ''
+                tipo_pago: 'ef'
             },
             tempAttributes: {
                 id_compra: null,
@@ -215,7 +215,7 @@ var appCompra = new Vue({
                     id_proveedor: null,
                     razon_social:''
                 },
-                tipo_pago: '',
+                tipo_pago: 'ef',
             },
             /*model: {
                 id_compra: null,
@@ -494,6 +494,11 @@ var appCompra = new Vue({
                 .then(response => {
                     this.cuenta_proveedor.monedas = response.data;
                     this.monedas = response.data;
+                    this.monedas.forEach(moneda=>{
+                        if(moneda.nombre==='Bolivianos' || moneda.nombre==='bolivianos'){
+                            this.compra.attributes.id_moneda = moneda.id_moneda;
+                        }
+                    });
                 }).catch(errors => {
                 console.log('errors');
             });
@@ -1045,6 +1050,4 @@ var appCompra = new Vue({
                 .slice(start, end);
         }
     }
-
-
 });

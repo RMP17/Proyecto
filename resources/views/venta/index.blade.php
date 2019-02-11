@@ -172,6 +172,12 @@
 													<i class="fas fa-eye fa-lg"></i>
 												</a>
 												<a href="javascript:void(0)"
+												   title="Imprimir"
+												   @click="getVentaById(_venta)"
+												   type="button" class="btn btn-outline-info btn-sm lh-1">
+													<i class="mdi mdi-printer mdi-18px"></i>
+												</a>
+												<a href="javascript:void(0)"
 												   v-if="_venta.tipo_pago==='cr'"
 												   title="Ver venta al crédito"
 												   @click="assignAnIdentificationOfVentaToCredito(_venta)"
@@ -298,6 +304,9 @@
 			</div>
 		</div>
 	</div>
+
+	{{--===============================================Modal Print Area======================================--}}
+	@include('comprobante.comprobante')
 </div>
 @endsection
 @section('scripts')
