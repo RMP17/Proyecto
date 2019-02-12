@@ -1,7 +1,7 @@
 <div class="form-group col mb-2">
     <select class="custom-select"
             v-model="movimiento_almacen.attributes.id_almacen_origen"
-            @change="selectStockAlmacen(movimiento_almacen.attributes.id_almacen_origen);selectNameAlmacen($event, 'origen')"
+            @change="selectStockAlmacen(movimiento_almacen.attributes.id_almacen_origen)"
             name="selectIdAlmacenOrigen">
         <option :value="null" disabled>Seleccione el almacén origen</option>
         <option v-for="_almacen in almacenes" :value="_almacen.id_almacen">@{{_almacen.codigo}}</option>
@@ -10,12 +10,19 @@
 <div class="form-group col mb-2">
     <select class="custom-select"
             v-model="movimiento_almacen.attributes.id_almacen_destino"
-            @change="selectNameAlmacen($event, 'destino')"
             name="selectIdAlmacenDestino">
         <option :value="null" disabled>Seleccione el almacén destino</option>
         <option v-for="_almacen in almacenes" :value="_almacen.id_almacen">@{{_almacen.codigo}}</option>
     </select>
 </div>
 <div class="form-group col mb-2">
-    <button type="button" class="btn btn-info w-100" >Realizar envío</button>
+    <textarea class="form-control"
+              placeholder="Observaciones"
+              rows="2"
+              v-model="movimiento_almacen.attributes.observaciones"
+              name="selectIdAlmacenDestino">
+    </textarea>
+</div>
+<div class="form-group col mb-2">
+    <button type="button" class="btn btn-info w-100" @click="submitFormMovimiento">Realizar envío</button>
 </div>

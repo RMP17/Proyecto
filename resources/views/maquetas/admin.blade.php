@@ -174,8 +174,13 @@
                         <a class="sidebar-link waves-effect waves-dark sidebar-link"
                            href="{{ url('movimientos-almacen')}}"
                            aria-expanded="false"
-                        ><i class="mdi mdi-transfer"
-                            ></i><span class="hide-menu">Movimientos de Artículos</span></a>
+                        ><i class="mdi mdi-transfer"></i><span class="hide-menu">Movimientos de Artículos</span></a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                           href="{{ url('mediciones')}}"
+                           aria-expanded="false"
+                        ><i class="mdi mdi-ruler"></i><span class="hide-menu">Mediciones</span></a>
                     </li>
                 </ul>
             </nav>

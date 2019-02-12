@@ -43,6 +43,9 @@ Route::prefix('caja')->group(function () {
     Route::patch('closedAndOpenCashier', 'CajaControlador@closedAndOpenCashier');
     Route::get('nit/{nit}', 'ClienteControlador@getClientByNit');
 });
+Route::prefix('movimientos-almacen')->group(function () {
+    Route::post('date_range', 'MovimientosAlmacenController@getMovimientoAlmacenByRangeDate');
+});
 
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');

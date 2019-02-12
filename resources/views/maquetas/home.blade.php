@@ -88,6 +88,26 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div class="col-md-6 col-lg-2 col-xlg-3">
+                                    <div class="card card-hover">
+                                        <a href="{{url('movimientos-almacen')}}">
+                                        <div class="box bg-indigo text-center">
+                                            <h1 class="font-light text-white"><i class="mdi mdi-transfer"></i></h1>
+                                            <h6 class="text-white">Movimientos de Artìculos</h6>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-2 col-xlg-3">
+                                    <div class="card card-hover">
+                                        <a href="{{url('caja')}}">
+                                        <div class="box bg-deep-orange text-center">
+                                            <h1 class="font-light text-white"><i class="mdi mdi-ruler"></i></h1>
+                                            <h6 class="text-white">Mediciones</h6>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
                                 <!-- Column -->
                             </div>
                         </div>

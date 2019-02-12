@@ -37,7 +37,7 @@
     <div class="col pr-0">
         <input class="form-control"
                ref="txtCantidad"
-               v-model.number="movimiento_almacen.attributes.cantidad"
+               v-model.number="movimiento_almacen.detalle.attributes.cantidad"
                placeholder="Cantidad" type="text" @keypress="numberPositiveDirective">
     </div>
     <div class="col pr-0 pl-0">
@@ -56,7 +56,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(_movimiento_almacen,index) in movimiento_almacen.inputs">
+            <tr v-for="(_movimiento_almacen,index) in movimiento_almacen.attributes.detalles">
                 <td>
                     <a href="javascript:void(0)"
                        @click="removeOfList(index)"
