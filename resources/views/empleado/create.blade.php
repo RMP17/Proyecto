@@ -107,7 +107,6 @@
 				<div class="form-group mb-2 row">
 					<label for="selectAlmacen" class="col-sm-5 text-right control-label col-form-label">Almacén : </label>
 					<div class="col-sm-7">
-						{{--fixme cambiar por almacen--}}
 						<select class="custom-select" id="selectAlmacen"
 								v-model="empleado.attributes.id_almacen"
 								name="cbxCargo">

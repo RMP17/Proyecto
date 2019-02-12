@@ -73,11 +73,14 @@ Route::prefix('articulo')->group(function () {
     Route::get('all', 'ArticuloControlador@getArticulos');
     Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
+    Route::get('stock/query/{nombre}', 'ArticuloControlador@getArticuloStockByName');
     Route::post('precios', 'ArticuloControlador@storePrecios');
     Route::get('precios/{id_articulo}', 'ArticuloControlador@getPreciosArticulo');
     Route::get('codigo/{codigo}', 'ArticuloControlador@getArticuloByCodigo');
+    Route::get('stock/codigo/{codigo}', 'ArticuloControlador@getArticuloStocksByCodigo');
     Route::get('id/{id}', 'ArticuloControlador@getArticuloById');
     Route::get('codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloByCodigoBarra');
+    Route::get('stock/codigo-barras/{codigo_barra}', 'ArticuloControlador@getArticuloStocksByCodigoBarra');
     Route::put('status/{id_articulo}', 'ArticuloControlador@changeStatusOfArticulo');
 });
 Route::prefix('permiso')->group(function () {
@@ -94,6 +97,7 @@ Route::group(['middleware' => ['auth','checkstatus']], function () {
         'articulo' => 'ArticuloControlador',
         'acceso' => 'AccesoController',
         'caja' => 'CajaControlador',
+        'movimientos-almacen' => 'MovimientosAlmacenController',
         /*'cajachica' => 'CajaChicaControlador',*/
         'cargo' => 'CargoControlador',
         'categoria' => 'CategoriaControlador',

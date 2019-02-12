@@ -34,6 +34,9 @@ class Articulo extends Model
         return $this->belongsToMany(Sucursal::class,'articulos_sucursales','id_articulo', 'id_sucursal')
             ->withPivot('precio_1','precio_2','precio_3','precio_4','precio_5');
     }
+    public function stock(){
+        return $this->hasMany(Stock::class,'id_articulo', 'id_articulo');
+    }
     public static function getArticulos(){
         $array = [];
         $articulos = Articulo::select('*')->orderBy('nombre')->get();
@@ -133,6 +136,39 @@ class Articulo extends Model
         }
         return  $array;
     }
+    public static function getArticuloStocksBy($key, $codigo){
+        $articulo = null;
+        if($key=='codigo'){
+            $articulo = Articulo::where('codigo',$codigo)->first();
+        } else if ($key=='codigo-barras') {
+            $articulo = Articulo::where('codigo_barra',$codigo)->first();
+        }
+        if(!is_null($articulo)){
+            if(count($articulo->sucursal)>0){
+                $sucursal= $articulo->sucursal->first();
+                $articulo->precios = $sucursal->pivot;
+            }
+            $categoria = Categoria::find($articulo['id_categoria']);
+            if(!is_null($categoria)){
+                $articulo->categoria = $categoria;
+            } else {
+                $articulo->categoria = ['categoria'=>''];
+            }
+            $fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(!is_null($fabricante)) {
+                $articulo->fabricante = $fabricante;
+            } else {
+                $articulo->fabricante = ['nombre'=>''];
+            }
+            $articulo->stock;
+            foreach ($articulo->stock as $stock){
+                $stock->almacen=Almacen::find($stock->id_almacen)->codigo;
+            }
+            unset($articulo->id_categoria);
+            unset($articulo->id_fabricante);
+        }
+        return  $articulo;
+    }
     public function getArticuloByName($nombre){
 
         $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
@@ -177,6 +213,39 @@ class Articulo extends Model
                 $articulo->dimensiones=$articulo->dimension;
                 unset($articulo->dimension);
             }
+        }
+
+        return $articulos;
+    }
+    public static function getArticuloStockByName($nombre){
+
+        $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
+            ->orderBy('nombre','desc')->take(10)->get();
+        foreach ($articulos as $articulo) {
+            $categoria = Categoria::find($articulo['id_categoria']);
+            $articulo->precios=(Object)[];
+            if(count($articulo->sucursal)>0){
+                $sucursal= $articulo->sucursal->first();
+                $articulo->precios = $sucursal->pivot;
+            }
+            if(!is_null($categoria)){
+                $articulo->categoria = $categoria;
+            } else {
+                $articulo->categoria = ['categoria'=>''];
+            }
+            $fabricante = Fabricante::find($articulo['id_fabricante']);
+            if(!is_null($fabricante)) {
+                $articulo->fabricante = $fabricante;
+            } else {
+                $articulo->fabricante = ['nombre'=>''];
+            }
+            $empleado = Empleado::find(auth()->user()->id_empleado);
+            $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
+            $articulo->stock;
+            foreach ($articulo->stock as $stock){
+                $stock->almacen=Almacen::find($stock->id_almacen)->codigo;
+            }
+
         }
 
         return $articulos;

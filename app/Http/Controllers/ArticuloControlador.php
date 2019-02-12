@@ -148,11 +148,20 @@ class ArticuloControlador extends Controller
 	public function getArticuloByCodigoBarra($codigo_barras){
         return response()->json((new Articulo)->getArticuloBy('codigo-barras',$codigo_barras));
     }
+    public function getArticuloStocksByCodigoBarra($codigo_barras){
+        return response()->json(Articulo::getArticuloStocksBy('codigo-barras',$codigo_barras));
+    }
+    public function getArticuloStocksByCodigo($codigo_barras){
+        return response()->json(Articulo::getArticuloStocksBy('codigo',$codigo_barras));
+    }
     public function getArticuloByCodigo($codigo){
         return response()->json((new Articulo)->getArticuloBy('codigo',$codigo));
     }
     public function getArticuloByName($nombre){
         return response()->json((new Articulo)->getArticuloByName($nombre));
+    }
+    public function getArticuloStockByName($nombre){
+        return response()->json(Articulo::getArticuloStockByName($nombre));
     }
     public function getArticuloById($id){
         return response()->json((new Articulo)->getArticuloById($id));

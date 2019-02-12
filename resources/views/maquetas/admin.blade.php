@@ -170,6 +170,13 @@
                                                 href="{{ url('cortes')}}" aria-expanded="false"><i
                                     class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                           href="{{ url('movimientos-almacen')}}"
+                           aria-expanded="false"
+                        ><i class="mdi mdi-transfer"
+                            ></i><span class="hide-menu">Movimientos de Artículos</span></a>
+                    </li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
