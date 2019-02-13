@@ -25,9 +25,14 @@
         </div>
     </div>
 </div>
-<div class="form-group col mb-2">
+<div class="form-group col mb-2" v-if="!medicion.cliente.oneCliente">
     <app-online-suggestions-objects :config="configCliente"
-                                    :input-value="medicion.cliente.attributes.razon_social"
+                                    @selected-suggestion-event="selectCliente">
+    </app-online-suggestions-objects>
+</div>
+<div class="form-group col mb-2" v-else>
+    <app-online-suggestions-objects :config="configCliente"
+                                    :input-value="medicion.cliente.oneCliente.razon_social"
                                     @selected-suggestion-event="selectCliente">
     </app-online-suggestions-objects>
 </div>
@@ -56,5 +61,29 @@
               id="txtObservacion"></textarea>
 </div>
 <div class="form-group col mb-2">
-    <button type="button" class="btn btn-info w-100" {{--@click="submitFormMovimiento"--}}>Registrar</button>
+    <button type="button" class="btn btn-info w-100" @click="submitFormMedicion">Registrar</button>
+</div>
+
+
+{{--===============================================Modal New Client======================================--}}
+<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
+     id="modal-new-client">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pt-1 pr-1">Nuevo Cliente</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                @include('cliente.create')
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

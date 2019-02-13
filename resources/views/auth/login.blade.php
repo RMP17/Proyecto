@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
                     <div class="col-md-12 text-center">
-                        <img src="{{asset('images/tabletec-logo-2018.png')}}" width="400">
+                        <img src="{{asset('images/tabletec-logo-2018.png')}}" width="400" class="img-responsive">
                     </div>
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}" autocomplete="off">
                         {{ csrf_field() }}
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="form-group text-center">
-                            <button type="submit" class="btn btn-danger" style="width: 25%">
+                            <button type="submit" class="btn btn-danger">
                                 Iniciar Sesión
                             </button>
                         </div>

@@ -2,14 +2,20 @@
     <table class="table table-striped table-bordered table-sm">
         <thead>
         <tr>
-            <th>Artículo</th>
+            <th>Descripción</th>
+            <th>Ancho</th>
+            <th>Alto</th>
             <th>Cantidad</th>
+            <th>Ubicación</th>
         </tr>
         </thead>
-        <tbody v-if="movimiento_almacen.oneMovimientoAlmacen">
-        <tr v-for="_detalle in movimiento_almacen.oneMovimientoAlmacen.movimientos_almacen_detalle">
-            <td>@{{ _detalle.articulo}}</td>
+        <tbody v-if="medicion.oneMedicion">
+        <tr v-for="_detalle in medicion.oneMedicion.medicion_detalle">
+            <td>@{{ _detalle.descripcion}}</td>
+            <td>@{{ _detalle.ancho }}</td>
+            <td>@{{ _detalle.alto }}</td>
             <td>@{{ _detalle.cantidad }}</td>
+            <td>@{{ _detalle.ubicacion }}</td>
         </tr>
         </tbody>
     </table>

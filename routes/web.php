@@ -46,6 +46,9 @@ Route::prefix('caja')->group(function () {
 Route::prefix('movimientos-almacen')->group(function () {
     Route::post('date_range', 'MovimientosAlmacenController@getMovimientoAlmacenByRangeDate');
 });
+Route::prefix('medicion')->group(function () {
+    Route::post('date_range', 'MedicionController@getMedicionByRangeDate');
+});
 
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');

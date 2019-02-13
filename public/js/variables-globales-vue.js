@@ -6,6 +6,7 @@ var urlGlobal={
     resourcesAlmacen:url + 'almacen',
     resourcesCargo:url + 'cargo',
     resourcesCompra:url + 'compra',
+    resourcesMedicion:url + 'medicion',
     resourcesMoneda:url + 'moneda',
     resourcesVenta:url + 'venta',
     resourcesCuenta:url + 'cuenta',
@@ -56,6 +57,7 @@ var urlGlobal={
     getMovimientoAlmacenByRangeDate:url + 'movimientos-almacen/date_range',
     getVentaById:url + 'venta/id/',
     getGastoByRangeDate:url + 'gasto/date_range',
+    getMedicionByRangeDate:url + 'medicion/date_range',
     getCajaChicaByRangeDate:url + 'caja/caja-chica/date_range',
     getPurchasesOnCreditInForce:url + 'compra/creditos',
     getSalesOnCreditInForce:url + 'venta/creditos',
@@ -462,7 +464,8 @@ Vue.component('app-online-suggestions-objects',{
                 return promise;
             }*/
 
-            let _suggestions=await this.matches();
+            /*let _suggestions=await this.matches();*/
+            let _suggestions=[];
             if(_suggestions.length>0){
                 this.suggestions = _suggestions;
             } else {

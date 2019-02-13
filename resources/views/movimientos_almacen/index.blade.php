@@ -147,7 +147,7 @@
                                                 <th>Fecha y hora</th>
                                                 <th>Almacen Origen</th>
                                                 <th>Almacen Destino</th>
-                                                <th>Obeservaciones</th>
+                                                <th>Observaciones</th>
                                                 <th>Acciones</th>
                                             </tr>
                                             </thead>
@@ -191,7 +191,7 @@
                                                 <th>Fecha y hora</th>
                                                 <th>Almacen Origen</th>
                                                 <th>Almacen Destino</th>
-                                                <th>Obeservaciones</th>
+                                                <th>Observaciones</th>
                                             </tr>
                                             </thead>
                                             <tbody>

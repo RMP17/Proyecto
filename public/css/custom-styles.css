@@ -119,6 +119,7 @@ legend {
     }
     .section-to-print, .section-to-print * {
         visibility: visible;
+        width: 100%;
     }
     .section-to-print {
         display: block!important;
