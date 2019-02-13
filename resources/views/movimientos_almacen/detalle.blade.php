@@ -1,20 +1,3 @@
-<div class="d-flex justify-content-center mb-2">
-    <div class="col pr-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Categoria: @{{ movimiento_almacen.articulo.one.categoria }}
-        </div>
-    </div>
-    <div class="col pr-0 pl-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Fabricante: @{{ movimiento_almacen.articulo.one.fabricante }}
-        </div>
-    </div>
-    <div class="col pl-0">
-        <div class="form-control border border-info border-top-0 border-bottom-0">
-            Stock Origen: @{{ movimiento_almacen.articulo.one.stock }}
-        </div>
-    </div>
-</div>
 <div class="d-flex justify-content-center mb-2" v-if="!movimiento_almacen.hideSuggestionsArticulo">
     <div class="col pr-0"><input
                 class="form-control"
@@ -31,6 +14,23 @@
                                         :input-value="movimiento_almacen.articulo.tempNombre"
                                         @selected-suggestion-event="selectArticuloMovimientoAlmacen">
         </app-online-suggestions-objects>
+    </div>
+</div>
+<div class="d-flex justify-content-center mb-2">
+    <div class="col pr-0">
+        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+            Categoria: @{{ movimiento_almacen.articulo.one.categoria }}
+        </div>
+    </div>
+    <div class="col pr-0 pl-0">
+        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+            Fabricante: @{{ movimiento_almacen.articulo.one.fabricante }}
+        </div>
+    </div>
+    <div class="col pl-0">
+        <div class="form-control border border-info border-top-0 border-bottom-0">
+            Stock Origen: @{{ movimiento_almacen.articulo.one.stock }}
+        </div>
     </div>
 </div>
 <div class="d-flex justify-content-center mb-2">

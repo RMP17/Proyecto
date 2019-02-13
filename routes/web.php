@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth','checkstatus']], function () {
         'tipoempleado' => 'TipoEmpleadoControlador',
         'empresa' => 'EmpresaControlador',
         'fabricante' => 'FabricanteControlador',
+        'medicion' => 'MedicionController',
         'gasto' => 'GastoControlador',
         'moneda' => 'MonedaControlador',
         'pais' => 'PaisControlador',

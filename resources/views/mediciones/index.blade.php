@@ -1,13 +1,10 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
-    <script type="text/javascript">
-        var movimientos_almacenes_php = JSON.parse('<?/*= $var; */?>');
-    </script>
-    <div id="app-movimiento-almacen">
+    <div id="app-medicion">
         <div class="page-breadcrumb mb-2">
             <div class="row">
                 <div class="d-flex no-block align-items-center">
-                    <h4 class="page-title">Movimientos de artículos</h4>
+                    <h4 class="page-title">Mediciones</h4>
                     <div class="col">
                         <nav>
                             <div class="nav nav-tabs show active" id="nav-tab" role="tablist">
@@ -16,16 +13,15 @@
                                    data-toggle="tab"
                                    href="#nav-movimientos-tab"
                                    role="tab"
-                                   aria-controls="nav-movimientos"
-                                   title="Nuevo Movimiento"
-                                   aria-selected="false">N. Movimiento</a>
+                                   aria-controls="nav-profile"
+                                   aria-selected="false">Medir</a>
                                 <a class="nav-item nav-link w-10em"
                                    id="nav-registro-movimientoalmacen"
-                                   title="Registro de movimientos entre almacenes"
+                                   title="Registro de Medición"
                                    data-toggle="tab"
                                    href="#nav-registro-movimientoalmacen-tab"
                                    role="tab"
-                                   aria-selected="false">R. Mov. almacén</a>
+                                   aria-selected="false">R. Mediciones</a>
                             </div>
                         </nav>
                     </div>
@@ -48,7 +44,7 @@
                         <div class="card-body">
                             <div class="tab-content" id="nav-tabContent">
                                 {{--=================================================NAV TABCONTENT==================================--}}
-                                {{--=========================================TAP REGISTRO movimientos almacen==========================--}}
+                                {{--=========================================TAP REGISTRO DE MEDICIONES==========================--}}
                                 <div class="tab-pane fade show active" id="nav-movimientos-tab" role="tabpanel"
                                      aria-labelledby="nav-contact-tab">
                                     <div class="container-fluid pr-0 pl-0">
@@ -56,21 +52,21 @@
                                             <div class="card col-md-8 p-0">
                                                 <div class="card-body p-0">
                                                     <h5 class="card-title text-center">Detalle</h5>
-                                                    @include('movimientos_almacen.detalle')
+                                                    @include('mediciones.detalle')
                                                 </div>
                                             </div>
                                             <div class="card col-md-4 border-0 pr-0 pl-0">
                                                 <div class="card-body p-0">
-                                                    <h5 class="card-title text-center">Datos de Movimiento</h5>
-                                                    @include('movimientos_almacen.create')
+                                                    <h5 class="card-title text-center">Datos del Cliente</h5>
+                                                    @include('mediciones.create')
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {{--=========================================END TAP REGISTRO de  movimientos almacen==================================--}}
+                                {{--=========================================END TAP REGISTRO DE MEDICIONES==================================--}}
                                 {{--=========================================TAP Registro de Movimientos==========================--}}
-                                <div class="tab-pane fade" id="nav-registro-movimientoalmacen-tab" role="tabpanel"
+                                {{--<div class="tab-pane fade" id="nav-registro-movimientoalmacen-tab" role="tabpanel"
                                      aria-labelledby="nav-profile-tab">
                                     <div class="row mb-3">
                                         <div class="col-md-8 offset-2 pr-5 pl-5">
@@ -205,7 +201,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div>--}}
                                 {{--=========================================END TAP CAJA==========================--}}
                             </div>
                         </div>
@@ -214,7 +210,7 @@
             </div>
         </div>
         {{--===============================================Modal View Detail Movimiento======================================--}}
-        <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
+        {{--<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
              id="modal-view-detail-movimiento">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -234,11 +230,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>--}}
 
-        @include('movimientos_almacen.comprobante')
+        {{--@include('movimientos_almacen.comprobante')--}}
     </div>
 @endsection
 @section('scripts')
-    <script src="{{asset('js/movimientos_almacen.js')}}"></script>
+    <script src="{{asset('js/mediciones.js')}}"></script>
 @endsection

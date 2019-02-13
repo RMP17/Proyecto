@@ -100,8 +100,8 @@
                                 </div>
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <a href="{{url('caja')}}">
-                                        <div class="box bg-deep-orange text-center">
+                                        <a href="{{url('medicion')}}">
+                                        <div class="box bg-purple text-center">
                                             <h1 class="font-light text-white"><i class="mdi mdi-ruler"></i></h1>
                                             <h6 class="text-white">Mediciones</h6>
                                         </div>
