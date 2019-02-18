@@ -182,6 +182,12 @@
                            aria-expanded="false"
                         ><i class="mdi mdi-ruler"></i><span class="hide-menu">Mediciones</span></a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                           href="{{ url('produccion')}}"
+                           aria-expanded="false"
+                        ><i class="fas fa-gavel"></i><span class="hide-menu">Producciones</span></a>
+                    </li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->

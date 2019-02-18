@@ -41,7 +41,6 @@ class ArticuloControlador extends Controller
             'codigo' => 'required|unique:articulo,codigo|max:50',
             'codigo_barra' => 'required|max:50',
             'precio_compra' => 'required',
-            'precio_produccion' => 'required'
         ]);
         if($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -97,7 +96,6 @@ class ArticuloControlador extends Controller
             'codigo' => ['required','max:50', Rule::unique('articulo')->ignore($articulo->codigo, 'codigo')],
             'codigo_barra' => 'required|max:50',
             'precio_compra' => 'required',
-            'precio_produccion' => 'required'
         ]);
         if($validator->fails()) {
             return response()->json($validator->errors(), 400);

@@ -77,7 +77,7 @@
                 </button>
             </div>
             <div class="modal-body pb-0">
-                @include('cliente.create')
+                @include('mediciones.cliente.create')
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">

@@ -51,7 +51,7 @@ class ClienteControlador extends Controller
 	public function store(ClientePeticion $peticion)
 	{
 		$cliente = Cliente::newCliente($peticion->all());
-		return response()->json();
+		return response()->json($cliente);
 	}
 	public function show($id_cliente)
 	{

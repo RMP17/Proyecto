@@ -9,13 +9,13 @@
                                 @include('pais.create')
                             </div>
                         </div>
-                        <div class="row ">
-                            <div class="col-md-4 offset-6 pl-0">
+                        <div class="form-row">
+                            <div class="col-md-4 offset-lg-6">
                                 <app-online-suggestions :config="pais.config"
                                                         @selected-suggestion-event="getPaisById">
                                 </app-online-suggestions>
                             </div>
-                            <div class="col-md-2 pl-0">
+                            <div class="col-md-2">
                                 <button class="btn btn-outline-secondary w-100" @click="getPaises">Ver todos los países</button>
                             </div>
                         </div>

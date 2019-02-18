@@ -4,7 +4,7 @@
             social : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtRazonSocial"
-                   v-model="venta.cliente.attributes.razon_social"
+                   v-model="medicion.cliente.attributes.razon_social"
                    placeholder="La razón social del cliente va aquí" name="txtRazonSocial">
         </div>
     </div>
@@ -13,7 +13,7 @@
             o NIT : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtNit"
-                   v-model="venta.cliente.attributes.nit"
+                   v-model="medicion.cliente.attributes.nit"
                    placeholder="La cédula de identidad del empleado aquí" name="txtNit">
         </div>
     </div>
@@ -22,7 +22,7 @@
             : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtActividad"
-                   v-model="venta.cliente.attributes.actividad"
+                   v-model="medicion.cliente.attributes.actividad"
                    placeholder="La cédula de identidad del empleado aquí" name="txtActividad">
         </div>
     </div>
@@ -31,7 +31,7 @@
             : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtTelefono"
-                   v-model="venta.cliente.attributes.telefono"
+                   v-model="medicion.cliente.attributes.telefono"
                    placeholder="Número telefónico del empleado aquí" name="txtTelefono"
                    onkeypress="return ValidarNumeroTecleado(event)">
         </div>
@@ -41,7 +41,7 @@
             : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtCelular"
-                   v-model="venta.cliente.attributes.celular"
+                   v-model="medicion.cliente.attributes.celular"
                    placeholder="Número del celular del empleado aquí" name="txtCelular"
                    onkeypress="return ValidarNumeroTecleado(event)">
         </div>
@@ -51,7 +51,7 @@
             : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtCorreo"
-                   v-model="venta.cliente.attributes.correo"
+                   v-model="medicion.cliente.attributes.correo"
                    placeholder="e-mail del empleado aquí" name="txtCorreo">
         </div>
     </div>
@@ -60,7 +60,7 @@
             : </label>
         <div class="col-sm-6">
             <input type="text" class="form-control" id="txtDireccion"
-                   v-model="venta.cliente.attributes.direccion"
+                   v-model="medicion.cliente.attributes.direccion"
                    placeholder="Dirección del empleado aquí" name="txtDireccion">
         </div>
     </div>
@@ -68,7 +68,7 @@
         <label for="cbxCiudad" class="col-sm-4 text-right control-label col-form-label">Ciudad
             : </label>
         <div class="col-sm-6">
-            <app-online-suggestions-objects v-if="!venta.hideSuggestions" :config="configCiudad"
+            <app-online-suggestions-objects v-if="!medicion.hideSuggestions" :config="configCiudad"
                                             @selected-suggestion-event="selectCiudad">
             </app-online-suggestions-objects>
         </div>

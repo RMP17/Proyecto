@@ -25,7 +25,17 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
+                            <div class="d-flex flex-wrap justify-content-center">
+                                <div class="col-md-6 col-lg-2 col-xlg-3">
+                                    <div class="card card-hover">
+                                        <a href="{{url('caja')}}">
+                                            <div class="box bg-secondary text-center">
+                                                <h1 class="font-light text-white"><i class="mdi mdi-wrench"></i></h1>
+                                                <h6 class="text-white">Panel de Administración</h6>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
                                 <!-- Column -->
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
@@ -71,20 +81,11 @@
                                 </div>
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <div class="box bg-teal text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-crop"></i></h1>
-                                            <h6 class="text-white">Cortes</h6>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-lg-2 col-xlg-3">
-                                    <div class="card card-hover">
-                                        <a href="{{url('caja')}}">
-                                        <div class="box bg-secondary text-center">
-                                            <h1 class="font-light text-white"><i class="mdi mdi-wrench"></i></h1>
-                                            <h6 class="text-white">Panel de Administración</h6>
-                                        </div>
+                                        <a href="{{url('cortes')}}">
+                                            <div class="box bg-teal text-center">
+                                                <h1 class="font-light text-white"><i class="mdi mdi-crop"></i></h1>
+                                                <h6 class="text-white">Cortes</h6>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>
@@ -104,6 +105,16 @@
                                         <div class="box bg-purple text-center">
                                             <h1 class="font-light text-white"><i class="mdi mdi-ruler"></i></h1>
                                             <h6 class="text-white">Mediciones</h6>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-2 col-xlg-3">
+                                    <div class="card card-hover">
+                                        <a href="{{url('produccion')}}">
+                                        <div class="box bg-theme text-center">
+                                            <h1 class="font-light text-white"><i class="fas fa-gavel"></i></h1>
+                                            <h6 class="text-white">Producción</h6>
                                         </div>
                                         </a>
                                     </div>
