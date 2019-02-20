@@ -1,5 +1,9 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
+
+	<script type="text/javascript">
+        let almacenes_php = @json($almacenes);
+	</script>
 <div id="app-produccion">
 	<div class="page-breadcrumb mb-2">
 		<div class="row">
@@ -13,13 +17,13 @@
 							   href="#nav-producir" role="tab"
 							   aria-controls="nav-vender"
 							   aria-selected="true">Producir</a>
-							{{--<a title="Registro de Ventas" class="nav-item nav-link w-10em"
+							<a title="Registro de Producciones" class="nav-item nav-link w-10em"
 							   id="nav-profile-tab"
 							   data-toggle="tab"
-							   href="#nav-registro-ventas"
+							   href="#nav-registro-producciones"
 							   role="tab"
 							   aria-controls="nav-register-venta"
-							   aria-selected="false">R. de Ventas</a>--}}
+							   aria-selected="false">R. Producciones</a>
 						</div>
 					</nav>
 				</div>
@@ -47,40 +51,40 @@
 								 aria-labelledby="nav-home-tab">
 								@include('produccion.create')
 							</div>
-							{{--<div class="tab-pane fade" id="nav-registro-ventas" role="tabpanel"
+							<div class="tab-pane fade" id="nav-registro-producciones" role="tabpanel"
 								 aria-labelledby="nav-registro-ventas-tab">
 								<div class="row mb-3">
 									<div class="col-md-8 offset-2 pr-5 pl-5">
-										<app-dates @date-range="getVentasByRageDate"></app-dates>
+										<app-dates @date-range="getProduccionesByRageDate"></app-dates>
 									</div>
 								</div>
 								<div class="d-md-flex flex-row">
-									<div v-if="!venta.hideFilters">
-										<app-online-suggestions-objects v-if="!venta.hideSuggestions"
+									<div>
+										<app-online-suggestions-objects v-if="!produccion.hideSuggestions"
 																		:config="configEmpleado"
 																		@selected-suggestion-event="filterByEmpleado">
 										</app-online-suggestions-objects>
 									</div>
-									<div v-if="!venta.hideFilters">
+									<div v-if="!produccion.hideFilters">
 										<select class="custom-select"
 												@change="filterByAlmacen"
-												name="cbxFilterAlmacen">
+												name="slctFilterAlmacen">
 											<option :value="null" disabled selected>Seleccione Almacen</option>
 											<option v-for="_almacen in almacenes" :value="_almacen.id_almacen">
 												@{{ _almacen.codigo }}
 											</option>
 										</select>
 									</div>
-									<div v-if="!venta.hideFilters" class="col p-0">
-										<app-online-suggestions-objects v-if="!venta.hideSuggestions"
+									<div v-if="!produccion.hideFilters" class="col p-0">
+										<app-online-suggestions-objects v-if="!produccion.hideSuggestions"
 																		:config="configCliente"
 																		@selected-suggestion-event="filterByCliente">
 										</app-online-suggestions-objects>
 									</div>
 									<div>
 										<button class="btn btn-outline-secondary"
-												@click="getSalesOnCreditInForce"
-										>Ventas al crédito vigentes</button>
+												@click="forceGetProductionCredits"
+										>Créditos vigentes</button>
 									</div>
 									<div class="ml-auto">
 										<div class="input-group">
@@ -99,20 +103,20 @@
 											<a href="javascript:void(0);" type="button"
 											   title="Átras"
 											   class="btn btn-outline-secondary"
-											   :class="venta.paginated.pageNumber === 0 ? 'disabled':''"
+											   :class="produccion.paginated.pageNumber === 0 ? 'disabled':''"
 											   @click="prevPage"
 											><i class="fas fa-arrow-left fa-lg"></i>
 											</a>
 											<div class="input-group-prepend">
                                                 <span title="Página actual" class="input-group-text">
-                                                @{{ venta.paginated.pageNumber+1 }}
+                                                @{{ produccion.paginated.pageNumber+1 }}
                                                 </span>
 											</div>
 
 											<a href="javascript:void(0);" type="button"
 											   title="Siguiente"
 											   class="btn btn-outline-secondary"
-											   :class="venta.paginated.pageNumber >= pageCount -1 ? 'disabled':''"
+											   :class="produccion.paginated.pageNumber >= pageCount -1 ? 'disabled':''"
 											   @click="nextPage"
 											><i class="fas fa-arrow-right fa-lg"></i>
 											</a>
@@ -123,72 +127,72 @@
 									<table class="table table-striped table-bordered table-sm">
 										<thead>
 										<tr>
-											<th>Fecha</th>
 											<th>Empleado</th>
 											<th>Cliente</th>
 											<th>Caja</th>
+											<th>Fecha de pedido</th>
+											<th>Fecha de entrega</th>
 											<th>Almacen</th>
 											<th>Costo Total</th>
-											<th>Descuento</th>
 											<th>Tipo de pago</th>
-											<th>Código</th>
 											<th>Acciones</th>
 										</tr>
 										</thead>
 										<tbody>
-										<tr v-for="_venta in paginatedData" :class="_venta.estatus==='vc' ? 'table-danger':''">
-											<td>@{{ _venta.fecha }}</td>
-											<td>@{{ _venta.empleado }}</td>
+										<tr v-for="_produccion in paginatedData" :class="_produccion.estatus==='vc' ? 'table-danger':''">
+											<td>@{{ _produccion.empleado }}</td>
 											<td>
-												<span v-if="_venta.nit">Nit: @{{ _venta.nit }}<br></span>
-												@{{ _venta.cliente }}
+												<span>Nit: @{{ _produccion.cliente.nit }}<br></span>
+												@{{ _produccion.cliente.razon_social }}
 											</td>
-                                            <td>@{{ _venta.caja }}</td>
-											<td>@{{ _venta.almacen }}</td>
-											<td>@{{ _venta.costo_total+' '+_venta.moneda }}</td>
-											<td>@{{ _venta.descuento }}</td>
+											<td>@{{ _produccion.caja }}</td>
+											<td>@{{ _produccion.fecha_inicio }}</td>
+											<td>@{{ _produccion.fecha_entrega }}</td>
+											<td>@{{ _produccion.almacen }}</td>
+											<td>@{{ _produccion.costo_total }}</td>
 											<td>
-												<span v-if="_venta.tipo_pago ==='ef'">Efectivo</span>
-												<span v-if="_venta.tipo_pago ==='cr'">Crédito</span>
-												<span v-if="_venta.tipo_pago ==='ch'">Cheque</span>
-												<span v-if="_venta.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
+												<span v-if="_produccion.tipo_pago ==='ef'">Efectivo</span>
+												<span v-if="_produccion.tipo_pago ==='cr'">Crédito</span>
+												<span v-if="_produccion.tipo_pago ==='ch'">Cheque</span>
+												<span v-if="_produccion.tipo_pago ==='co'">Solo Cotización</span>
+												<span v-if="_produccion.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
 											</td>
-											<td>@{{ _venta.codigo_tarjeta_cheque }}</td>
 											<td>
 												<a href="javascript:void(0)"
 												   title="Ver detalle"
-												   @click="viewDetallesVenta(_venta)"
-												   data-target="#modal-view-detail-venta"
+												   @click="viewDetallesProduccion(_produccion)"
+												   data-target="#modal-view-detail-produccion"
 												   data-toggle="modal"
 												   type="button" class="btn btn-outline-info btn-sm">
 													<i class="fas fa-eye fa-lg"></i>
 												</a>
 												<a href="javascript:void(0)"
 												   title="Imprimir"
-												   @click="getVentaById(_venta)"
+												   @click="printProduccion(_produccion)"
 												   type="button" class="btn btn-outline-info btn-sm lh-1">
 													<i class="mdi mdi-printer mdi-18px"></i>
 												</a>
 												<a href="javascript:void(0)"
-												   v-if="_venta.tipo_pago==='cr'"
-												   title="Ver venta al crédito"
-												   @click="assignAnIdentificationOfVentaToCredito(_venta)"
-												   data-target="#modal-view-credit-sale"
+												   v-if="_produccion.tipo_pago==='cr'"
+												   title="Ver Producción al crédito"
+												   @click="selectCreditProduccion(_produccion)"
+												   data-target="#modal-view-credit-produccion"
 												   data-toggle="modal"
 												   type="button" class="btn btn-outline-info btn-sm">
 													<i class="fas fa-hand-holding-usd fa-lg"></i>
 												</a>
-												<a v-if="_venta.estatus==='null' || _venta.estatus!=='vc'" href="javascript:void(0)"
+												{{--
+												<a v-if="_produccion.estatus==='null' || _produccion.estatus!=='vc'" href="javascript:void(0)"
 												   title="Anular Venta"
-                                                   @click="cancelSale(_venta)"
+                                                   @click="cancelSale(_produccion)"
 												   type="button" class="btn btn-outline-danger btn-sm">
 													<i class="far fa-trash-alt fa-lg"></i>
-												</a>
+												</a>--}}
 											</td>
 										</tr>
 										</tbody>
 									</table>
-									<table v-show="false" id="content">
+									{{--<table v-show="false" id="content">
 										<thead>
 										<tr>
 											<th>Fecha</th>
@@ -226,15 +230,14 @@
                                             </td>
 										</tr>
 										</tbody>
-									</table>
+									</table>--}}
 								</div>
-							</div>--}}
+							</div>
 							{{--=========================================NAV TABCONTENT==========================--}}
 							{{--=========================================END TAP PAISES==========================--}}
 						</div>
 					</div>
 				</div>
-				{{--{{$compras -> render()}}--}}
 			</div>
 		</div>
 
@@ -253,18 +256,18 @@
 	<!-- End Container fluid  -->
 	<!-- ============================================================== -->
 	{{--===============================================Modal View Detail Venta======================================--}}
-	{{--<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
-		 id="modal-view-detail-venta">
+	<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
+		 id="modal-view-detail-produccion">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title pt-1 pr-1">Detalle</h4>
+					<h4 class="modal-title pt-1 pr-1">Detalle @{{ produccion.oneProduccion ? produccion.oneProduccion.cliente.razon_social:'' }}</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
 						<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					@include('venta.show_detalle_venta')
+					@include('produccion.show_detalle_venta')
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -273,20 +276,20 @@
 				</div>
 			</div>
 		</div>
-	</div>--}}
+	</div>
 	{{--===============================================Modal Credits======================================--}}
-	{{--<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
-		 id="modal-view-credit-sale">
+	<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
+		 id="modal-view-credit-produccion">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title pt-1 pr-1">Venta al crédito</h4>
+					<h4 class="modal-title pt-1 pr-1">Producción al crédito</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
 						<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
 					</button>
 				</div>
 				<div class="modal-body pb-0">
-					@include('venta.credito_venta')
+					@include('produccion.credito_venta')
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -295,10 +298,10 @@
 				</div>
 			</div>
 		</div>
-	</div>--}}
+	</div>
 
 	{{--===============================================Modal Print Area======================================--}}
-	{{--@include('comprobante.comprobante')--}}
+	@include('produccion.comprobante')
 </div>
 @endsection
 @section('scripts')

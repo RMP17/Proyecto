@@ -1,4 +1,4 @@
-<div v-if="venta.oneVenta" id="myPrintArea" class="section-to-print">
+<div v-if="venta.oneVenta" id="myPrintArea" class="section-to-print" ref="print_venta">
     <div id="print-section" class="hoja">
         <h5 class="text-center">COMPROBANTE</h5>
         <div>

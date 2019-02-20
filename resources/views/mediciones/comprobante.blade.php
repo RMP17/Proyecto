@@ -1,4 +1,4 @@
-<div v-if="medicion.oneMedicion" id="myPrintArea" class="section-to-print">
+<div v-if="medicion.oneMedicion" id="myPrintArea" class="section-to-print" ref="print_medicion">
     <div id="print-section" class="hoja">
         <h5 class="text-center">MEDICIONES</h5>
         <div>

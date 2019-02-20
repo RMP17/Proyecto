@@ -49,6 +49,11 @@ Route::prefix('movimientos-almacen')->group(function () {
 Route::prefix('medicion')->group(function () {
     Route::post('date_range', 'MedicionController@getMedicionByRangeDate');
 });
+Route::prefix('produccion')->group(function () {
+    Route::get('creditos', 'ProduccionController@forceGetProductionCredits');
+    Route::post('date_range', 'ProduccionController@getProduccionesByRangeDate');
+    Route::get('credito/{id_produccion}', 'ProduccionController@getCreditoOfProduccion');
+});
 
 Route::prefix('empresa')->group(function () {
     Route::post('add-suscursal/{id_empresa}', 'EmpresaControlador@addSucursalToEmpresa');

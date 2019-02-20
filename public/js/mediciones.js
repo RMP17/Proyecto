@@ -239,7 +239,7 @@ var appMovimientoAlmacen = new Vue({
         printDetallesMedicion(medicion){
             this.medicion.oneMedicion = medicion;
             this.$nextTick(function () {
-                this.print();
+                this.print(this.$refs.print_medicion);
             });
         },
         goThroughFilters(){
@@ -300,7 +300,16 @@ var appMovimientoAlmacen = new Vue({
             doc.autoTable({html: '#print-medicion'});
             doc.save('mediciones.pdf');
         },
-        print(){
+        print(element){
+            let domClone = element.cloneNode(true);
+            let printSection = document.getElementById("printSection");
+            if (!printSection) {
+                let printSection = document.createElement("div");
+                printSection.class = "printSection";
+                document.body.appendChild(printSection);
+            }
+            printSection.innerHTML = "";
+            printSection.appendChild(domClone);
             window.print();
         },
         //<editor-fold desc="Methods of Notifications">

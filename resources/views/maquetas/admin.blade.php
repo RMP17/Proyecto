@@ -20,7 +20,7 @@
     <!-- Custom CSS -->
     {{--<link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">--}}
     <link rel="stylesheet" type="text/css" href="{{asset('dist/css/style.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/custom-styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/custom-styles.css')}}" >
     <link rel="stylesheet" type="text/css" href="{{asset('css/toastr.min.css')}}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,6 +32,9 @@
 </head>
 
 <body>
+<div id="printSection">
+    <div class="modifyMe"></div>
+</div>
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->

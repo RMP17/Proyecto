@@ -278,7 +278,7 @@ var appMovimientoAlmacen = new Vue({
         printDetallesMovimientoAlmacen(movimiento_almacen){
             this.movimiento_almacen.oneMovimientoAlmacen = movimiento_almacen;
             this.$nextTick(function () {
-                this.print();
+                this.print(this.$refs.print_movimiento);
             });
         },
         goThroughFilters(){
@@ -348,7 +348,16 @@ var appMovimientoAlmacen = new Vue({
             doc.autoTable({html: '#print-movimientos'});
             doc.save('table.pdf');
         },
-        print(){
+        print(element){
+            let domClone = element.cloneNode(true);
+            let printSection = document.getElementById("printSection");
+            if (!printSection) {
+                let printSection = document.createElement("div");
+                printSection.class = "printSection";
+                document.body.appendChild(printSection);
+            }
+            printSection.innerHTML = "";
+            printSection.appendChild(domClone);
             window.print();
         },
         numberPositiveDirective(event) {

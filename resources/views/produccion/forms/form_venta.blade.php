@@ -51,6 +51,7 @@
             <option :value="null" disabled>Seleccione tipo de pago</option>
             <option value="ef">Efectivo</option>
             <option value="cr">Al crédito</option>
+            <option value="co">Solo Cotización</option>
             <option value="ch">Cheque</option>
             <option value="tc">Tarjeta de crédito o débito</option>
         </select>
@@ -58,19 +59,28 @@
 </div>
 <div class="form-group  mb-2">
     <div class="col-auto">
+        <textarea class="form-control"
+                  v-model="produccion.attributes.observaciones"
+                  placeholder="Observaciones" type="text">
+
+        </textarea>
+    </div>
+</div>
+<div class="form-group  mb-2">
+    <div class="col-auto">
         <a href="javascript:void(0)"
            data-backdrop="static"
            data-keyboad="false"
-           data-target="#modal-realizar-venta"
+           data-target="#modal-producir"
            data-toggle="modal"
            @mouseup="focusButtonYes"
            class="btn btn-primary w-100 ">
-            Realizar Venta
+            Producir
         </a>
     </div>
 </div>
 <!--======================================================Modal Confirmar Venta=====================================================-->
-{{--<div class="modal fade" id="modal-realizar-venta" tabindex="-1" role="dialog" aria-labelledby="modalGenerateinvoiceLabel" aria-hidden="true" v-cloak>
+<div class="modal fade" id="modal-producir" tabindex="-1" role="dialog" aria-labelledby="modalPorucir" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info" >
@@ -80,36 +90,50 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>¿Está seguro que desea realizar la venta?</p>
+                <p>¿Está seguro que desea registrar la producción?</p>
                 <div class="input-group">
-                    <div class="input-group-prepend col-md-3 p-0">
-                        <span class="input-group-text w-100" id="basic-addon1">Total a pagar</span>
+                    <div class="input-group-prepend col-md-4 p-0">
+                        <span class="input-group-text w-100" id="basic-addon1">Fecha de pedido</span>
                     </div>
-                    <div class="form-control text-right">@{{ venta.totalDetallesVenta }}</div>
-                </div>
-                <div class="input-group border border-info">
-                    <div class="input-group-prepend col-md-3 p-0">
-                        <span class="input-group-text w-100" id="txtImporte">Importe</span>
-                    </div>
-                    <input type="text"
-                           class="form-control text-right"
-                           v-model.number="venta.attributes.importe"
-                           placeholder="00.00" aria-label="txtImporte" aria-describedby="txtImporte">
+                    <input type="date" v-model="produccion.attributes.fecha_inicio" class="form-control">
                 </div>
                 <div class="input-group">
-                    <div class="input-group-prepend col-md-3 p-0">
-                        <span class="input-group-text w-100" id="basic-addon1">Cambio</span>
+                    <div class="input-group-prepend col-md-4 p-0">
+                        <span class="input-group-text w-100" id="basic-addon1">Fecha de entrega</span>
                     </div>
-                    <div class="form-control text-right">@{{ venta.attributes.importe-Number(venta.totalDetallesVenta)}}</div>
+                    <input type="date" v-model="produccion.attributes.fecha_entrega" class="form-control">
+                </div>
+                <div v-if="['ef', 'ch', 'tc', 'cr'].indexOf(produccion.attributes.tipo_pago) !==-1 ">
+                    <div class="input-group">
+                        <div class="input-group-prepend col-md-4 p-0">
+                            <span class="input-group-text w-100" id="basic-addon1">Total a pagar</span>
+                        </div>
+                        <div class="form-control text-right">@{{ produccion.totalDetalles }}</div>
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend col-md-4 p-0">
+                            <span class="input-group-text w-100" id="txtImporte">Importe</span>
+                        </div>
+                        <input type="text"
+                               class="form-control text-right"
+                               v-model.number="produccion.attributes.importe"
+                               placeholder="00.00" aria-label="txtImporte" aria-describedby="txtImporte">
+                    </div>
+                    <div class="input-group">
+                        <div class="input-group-prepend col-md-4 p-0">
+                            <span class="input-group-text w-100" id="basic-addon1">Cambio</span>
+                        </div>
+                        <div class="form-control text-right">@{{ produccion.attributes.importe-Number(produccion.totalDetalles)}}</div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger w-25" data-dismiss="modal">NO</button>
-                <button ref="btnSi" type="button" class="btn btn-outline-info w-25" data-dismiss="modal" @click="submitFormVenta">SI</button>
+                <button ref="btnSi" type="button" class="btn btn-outline-info w-25" data-dismiss="modal" @click="submitFormProduccion">SI</button>
             </div>
         </div>
     </div>
-</div>--}}
+</div>
 {{--===============================================Modal New Client======================================--}}
 <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
      id="modal-new-client-produccion">

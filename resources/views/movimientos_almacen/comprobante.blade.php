@@ -1,4 +1,4 @@
-<div v-if="movimiento_almacen.oneMovimientoAlmacen" id="myPrintArea" class="section-to-print">
+<div v-if="movimiento_almacen.oneMovimientoAlmacen" id="myPrintArea" class="section-to-print" ref="print_movimiento">
     <div id="print-section" class="hoja">
         <h5 class="text-center">COMPROBANTE</h5>
         <div>

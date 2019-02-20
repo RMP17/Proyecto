@@ -341,7 +341,7 @@ var appVenta = new Vue({
             ).then(response => {
                 this.venta.oneVenta=response.data;
                 this.$nextTick(function () {
-                    this.printVenta();
+                    this.printVenta(this.$refs.print_venta);
                 })
             }).catch(errors => {
                 console.log(errors);
@@ -449,7 +449,7 @@ var appVenta = new Vue({
                 this.venta.attributes.importe = 0;
                 this.venta.oneVenta = response.data;
                 this.$nextTick(function () {
-                    this.printVenta();
+                    this.printVenta(this.$refs.print_venta);
                 });
                 this.notificationSuccess();
             }).catch(errors => {
@@ -629,8 +629,16 @@ var appVenta = new Vue({
             doc.autoTable({html: '#content'});
             doc.save('table.pdf');
         },
-        printVenta(){
-            /*$.print("#myPrintArea");*/
+        printVenta(element){
+            let domClone = element.cloneNode(true);
+            let printSection = document.getElementById("printSection");
+            if (!printSection) {
+                let printSection = document.createElement("div");
+                printSection.class = "printSection";
+                document.body.appendChild(printSection);
+            }
+            printSection.innerHTML = "";
+            printSection.appendChild(domClone);
             window.print();
         }
     },

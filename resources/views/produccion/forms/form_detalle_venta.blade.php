@@ -41,7 +41,7 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center mb-4">
+<div class="d-flex justify-content-center mb-2">
     <div class="col-lg-4 pr-0"><input
                 class="form-control"
                 ref="txtCantidadProduccion"
@@ -63,7 +63,7 @@
         </select>
     </div>
     <div class="col-lg-4 pl-0">
-        <button type="button" class="btn w-100" :class="produccion.detalle.attributes.id_articulo  ?  'btn-info':'btn-secondary'" @click="addToList">Agregar a la lista y borrar</button>
+        <button type="button" class="btn w-100" :class="produccion.detalle.attributes.id_articulo  ?  'btn-info':'btn-secondary'" @click="addToListAndRemove">Agregar a la lista y borrar</button>
     </div>
 </div>
 <div class="d-flex justify-content-center mb-4">
@@ -74,8 +74,8 @@
     </div>
     <div class="col-lg-4 pr-0 pl-0"><input
                 class="form-control"
-                v-model.number ="produccion.detalle.attributes.alto"
-                placeholder="Alto [cm]" type="text" @keypress="numberFloatDirective">
+                v-model.number ="produccion.detalle.attributes.largo"
+                placeholder="Largo [cm]" type="text" @keypress="numberFloatDirective">
     </div>
     <div class="col-lg-4 pl-0">
         <button type="button" class="btn w-100" :class="produccion.detalle.attributes.id_articulo  ?  'btn-info':'btn-secondary'" @click="addToList">Agregar a la lista</button>
@@ -94,11 +94,14 @@
             </thead>
             <tbody>
             <tr v-for="(detalle,index) in produccion.attributes.detalles">
-                <td>
+                <td title="Ancho X Largo">
                     <a href="javascript:void(0)"
-                       @click="removeDetalleVenta(index)"
+                       @click="removeOfList(index)"
                        class="text-danger" title="Quitar"><i class="fas fa-minus fa-lg"></i></a>
-                    @{{ detalle.nombre}}
+                    <span v-if="detalle.ancho">
+                        @{{ detalle.nombre}} <strong>@{{detalle.ancho+'x'+detalle.largo }}</strong>
+                    </span>
+                    <span v-else>@{{ detalle.nombre}}</span>
                 </td>
                 <td class="text-right pr-3">@{{ detalle.cantidad}}</td>
                 <td class="text-right pr-3">@{{ detalle.precio_unitario}}</td>
