@@ -8,6 +8,7 @@ use Allison\Produccion;
 use Allison\ProduccionCredito;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class ProduccionController extends Controller
 {
@@ -30,8 +31,7 @@ class ProduccionController extends Controller
     public function show($id_produccion){
 
         $produccion = Produccion::getProduccionById($id_produccion);
-        return $produccion->toJson();
-//        return response()->json($produccion);
+        return response()->json($produccion);
     }
     public function getProduccionesByRangeDate(Request $request)
     {
@@ -59,5 +59,21 @@ class ProduccionController extends Controller
     public function getCreditoOfProduccion($id_produccion){
         $_produccion= ProduccionCredito::getCreditoOfProduccion($id_produccion);
         return $_produccion;
+    }
+    public function payCredit(Request $request){
+        $validator = Validator::make($request->all(), [
+            'monto' => 'required|numeric|min:1',
+            'id_produccion' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $_produccion= Produccion::find($request['id_produccion']);
+        $produccion_credito_total= ProduccionCredito::where('id_produccion',$request['id_produccion'])->sum('monto');
+        if($produccion_credito_total>=$_produccion->costo_total) {
+            return response()->json( ['credito' => ['Este crédito esta cancelado']],400);
+        }
+        Produccion::payCredit($request->all());
+        return response()->json();
     }
 }

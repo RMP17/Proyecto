@@ -4,6 +4,7 @@ namespace Allison;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class MovimientoAlmacen extends Model
 {
@@ -31,12 +32,78 @@ class MovimientoAlmacen extends Model
 
 
     public static function newMovimientoAlmacen($parameters){
-        $movimiento_almacen = new MovimientoAlmacen();
-        $movimiento_almacen->fill($parameters);
-        $movimiento_almacen->fecha=Carbon::now()->toDateTimeString();
-        $movimiento_almacen->id_empleado=\Auth::user()->id_empleado;
-        $movimiento_almacen->save();
-        $movimiento_almacen->movimientosAlmacenDetalle()->createMany($parameters['detalles']);
+        DB::beginTransaction();
+        try {
+            $empleado = Empleado::find(auth()->user()->id_empleado);
+            $movimiento_almacen = new MovimientoAlmacen();
+            $movimiento_almacen->fill($parameters);
+            $movimiento_almacen->fecha = Carbon::now()->toDateTimeString();
+            $movimiento_almacen->id_empleado = $empleado->id_empleado;
+            $movimiento_almacen->save();
+            $movimiento_almacen->movimientosAlmacenDetalle()->createMany($parameters['detalles']);
+            foreach ($parameters['detalles'] as $detalle) {
+                $productoInsuficiente = Articulo::find($detalle['id_articulo'])->nombre;
+                $stock = Stock::where('id_articulo', $detalle['id_articulo'])
+                    ->where('id_almacen', $parameters['id_almacen_origen'])->lockForUpdate()->first();
+                if (!is_null($stock)) {
+                    if ($stock->cantidad - $detalle['cantidad'] < 0) {
+                        DB::rollback();
+                        return [
+                            'message' => [
+                                'errors' => [
+                                    'stock' => [
+                                        'Stock insuficiente del articulo ' . $productoInsuficiente
+                                    ]
+                                ]
+                            ],
+                            'code' => 400
+                        ];
+                    }
+                    $stock->cantidad = $stock->cantidad - (int)$detalle['cantidad'];
+                    $stock->update();
+                    $stockDestino = Stock::where('id_articulo', $detalle['id_articulo'])
+                        ->where('id_almacen', $parameters['id_almacen_destino'])->lockForUpdate()->first();
+                    if (is_null($stockDestino)){
+                        $_stock = new Stock();
+                        $_stock->id_articulo = $detalle['id_articulo'];
+                        $_stock->id_almacen = $parameters['id_almacen_destino'];
+                        $_stock->cantidad = $detalle['cantidad'];
+                        $_stock->save();
+                    } else {
+                        $stockDestino->cantidad = $stockDestino->cantidad + (int)$detalle['cantidad'];
+                        $stockDestino->update();
+                    }
+                } else {
+                    return [
+                        'message' => [
+                            'errors' => [
+                                'stock' => [
+                                    'El articulo no existe en este almacen ' . $productoInsuficiente
+                                ]
+                            ]
+                        ],
+                        'code' => 400
+                    ];
+                }
+            }
+            DB::commit();
+            return [
+                'message' => [],
+                'code' => 200
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'message' => [
+                    'errors' => [
+                        'error' => [
+                            'Algo salio mal en el los movimientos de almacen'
+                        ]
+                    ]
+                ],
+                'code' => 400
+            ];
+        }
     }
     public static function getMovimientoAlmacenByRangeDate($date1, $date2) {
         $movimientosAlmacen = MovimientoAlmacen::whereBetween('fecha', [$date1.' 00:00:00',$date2.' 23:59:59'])

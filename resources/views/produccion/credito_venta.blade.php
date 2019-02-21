@@ -1,8 +1,5 @@
-<form class="mb-3" @submit.prevent="registerVentaCredito">
+<form class="mb-3" @submit.prevent="registerPayCreditoOfProduccion">
     <div class="input-group">
-        {{--<div class="input-group-prepend">
-            <span class="input-group-text">Abonar</span>
-        </div>--}}
         <input type="text"
                v-model="produccion.credito.attributes.monto"
                @keypress="numberFloatDirective"

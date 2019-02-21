@@ -68,6 +68,7 @@ var urlGlobal={
     getCompraCredito:url + 'compra/creditos/',
     getVentaCredito:url + 'venta/creditos/',
     getCreditoOfProduccion:url + 'produccion/credito/',
+    payCreditOfProduccion:url + 'produccion/credito',
     getPaisesById:url + 'pais/id/',
     getContactoOfProveedor:url + 'proveedor/contactos/',
     suggestionsOfCiudades:url + 'ciudades/',
@@ -377,12 +378,12 @@ Vue.component('app-online-suggestions-objects',{
          onmousedown="return false;">
         <a v-for="(suggestion,index) in suggestions"
            :class="{'active': current === index }"
-           class="dropdown-item"
+           class="dropdown-item w-100"
            @click="suggestionClick(index)"
            @mousedown="indexChange(index)"
-        >
-            <span v-html="suggestion.detalleShow"></span>
-            <span v-if="suggestion.object.nit" class="float-right">{{suggestion.object.nit}}</span>
+        ><span v-html="suggestion.detalleShow"
+            ></span><span v-if="suggestion.object.nit" 
+                class="float-right pt-1">{{suggestion.object.nit}}</span>
         </a>
     </div>
 </div>`,

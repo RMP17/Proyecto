@@ -137,8 +137,8 @@ legend {
     }
 }
 
-@media print {
-   /* body * {
+/*@media print {
+    body * {
         visibility:hidden;
     }
     .section-to-print, .section-to-print * {
@@ -149,14 +149,14 @@ legend {
         position: absolute;
         left: 0;
         top: 0;
-    }*/
-    /*.hoja{
+    }
+    .hoja{
         width: 400px !important;
         padding: 2mm;
         font-family: sans-serif;
         font-size: 9pt;
-    }*/
-    /*!*css para impresion*!
+    }
+    !*css para impresion*!
     .table thead.center-im th {
         text-align: center;
         vertical-align: top;
@@ -165,5 +165,5 @@ legend {
     .table tbody.center-im tr td {
         text-align: center;
         padding: 0;
-    }*/
-}
+    }
+}*/

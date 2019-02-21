@@ -236,9 +236,14 @@ class Produccion extends Model
             $_produccion->almacen = $almacen;
             $_produccion->sucursal = $sucursal;
             $_produccion->detallesProduccion;
+            $total_monto_credito=0;
             foreach ($_produccion->detallesProduccion as $detalle) {
                 $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
             }
+            foreach ($_produccion->produccionCredito as $credito) {
+                $total_monto_credito+=$credito->monto;
+            }
+            $_produccion->total_monto_credito = $total_monto_credito;
             return [
                 'data' => $_produccion,
                 'code' => 200
@@ -285,6 +290,11 @@ class Produccion extends Model
             foreach ($_produccion->detallesProduccion as $detalle) {
                 $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
             }
+            $total_monto_credito=0;
+            foreach ($_produccion->produccionCredito as $credito) {
+                $total_monto_credito+=$credito->monto;
+            }
+            $_produccion->total_monto_credito = $total_monto_credito;
         }
         return $_producciones;
     }
@@ -311,8 +321,10 @@ class Produccion extends Model
         return $_producciones;
     }
     public static function getProduccionById($id_produccion) {
-
         $_produccion = Produccion::find($id_produccion);
+        if (is_null($_produccion)){
+            return null;
+        }
         $empleado = $_produccion->empleado->nombre;
         $caja = $_produccion->caja->nombre;
         $almacen = $_produccion->almacen;
@@ -327,6 +339,40 @@ class Produccion extends Model
         foreach ($_produccion->detallesProduccion as $detalle) {
             $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
         }
+        $total_monto_credito=0;
+        foreach ($_produccion->produccionCredito as $credito) {
+            $total_monto_credito+=$credito->monto;
+        }
+        $_produccion->total_monto_credito = $total_monto_credito;
         return $_produccion;
+    }
+    public static function payCredit($parameters){
+        $_produccion= Produccion::find($parameters['id_produccion']);
+        if($_produccion->status=='cv') {
+            $produccion_credito_total = ProduccionCredito::where('id_produccion', $parameters['id_produccion'])->sum('monto');
+            if ($produccion_credito_total > $_produccion->costo_total) {
+                return false;
+            }
+            $produccion_credito = new ProduccionCredito();
+            $produccion_credito->fill($parameters);
+            if ($produccion_credito_total + $parameters['monto'] <= $_produccion->costo_total) {
+                $produccion_credito->monto = $parameters['monto'];
+            } else {
+                $produccion_credito->monto = $_produccion->costo_total - $produccion_credito_total;
+                if ($produccion_credito->monto == 0) {
+                    return false;
+                }
+                $_produccion->status = 'cc';
+                $_produccion->update();
+            }
+            if ($produccion_credito->monto + $produccion_credito_total - $_produccion->costo_total == 0) {
+                $_produccion->status = 'cc';
+                $_produccion->update();
+            }
+
+            $produccion_credito->fecha = Carbon::now()->toDateTimeString();
+            $_produccion->produccionCredito()->save($produccion_credito);
+        }
+        return true;
     }
 }

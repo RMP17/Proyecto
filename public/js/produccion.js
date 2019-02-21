@@ -259,6 +259,23 @@ var appProduccion = new Vue({
         removeOfList(index) {
             this.produccion.attributes.detalles.splice(index, 1);
         },
+        registerPayCreditoOfProduccion: function() {
+            let inputs = this.produccion.credito.attributes;
+            axios.post(urlGlobal.payCreditOfProduccion, inputs
+            ).then(response => {
+                let id_produccion = this.produccion.credito.attributes.id_produccion;
+                /*let tipo_pago = this.produccion.credito.attributes.tipo_pago*/
+                Object.assign(this.produccion.credito.attributes, this.produccion.credito.attributes.model);
+                this.produccion.credito.attributes.id_produccion = id_produccion;
+                /*this.produccion.credito.attributes.tipo_pago = tipo_pago;*/
+                this.getCreditoOfProduccion(id_produccion);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors2(errors);
+            });
+
+        },
         calcularTotale() {
             let total = 0;
             this.produccion.attributes.detalles.forEach(detalle => {
@@ -374,22 +391,36 @@ var appProduccion = new Vue({
                 this.goThroughFilters();
             }
         },
-        // Si no se necesita borrar
-        /*getProduccionById(produccion){
-            axios.get(urlGlobal.resourcesProduccion+'/'+produccion.id_produccion,
+
+        getProduccionById(id_produccion){
+            axios.get(urlGlobal.resourcesProduccion+'/'+id_produccion,
             ).then(response => {
-                this.produccion.oneProduccion=response.data;
-                /!*this.$nextTick(function () {
+                if (Object.keys(response.data).length>0){
+                    this.produccion.oneProduccion=response.data;
+                    this.produccion.data=Array(response.data);
+                    this.produccion.data_with_filters=this.produccion.data;
+                } else {
+                    this.produccion.oneProduccion=null;
+                    this.produccion.data=[];
+                    this.produccion.data_with_filters=this.produccion.data;
+                }
+                /*this.$nextTick(function () {
                     this.printVenta();
-                })*!/
+                })*/
             }).catch(errors => {
                 console.log(errors);
             });
-        },*/
+        },
         printProduccion(produccion){
             this.produccion.oneProduccion=produccion;
             this.$nextTick(function () {
                     this.print(this.$refs.print_produccion);
+            });
+        },
+        printEtiqueta(produccion){
+            this.produccion.oneProduccion=produccion;
+            this.$nextTick(function () {
+                    this.print(this.$refs.print_produccion_etiqueta);
             });
         },
         filterByAlmacen: function(almacen){
@@ -405,6 +436,7 @@ var appProduccion = new Vue({
             this.produccion.filters.almacen = '';
             this.produccion.hideFilters = true;
             this.produccion.paginated.pageNumber = 0;
+            this.produccion.oneProduccion=null;
             setTimeout(() => this.produccion.hideFilters = false, 0);
             this.goThroughFilters();
         },
@@ -472,7 +504,9 @@ var appProduccion = new Vue({
         },
         exportPdf() {
             const doc = new jsPDF('p', 'mm', 'letter', true);
-            doc.autoTable({html: '#print-produccion'});
+            doc.autoTable({
+                html: '#exportproduccion'
+            });
             doc.save('produccion.pdf');
         },
         print(element) {

@@ -15,8 +15,12 @@ class MovimientosAlmacenController extends Controller
     }
     public function store(MovimientoAlmacenRequest $request)
     {
-        MovimientoAlmacen::newMovimientoAlmacen($request->all());
-        return response()->json();
+        $movimientos = MovimientoAlmacen::newMovimientoAlmacen($request->all());
+        if($movimientos['code']==200){
+            return response()->json();
+        } else {
+            return response()->json($movimientos['message'],$movimientos['code']);
+        }
     }
     public function destroy($id_movimiento_almacen)
     {
