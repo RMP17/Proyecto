@@ -3,15 +3,21 @@
 namespace Allison\Http\Controllers;
 
 use Allison\Almacen;
+use Allison\Http\Requests\ProduccionEntregaRequest;
 use Allison\Http\Requests\ProduccionRequest;
 use Allison\Produccion;
 use Allison\ProduccionCredito;
+use Allison\ProduccionEntrega;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class ProduccionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permiso_produccion', ['only' => ['index']]);
+    }
     public function index(){
 
         $outputData=[
@@ -75,5 +81,15 @@ class ProduccionController extends Controller
         }
         Produccion::payCredit($request->all());
         return response()->json();
+    }
+    public function storeProduccionEntrega(ProduccionEntregaRequest $request){
+
+        Produccion::newProduccionEntrega($request->all());
+        return response()->json();
+    }
+    public function getEntregasByProduccion($id_produccion){
+
+        $entregasByProduccion=Produccion::getEntregasByProduccion($id_produccion);
+        return response()->json($entregasByProduccion);
     }
 }

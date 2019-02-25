@@ -52,6 +52,8 @@ Route::prefix('medicion')->group(function () {
 Route::prefix('produccion')->group(function () {
     Route::get('creditos', 'ProduccionController@forceGetProductionCredits');
     Route::post('date_range', 'ProduccionController@getProduccionesByRangeDate');
+    Route::post('entrega', 'ProduccionController@storeProduccionEntrega');
+    Route::get('entrega/{id_produccion}', 'ProduccionController@getEntregasByProduccion');
     Route::post('credito', 'ProduccionController@payCredit');
     Route::get('credito/{id_produccion}', 'ProduccionController@getCreditoOfProduccion');
 });

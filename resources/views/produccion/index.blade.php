@@ -169,35 +169,54 @@
                                                     <span v-if="_produccion.tipo_pago ==='tc'">Tarjeta de crédito o débito</span>
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0)"
-                                                       title="Ver detalle"
-                                                       @click="viewDetallesProduccion(_produccion)"
-                                                       data-target="#modal-view-detail-produccion"
-                                                       data-toggle="modal"
-                                                       type="button" class="btn btn-outline-info btn-sm">
-                                                        <i class="fas fa-eye fa-lg"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0)"
-                                                       title="Imprimir"
-                                                       @click="printProduccion(_produccion)"
-                                                       type="button" class="btn btn-outline-info btn-sm lh-1">
-                                                        <i class="mdi mdi-printer mdi-18px"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0)"
-                                                       v-if="_produccion.tipo_pago==='cr'"
-                                                       title="Ver Producción al crédito"
-                                                       @click="selectCreditProduccion(_produccion)"
-                                                       data-target="#modal-view-credit-produccion"
-                                                       data-toggle="modal"
-                                                       type="button" class="btn btn-outline-info btn-sm">
-                                                        <i class="fas fa-hand-holding-usd fa-lg"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0)"
-                                                       title="Imprimir etiqueta"
-                                                       @click="printEtiqueta(_produccion)"
-                                                       type="button" class="btn btn-outline-info btn-sm lh-1">
-                                                        <i class="mdi mdi-note mdi-18px"></i>
-                                                    </a>
+                                                    <div class="btn-group">
+                                                        <a href="javascript:void(0)"
+                                                           title="Ver detalle"
+                                                           @click="viewDetallesProduccion(_produccion)"
+                                                           data-target="#modal-view-detail-produccion"
+                                                           data-toggle="modal"
+                                                           type="button" class="btn btn-outline-info btn-sm">
+                                                            <i class="fas fa-eye fa-lg"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)"
+                                                           title="Imprimir"
+                                                           @click="printProduccion(_produccion)"
+                                                           type="button" class="btn btn-outline-info btn-sm lh-1">
+                                                            <i class="mdi mdi-printer mdi-18px"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)"
+                                                           title="Imprimir etiqueta"
+                                                           @click="printEtiqueta(_produccion)"
+                                                           type="button" class="btn btn-outline-info btn-sm lh-1">
+                                                            <i class="mdi mdi-note mdi-18px"></i>
+                                                        </a>
+                                                    </div>
+                                                    <br>
+                                                    <div class="btn-group">
+                                                        <a href="javascript:void(0)"
+                                                           title="Imprimir Plano"
+                                                           @click="printPlano(_produccion)"
+                                                           type="button" class="btn btn-outline-info btn-sm lh-1">
+                                                            <i class="mdi mdi-code-array mdi-18px"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)"
+                                                           title="Material entregado"
+                                                           @click="selectProduccionForEntrega(_produccion)"
+                                                           data-target="#modal-entrega-material"
+                                                           data-toggle="modal"
+                                                           type="button" class="btn btn-outline-info btn-sm">
+                                                            <i class="mdi mdi-transfer mdi-18px lh-1"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0)"
+                                                           v-if="_produccion.tipo_pago==='cr'"
+                                                           title="Ver Producción al crédito"
+                                                           @click="selectCreditProduccion(_produccion)"
+                                                           data-target="#modal-view-credit-produccion"
+                                                           data-toggle="modal"
+                                                           type="button" class="btn btn-outline-info btn-sm">
+                                                            <i class="fas fa-hand-holding-usd fa-lg"></i>
+                                                        </a>
+                                                    </div>
                                                     {{--
                                                     <a v-if="_produccion.estatus==='null' || _produccion.estatus!=='vc'" href="javascript:void(0)"
                                                        title="Anular Venta"
@@ -313,10 +332,33 @@
                 </div>
             </div>
         </div>
+        {{--===============================================Modal Entregas de Material======================================--}}
+        <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1"
+             id="modal-entrega-material">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title pt-1 pr-1">Artículos entregados</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        @include('produccion.material_entregado')
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {{--===============================================Modal Print Area======================================--}}
         @include('produccion.comprobante')
         @include('produccion.etiqueta')
+        @include('produccion.planos')
     </div>
 @endsection
 @section('scripts')

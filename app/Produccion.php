@@ -48,6 +48,9 @@ class Produccion extends Model
     public function caja(){
         return $this->belongsTo(Caja::class,'id_caja');
     }
+    public function produccionEntregas(){
+        return $this->hasMany(ProduccionEntrega::class,'id_produccion','id_produccion');
+    }
     public function produccionCredito(){
         return $this->hasMany(ProduccionCredito::class,'id_produccion','id_produccion');
     }
@@ -317,6 +320,11 @@ class Produccion extends Model
             foreach ($_produccion->detallesProduccion as $detalle) {
                 $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
             }
+            $total_monto_credito=0;
+            foreach ($_produccion->produccionCredito as $credito) {
+                $total_monto_credito+=$credito->monto;
+            }
+            $_produccion->total_monto_credito = $total_monto_credito;
         }
         return $_producciones;
     }
@@ -374,5 +382,82 @@ class Produccion extends Model
             $_produccion->produccionCredito()->save($produccion_credito);
         }
         return true;
+    }
+
+    public static function newProduccionEntrega($parameters)
+    {
+       /* DB::beginTransaction();
+        try {*/
+            $empleado = $empleado = Empleado::find(auth()->user()->id_empleado);
+            $_produccion = Produccion::find($parameters['id_produccion']);
+            $_produccion_entrega = new ProduccionEntrega();
+            $_produccion_entrega->fill($parameters);
+            $_produccion_entrega->id_almacen = $empleado->id_almacen;
+            $_produccion_entrega->fecha = Carbon::now()->toDateTimeString();
+            $_produccion->produccionEntregas()->save($_produccion_entrega);
+            $productoInsuficiente = Articulo::find($parameters['id_articulo'])->nombre;
+            $stock = Stock::where('id_articulo', $parameters['id_articulo'])
+                ->where('id_almacen', $empleado->id_almacen)->lockForUpdate()->first();
+            if (!is_null($stock)) {
+                /**
+                 * Controla el stock
+                 **/
+                if ($stock->cantidad - $parameters['cantidad'] < 0) {
+                    DB::rollback();
+                    return [
+                        'message' => [
+                            'errors' => [
+                                'stock' => [
+                                    'Stock insuficiente del articulo ' . $productoInsuficiente
+                                ]
+                            ]
+                        ],
+                        'code' => 400
+                    ];
+                }
+                $stock->cantidad = $stock->cantidad -(int)$parameters['cantidad'];
+                $stock->update();
+            } else {
+                return [
+                    'message' => [
+                        'errors' => [
+                            'stock' => [
+                                'El articulo no existe en este almacen ' . $productoInsuficiente
+                            ]
+                        ]
+                    ],
+                    'code' => 400
+                ];
+            }
+            DB::commit();
+        /*} catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'message' => [
+                    'errors' => [
+                        'error' => [
+                            'Algo salio mal en la venta'
+                        ]
+                    ]
+                ],
+                'code' => 400
+            ];
+        }*/
+    }
+    public static function getEntregasByProduccion($id_produccion){
+        $_produccion = Produccion::find($id_produccion);
+        if (is_null($_produccion)){
+            return [];
+        }
+        $_produccion->produccionEntregas;
+        foreach ($_produccion->produccionEntregas as $produccionEntrega) {
+            $empleado= Empleado::find($produccionEntrega->id_empleado);
+            $almacen= Almacen::find($produccionEntrega->id_almacen);
+            $articulo= Articulo::find($produccionEntrega->id_articulo);
+            $produccionEntrega->empleado=$empleado;
+            $produccionEntrega->almacen=$almacen;
+            $produccionEntrega->articulo=$articulo;
+        }
+        return $_produccion->produccionEntregas;
     }
 }

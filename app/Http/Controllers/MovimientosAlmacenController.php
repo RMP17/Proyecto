@@ -9,6 +9,10 @@ use Carbon\Carbon;
 
 class MovimientosAlmacenController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permiso_movimiento', ['only' => ['index']]);
+    }
     public function index()
     {
         return view('movimientos_almacen.index');

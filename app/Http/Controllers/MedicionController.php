@@ -9,6 +9,10 @@ use Carbon\Carbon;
 
 class MedicionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permiso_mediciones', ['only' => ['index']]);
+    }
     public function index(){
         return view('mediciones.index');
     }

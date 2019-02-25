@@ -141,16 +141,6 @@
                                                        @click="selectArticulo(articulo)"
                                                        class="btn btn-info btn-sm"><i class="far fa-money-bill-alt"></i>
                                                     </a>
-                                                    <a type="button"
-                                                       title="Transferir"
-                                                       href="javascript:void(0);"
-                                                       data-backdrop="static"
-                                                       data-keyboad="false"
-                                                       data-target="#modal-add-precio"
-                                                       data-toggle="modal"
-                                                       @click="selectArticulo(articulo)"
-                                                       class="btn btn-info btn-sm lh-1"><i class="mdi mdi-transfer mdi-18px"></i>
-                                                    </a>
                                                     <a v-if="!!articulo.estatus" type="button" href="javascript:void(0);"
                                                        title="Dar de baja"
                                                        @click="changeStatusOfArticulo(articulo)"

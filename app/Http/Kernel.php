@@ -63,5 +63,8 @@ class Kernel extends HttpKernel
         'permiso_venta' => \Allison\Http\Middleware\PermisoVenta::class,
         'permiso_articulo' => \Allison\Http\Middleware\PermisoArticulo::class,
         'permiso_caja' => \Allison\Http\Middleware\PermisoCaja::class,
+        'permiso_movimiento' => \Allison\Http\Middleware\PermisoMovimientos::class,
+        'permiso_mediciones' => \Allison\Http\Middleware\PermisoMedicion::class,
+        'permiso_produccion' => \Allison\Http\Middleware\PermisoProduccion::class,
     ];
 }

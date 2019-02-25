@@ -56,6 +56,8 @@ var urlGlobal={
     getComprasByRageDate:url + 'compra/date_range',
     getVentasByRageDate:url + 'venta/date_range',
     getProduccionesByRageDate:url + 'produccion/date_range',
+    storeProduccionEntrega:url + 'produccion/entrega',
+    getEntregasByProduccion:url + 'produccion/entrega/',
     getMovimientoAlmacenByRangeDate:url + 'movimientos-almacen/date_range',
     getVentaById:url + 'venta/id/',
     getGastoByRangeDate:url + 'gasto/date_range',

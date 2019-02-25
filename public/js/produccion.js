@@ -76,7 +76,26 @@ var appProduccion = new Vue({
                     id_ciudad: null,
                 }
             },
-            detalle: {
+            entrega: {
+                data:[],
+                hideSuggestions:false,
+                hideSuggestionsAll:false,
+                attributes: {
+                    id: null,
+                    id_empleado: null,
+                    id_articulo: null,
+                    cantidad: null,
+                    id_produccion: null,
+                },
+                model: {
+                    id: null,
+                    id_empleado: null,
+                    id_articulo: null,
+                    cantidad: null,
+                    id_produccion: null,
+                }
+            },
+            detalle:{
                 attributes: {
                     id_detalle_produccion: null,
                     cantidad: null,
@@ -108,7 +127,7 @@ var appProduccion = new Vue({
                     observaciones:null,
                     id_produccion:null,
                 },
-                mode:{
+                model:{
                     id:null,
                     monto:null,
                     observaciones:null,
@@ -265,7 +284,7 @@ var appProduccion = new Vue({
             ).then(response => {
                 let id_produccion = this.produccion.credito.attributes.id_produccion;
                 /*let tipo_pago = this.produccion.credito.attributes.tipo_pago*/
-                Object.assign(this.produccion.credito.attributes, this.produccion.credito.attributes.model);
+                Object.assign(this.produccion.credito.attributes, this.produccion.credito.model);
                 this.produccion.credito.attributes.id_produccion = id_produccion;
                 /*this.produccion.credito.attributes.tipo_pago = tipo_pago;*/
                 this.getCreditoOfProduccion(id_produccion);
@@ -275,6 +294,35 @@ var appProduccion = new Vue({
                 this.notificationErrors2(errors);
             });
 
+        },
+        registerProduccionEntrega: function() {
+            let inputs = this.produccion.entrega.attributes;
+            axios.post(urlGlobal.storeProduccionEntrega, inputs
+            ).then(response => {
+                let id_produccion = this.produccion.entrega.attributes.id_produccion;
+                let id_empleado = this.produccion.entrega.attributes.id_empleado;
+                this.produccion.entrega.attributes=Object.assign({}, this.produccion.entrega.model);
+                this.produccion.entrega.attributes.id_produccion = id_produccion;
+                this.produccion.entrega.attributes.id_empleado = id_empleado;
+                this.produccion.entrega.hideSuggestions= true;
+                this.getEntregasByProduccion(id_produccion);
+                setTimeout(() => {
+                    this.produccion.entrega.hideSuggestions= false;
+                }, 0);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors(errors);
+            });
+
+        },
+        getEntregasByProduccion(id_produccion){
+            axios.get(urlGlobal.getEntregasByProduccion+id_produccion
+            ).then(response => {
+                this.produccion.entrega.data=response.data;
+            }).catch(errors => {
+                console.log(errors);
+            });
         },
         calcularTotale() {
             let total = 0;
@@ -354,6 +402,16 @@ var appProduccion = new Vue({
             this.produccion.oneProduccion = produccion;
             this.getCreditoOfProduccion(produccion.id_produccion);
         },
+        selectProduccionForEntrega(produccion){
+            this.produccion.entrega.attributes = Object.assign({}, this.produccion.entrega.model);
+            this.produccion.entrega.attributes.id_produccion = produccion.id_produccion;
+            this.produccion.oneProduccion = produccion;
+            this.produccion.entrega.hideSuggestionsAll= true;
+            setTimeout(() => {
+                this.produccion.entrega.hideSuggestionsAll= false;
+            }, 0);
+            this.getEntregasByProduccion(produccion.id_produccion);
+        },
         getProduccionesByRageDate(event){
             axios.post(urlGlobal.getProduccionesByRageDate, event
             ).then(response => {
@@ -383,6 +441,21 @@ var appProduccion = new Vue({
             if (empleado && empleado.nombre) {
                 this.produccion.filters.empleado = empleado.nombre;
                 this.goThroughFilters();
+            }
+        },
+
+        selectEmpleadoForProduccionEntrega(empleado) {
+            if (empleado && empleado.id_empleado) {
+                this.produccion.entrega.attributes.id_empleado = empleado.id_empleado;
+            } else {
+                this.produccion.entrega.attributes.id_empleado = null;
+            }
+        },
+        selectArticuloForProduccionEntrega(articulo) {
+            if (articulo && articulo.id_articulo) {
+                this.produccion.entrega.attributes.id_articulo = articulo.id_articulo;
+            } else {
+                this.produccion.entrega.attributes.id_articulo = null;
             }
         },
         filterByCliente(cliente) {
@@ -421,6 +494,12 @@ var appProduccion = new Vue({
             this.produccion.oneProduccion=produccion;
             this.$nextTick(function () {
                     this.print(this.$refs.print_produccion_etiqueta);
+            });
+        },
+        printPlano(produccion){
+            this.produccion.oneProduccion=produccion;
+            this.$nextTick(function () {
+                    this.print(this.$refs.print_produccion_plano);
             });
         },
         filterByAlmacen: function(almacen){
@@ -598,6 +677,11 @@ var appProduccion = new Vue({
                 end = start + this.produccion.paginated.size;
             return this.produccion.data_with_filters
                 .slice(start, end);
+        },
+        planosData: function () {
+            return this.produccion.oneProduccion.detalles_produccion.filter(_detalle => {
+                return _detalle.ancho;
+            });
         },
     }
 });
