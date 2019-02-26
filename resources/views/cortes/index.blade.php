@@ -21,6 +21,16 @@
 														<input type="number" step=".01" min="0" class="form-control" id="cutHeight" placeholder="Ingrese Altura" v-model="size.height" required="required">
 												</div>
 										</div>
+
+										<div class="border-top">
+												<div class="card-body">
+													<h4 class="card-title">Ingrese Zoom <strong></strong></h4>
+													<h2>Zoom x@{{ config.scale }}</h2>
+													<div class="col-sm-12">
+															<input type="range" step="1" min="1" max="5" v-model="config.scale" class="form-control" placeholder="Ancho" required="required">
+													</div>
+										</div>
+
 										<div class="border-top">
 												<div class="card-body">
 													<h4 class="card-title">Ingrese Cortes <strong>[cm]</strong></h4>

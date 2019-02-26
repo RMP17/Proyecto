@@ -5,8 +5,8 @@ var appCortes = new Vue({
         canvas:null
       },
       config:{
-        sort:'maxside',
-        scale: 4
+        sort:'width',
+        scale: 1
       },
       size:{
         width:'',
@@ -54,15 +54,16 @@ var appCortes = new Vue({
       var packer = this.packer();
       this.now(blocks);
       packer.fit(blocks);
+      console.log(blocks);
       this.el.draw = this.el.canvas.getContext("2d");
-      console.log(this.el);
       this.el.draw.imageSmoothingQuality = "high";
       this.reset(packer.root.w,packer.root.h);
+      
       this.blocks(blocks);
-      this.boundary(packer.root);
+      this.stroke(packer.root.x,packer.root.y,packer.root.w,packer.root.h);
+
       //this.report(blocks, packer.root.w, packer.root.h);
       this.printCanvas(this.report(blocks, packer.root.w, packer.root.h));
-
     },
     dataEncode: function(){
       let data = "";
@@ -154,6 +155,7 @@ var appCortes = new Vue({
     rect:  function(x, y, w, h, color) {
       this.el.draw.fillStyle = color;
       this.el.draw.fillRect(x + 0.5, y + 0.5, w, h);
+      this.stroke(x,y,w,h);
       this.el.draw.font='14px Arial';
       this.el.draw.fillStyle = "#000000";
       this.el.draw.fillText(""+(w/this.config.scale)+"x"+(h/this.config.scale), x+ 1, y+ 14);
@@ -167,8 +169,9 @@ var appCortes = new Vue({
       var n, block;
       for (n = 0 ; n < blocks.length ; n++) {
         block = blocks[n];
-        if (block.fit)
-          this.rect(block.fit.x, block.fit.y, block.w, block.h, "transparent");
+        if (block.fit){
+          this.rect(block.fit.x, block.fit.y, block.w, block.h, "#f1f1f2");
+        }
       }
     },
     
