@@ -460,7 +460,7 @@ var appVenta = new Vue({
         focusButtonYes(){
             setTimeout(()=>{
                 document.activeElement.blur();
-                this.$refs.btnSi.focus();
+                this.$refs.txtImporte.focus();
             },400);
         },
         getSalesOnCreditInForce(){

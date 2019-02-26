@@ -16,7 +16,7 @@ class Venta extends Model
 	protected $fillable = [
 		'fecha',
 		'costo_total',
-        'importe',
+        //'importe',
 		'costo_tarjeta_cheque',
 		'descuento',
 		'id_moneda',
@@ -78,7 +78,9 @@ class Venta extends Model
             if (is_null($caja)) {
                 return [
                     'message' => [
-                        'caja'=>['No está asignado a ninguna caja']
+                        'errors' => [
+                            'caja'=>['No está asignado a ninguna caja']
+                        ]
                     ],
                     'code' => 400
                 ];

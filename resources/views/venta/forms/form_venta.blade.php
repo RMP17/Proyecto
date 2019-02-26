@@ -114,6 +114,7 @@
                     <input type="text"
                            class="form-control text-right"
                            v-model.number="venta.attributes.importe"
+                           ref="txtImporte"
                            placeholder="00.00" aria-label="txtImporte" aria-describedby="txtImporte">
                 </div>
                 <div class="input-group">
@@ -125,7 +126,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger w-25" data-dismiss="modal">NO</button>
-                <button ref="btnSi" type="button" class="btn btn-outline-info w-25" data-dismiss="modal" @click="submitFormVenta">SI</button>
+                <button type="button" class="btn btn-outline-info w-25" data-dismiss="modal" @click="submitFormVenta">SI</button>
             </div>
         </div>
     </div>
