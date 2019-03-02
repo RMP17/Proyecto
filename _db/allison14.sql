@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2019 a las 12:57:01
+-- Tiempo de generación: 02-03-2019 a las 13:46:30
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -41,7 +41,7 @@ CREATE TABLE `acceso` (
 --
 
 INSERT INTO `acceso` (`id_empleado`, `usuario`, `pass`, `estatus`, `remember_token`) VALUES
-(17, 'bol', '$2y$10$SwdTQbB6Wp4qdmbhhRvWtuBm0vb0PQkWUGPe5dKy.depLenM18y0G', '1', 's8tMBrmfsxcv3RZIgyBoQTeYGJxUVvUJrvZTDlakIYoM8sIuKYehxtMLlUjh'),
+(17, 'bol', '$2y$10$SwdTQbB6Wp4qdmbhhRvWtuBm0vb0PQkWUGPe5dKy.depLenM18y0G', '1', 'pCHp1f44VLfOqJlCnn9pJc3G9bUmU7T1t4bBemZfPrTsP6ZAFfhn68CaVD3b'),
 (18, 'rid', '$2y$10$Kk2oCSizXaLFJrQxw7PlpuEclfJclxVgyWZprRZO6Tu74x3f7sKDO', '1', 'DEJBbWPSEdUQP8XMwSdg1Qp3W43VWPb9EIDjus7drWBYNbz780Gq3xE6Vn85'),
 (19, 'Jose', '$2y$10$5MnfbGOEfQ/wZ5FwTQIr6.uPec6lWwubUtf3XMjlgvvhJHX0Ayzom', '1', NULL),
 (24, 'pepe', '$2y$10$OTYhEEZ01jQDCSldN1xsj.mYZIezY2QYGAJTHymaY3R7RsNo2KN2K', '1', 'dJvcXdefQ3t6y1XbZxvoH7gBwWmM2unXP3tAvcwbmAQtyzuCUzHEEjM08wm3'),
@@ -120,11 +120,11 @@ INSERT INTO `articulo` (`id_articulo`, `nombre`, `codigo`, `codigo_barra`, `cara
 CREATE TABLE `articulos_sucursales` (
   `id_articulo` int(11) NOT NULL,
   `id_sucursal` int(11) NOT NULL,
-  `precio_1` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `precio_2` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `precio_3` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `precio_4` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `precio_5` decimal(10,2) NOT NULL DEFAULT '0.00'
+  `precio_1` decimal(10,2) DEFAULT '0.00',
+  `precio_2` decimal(10,2) DEFAULT '0.00',
+  `precio_3` decimal(10,2) DEFAULT '0.00',
+  `precio_4` decimal(10,2) DEFAULT '0.00',
+  `precio_5` decimal(10,2) DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -136,11 +136,13 @@ INSERT INTO `articulos_sucursales` (`id_articulo`, `id_sucursal`, `precio_1`, `p
 (17, 1, '10.00', '10.00', '10.00', '10.00', '10.00'),
 (17, 2, '50.00', '50.00', '50.00', '50.00', '50.00'),
 (17, 3, '10.00', '10.00', '10.00', '10.00', '10.00'),
-(17, 4, '5.00', '5.00', '5.00', '5.00', '5.00'),
+(17, 4, NULL, '200.00', NULL, NULL, NULL),
 (19, 1, '50.00', '54.00', '5.00', '56.00', '5.00'),
+(20, 1, NULL, NULL, '100.00', NULL, NULL),
 (21, 2, '1000.00', '50.00', '10.00', '25.00', '25.00'),
 (21, 3, '5.00', '5.00', '56.00', '5.00', '5.00'),
-(21, 4, '100.00', '100.00', '100.00', '100.00', '50.00');
+(21, 4, '100.00', '100.00', '100.00', '100.00', '50.00'),
+(22, 1, NULL, NULL, '150.00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -270,7 +272,10 @@ INSERT INTO `bitacora` (`id`, `id_empleado`, `descripcion`, `accion`, `fecha`) V
 (119, 17, 'previusData={\"id_empleado\":18,\"usuario\":\"rid\",\"pass\":null,\"permisos_permitidos\":[{\"id_permiso\":14,\"descripcion\":\"Ventas\",\"permitir\":1},{\"id_permiso\":13,\"descripcion\":\"Panel de Administraci\\u00f3n\",\"permitir\":1},{\"id_permiso\":18,\"descripcion\":\"Crear Cajas\",\"permitir\":1},{\"id_permiso\":15,\"descripcion\":\"Compras\",\"permitir\":1},{\"id_permiso\":17,\"descripcion\":\"Caja\",\"permitir\":1},{\"id_permiso\":16,\"descripcion\":\"Art\\u00edculo\",\"permitir\":1}]}', 'UPDATE', '2019-02-18 18:35:11'),
 (120, 17, 'previusData={\"id_empleado\":18,\"usuario\":\"rid\",\"pass\":\"123\",\"permisos_permitidos\":[{\"id_permiso\":14,\"descripcion\":\"Ventas\",\"permitir\":1},{\"id_permiso\":13,\"descripcion\":\"Panel de Administraci\\u00f3n\",\"permitir\":1},{\"id_permiso\":18,\"descripcion\":\"Crear Cajas\",\"permitir\":1},{\"id_permiso\":15,\"descripcion\":\"Compras\",\"permitir\":1},{\"id_permiso\":17,\"descripcion\":\"Caja\",\"permitir\":1},{\"id_permiso\":16,\"descripcion\":\"Art\\u00edculo\",\"permitir\":1}]}', 'UPDATE', '2019-02-18 18:35:56'),
 (121, 18, 'previusData={\"id_empleado\":17,\"nombre\":\"Bolivia\",\"ci\":\"87687687\",\"sexo\":\"m\",\"fecha_nacimiento\":\"2000-01-18\",\"telefono\":\"214214\",\"celular\":\"4232\",\"correo\":\"23432\",\"direccion\":\"iuqhjkhjkhk\",\"foto\":\"1547042188logo-icon.png\",\"persona_referencia\":\"hhjgjhghj\",\"telefono_referencia\":\"5757576\",\"fecha_registro\":\"2019-01-09\",\"estatus\":\"1\",\"id_almacen\":6}', 'UPDATE', '2019-02-18 18:44:03'),
-(122, 18, 'previusData={\"id_empleado\":18,\"usuario\":\"rid\",\"pass\":null,\"permisos_permitidos\":[{\"id_permiso\":14,\"descripcion\":\"Ventas\",\"permitir\":1},{\"id_permiso\":21,\"descripcion\":\"Producciones\",\"permitir\":1},{\"id_permiso\":13,\"descripcion\":\"Panel de Administraci\\u00f3n\",\"permitir\":1},{\"id_permiso\":19,\"descripcion\":\"Movimientos de Art\\u00edculos\",\"permitir\":1},{\"id_permiso\":20,\"descripcion\":\"Mediciones\",\"permitir\":1},{\"id_permiso\":18,\"descripcion\":\"Crear Cajas\",\"permitir\":1},{\"id_permiso\":15,\"descripcion\":\"Compras\",\"permitir\":1},{\"id_permiso\":17,\"descripcion\":\"Caja\",\"permitir\":1},{\"id_permiso\":16,\"descripcion\":\"Art\\u00edculo\",\"permitir\":1}]}', 'UPDATE', '2019-02-24 19:32:13');
+(122, 18, 'previusData={\"id_empleado\":18,\"usuario\":\"rid\",\"pass\":null,\"permisos_permitidos\":[{\"id_permiso\":14,\"descripcion\":\"Ventas\",\"permitir\":1},{\"id_permiso\":21,\"descripcion\":\"Producciones\",\"permitir\":1},{\"id_permiso\":13,\"descripcion\":\"Panel de Administraci\\u00f3n\",\"permitir\":1},{\"id_permiso\":19,\"descripcion\":\"Movimientos de Art\\u00edculos\",\"permitir\":1},{\"id_permiso\":20,\"descripcion\":\"Mediciones\",\"permitir\":1},{\"id_permiso\":18,\"descripcion\":\"Crear Cajas\",\"permitir\":1},{\"id_permiso\":15,\"descripcion\":\"Compras\",\"permitir\":1},{\"id_permiso\":17,\"descripcion\":\"Caja\",\"permitir\":1},{\"id_permiso\":16,\"descripcion\":\"Art\\u00edculo\",\"permitir\":1}]}', 'UPDATE', '2019-02-24 19:32:13'),
+(123, 18, 'previusData={\"id_articulo\":17,\"id_sucursal\":4,\"precio_1\":null,\"precio_2\":\"200\",\"precio_3\":null,\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 18:58:08'),
+(124, 18, 'previusData={\"id_articulo\":20,\"id_sucursal\":1,\"precio_1\":null,\"precio_2\":null,\"precio_3\":\"100\",\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 18:58:46'),
+(125, 18, 'previusData={\"id_articulo\":22,\"id_sucursal\":1,\"precio_1\":null,\"precio_2\":null,\"precio_3\":\"150\",\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 19:04:47');
 
 -- --------------------------------------------------------
 
@@ -543,7 +548,9 @@ INSERT INTO `compra` (`id_compra`, `fecha`, `descuento`, `costo_total`, `codigo_
 (49, '2019-01-31', '0.00', '100.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
 (50, '2019-01-31', '0.00', '100.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
 (51, '2019-02-06', '0.00', '200.00', NULL, '33', NULL, NULL, 1, 17, 2, 'ef'),
-(52, '2019-02-08', '0.00', '250.00', NULL, NULL, NULL, NULL, 1, 24, NULL, 'ef');
+(52, '2019-02-08', '0.00', '250.00', NULL, NULL, NULL, NULL, 1, 24, NULL, 'ef'),
+(53, '2019-02-27', '0.00', '1200.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef'),
+(54, '2019-02-27', '0.00', '1200.00', NULL, NULL, NULL, NULL, 1, 18, NULL, 'ef');
 
 -- --------------------------------------------------------
 
@@ -683,7 +690,9 @@ INSERT INTO `detalle_compra` (`id_detalle_compra`, `cantidad`, `precio_unitario`
 (81, 10, '10', 19, 4, 49),
 (82, 100, '1', 16, 6, 50),
 (83, 10, '20', 17, 4, 51),
-(84, 10, '25', 17, 4, 52);
+(84, 10, '25', 17, 4, 52),
+(85, 6, '200', 16, 2, 53),
+(86, 6, '200', 16, 6, 54);
 
 -- --------------------------------------------------------
 
@@ -779,7 +788,11 @@ INSERT INTO `detalle_venta` (`id_detalle_venta`, `cantidad`, `precio_unitario`, 
 (151, 10, '10.00', 16, 49),
 (152, 10, '10.00', 16, 50),
 (153, 1, '50.00', 19, 51),
-(154, 1, '10.00', 16, 51);
+(154, 1, '10.00', 16, 51),
+(155, 6, '10.00', 16, 52),
+(156, 10, '10.00', 16, 53),
+(157, 4, '10.00', 16, 54),
+(158, 10, '10.00', 16, 55);
 
 -- --------------------------------------------------------
 
@@ -886,6 +899,20 @@ INSERT INTO `empresa` (`id_empresa`, `razon_social`, `nit`, `propietario`, `acti
 (2, 'TABLETEC-POTOSI', '1234567013', 'Orlando Barron', 'Muebleria'),
 (3, 'TABLETEC', '1234567011', 'Orlando Barron', 'Produccion de Muebles'),
 (4, 'TABLETEC-CBBA', '1234567014', 'Jose Jose', 'Venta de Muebles - Puertas');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `entradas_salidas_articulos`
+--
+
+CREATE TABLE `entradas_salidas_articulos` (
+  `id` int(11) NOT NULL,
+  `id_almacen` int(11) NOT NULL,
+  `id_articulo` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `actividad` char(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf32;
 
 -- --------------------------------------------------------
 
@@ -1472,9 +1499,10 @@ INSERT INTO `stock` (`id_stock`, `id_articulo`, `id_almacen`, `cantidad`) VALUES
 (11, 21, 5, 21),
 (12, 16, 1, 12),
 (13, 20, 6, 100),
-(14, 16, 6, 124),
+(14, 16, 6, 100),
 (15, 19, 4, 10),
-(16, 16, 3, 10);
+(16, 16, 3, 10),
+(17, 16, 2, 6);
 
 -- --------------------------------------------------------
 
@@ -1544,7 +1572,8 @@ INSERT INTO `tipo_empleado` (`id_tipo_empleado`, `tipo`) VALUES
 CREATE TABLE `venta` (
   `id_venta` int(11) NOT NULL,
   `fecha` date DEFAULT NULL,
-  `costo_total` decimal(10,0) DEFAULT NULL,
+  `costo_total` decimal(10,2) DEFAULT NULL,
+  `importe` decimal(10,2) NOT NULL,
   `codigo_tarjeta_cheque` varchar(36) DEFAULT NULL,
   `descuento` decimal(10,0) DEFAULT NULL,
   `estatus` char(2) DEFAULT NULL,
@@ -1560,14 +1589,18 @@ CREATE TABLE `venta` (
 -- Volcado de datos para la tabla `venta`
 --
 
-INSERT INTO `venta` (`id_venta`, `fecha`, `costo_total`, `codigo_tarjeta_cheque`, `descuento`, `estatus`, `id_almacen`, `id_empleado`, `id_moneda`, `id_cliente`, `id_caja`, `tipo_pago`) VALUES
-(43, '2019-01-30', '110', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
-(44, '2019-01-30', '200', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
-(45, '2019-01-31', '100', NULL, '0', 'vc', 6, 18, 1, 7, 2, 'ef'),
-(47, '2019-01-31', '100', NULL, '0', NULL, 6, 18, 1, 3, 2, 'ef'),
-(49, '2019-01-31', '100', NULL, '0', 'cc', 6, 18, 1, 7, 2, 'cr'),
-(50, '2019-01-31', '100', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
-(51, '2019-01-31', '60', NULL, '0', 'cv', 4, 17, 1, 7, 1, 'cr');
+INSERT INTO `venta` (`id_venta`, `fecha`, `costo_total`, `importe`, `codigo_tarjeta_cheque`, `descuento`, `estatus`, `id_almacen`, `id_empleado`, `id_moneda`, `id_cliente`, `id_caja`, `tipo_pago`) VALUES
+(43, '2019-01-30', '110.00', '0.00', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
+(44, '2019-01-30', '200.00', '0.00', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
+(45, '2019-01-31', '100.00', '0.00', NULL, '0', 'vc', 6, 18, 1, 7, 2, 'ef'),
+(47, '2019-01-31', '100.00', '0.00', NULL, '0', NULL, 6, 18, 1, 3, 2, 'ef'),
+(49, '2019-01-31', '100.00', '0.00', NULL, '0', 'cc', 6, 18, 1, 7, 2, 'cr'),
+(50, '2019-01-31', '100.00', '0.00', NULL, '0', NULL, 4, 17, 1, 7, 1, 'ef'),
+(51, '2019-01-31', '60.00', '0.00', NULL, '0', 'cv', 4, 17, 1, 7, 1, 'cr'),
+(52, '2019-02-27', '60.00', '100.00', NULL, '0', NULL, 6, 18, 1, 7, 2, 'ef'),
+(53, '2019-02-27', '100.00', '100.00', NULL, '0', NULL, 6, 18, 1, 7, 2, 'ef'),
+(54, '2019-02-27', '40.00', '50.00', NULL, '10', NULL, 6, 18, 1, 7, 2, 'ef'),
+(55, '2019-02-27', '100.00', '150.00', NULL, '0', NULL, 6, 18, 1, 7, 2, 'ef');
 
 -- --------------------------------------------------------
 
@@ -1788,6 +1821,14 @@ ALTER TABLE `empleado`
 ALTER TABLE `empresa`
   ADD PRIMARY KEY (`id_empresa`),
   ADD UNIQUE KEY `nit` (`nit`);
+
+--
+-- Indices de la tabla `entradas_salidas_articulos`
+--
+ALTER TABLE `entradas_salidas_articulos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_almacen` (`id_almacen`),
+  ADD KEY `id_articulo` (`id_articulo`);
 
 --
 -- Indices de la tabla `fabricante`
@@ -2019,7 +2060,7 @@ ALTER TABLE `articulo`
 -- AUTO_INCREMENT de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
 
 --
 -- AUTO_INCREMENT de la tabla `caja`
@@ -2073,7 +2114,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de la tabla `compra`
 --
 ALTER TABLE `compra`
-  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT de la tabla `compra_credito`
@@ -2103,7 +2144,7 @@ ALTER TABLE `cuenta_proveedor`
 -- AUTO_INCREMENT de la tabla `detalle_compra`
 --
 ALTER TABLE `detalle_compra`
-  MODIFY `id_detalle_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `id_detalle_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_produccion`
@@ -2115,7 +2156,7 @@ ALTER TABLE `detalle_produccion`
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT de la tabla `dosificacion`
@@ -2134,6 +2175,12 @@ ALTER TABLE `empleado`
 --
 ALTER TABLE `empresa`
   MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `entradas_salidas_articulos`
+--
+ALTER TABLE `entradas_salidas_articulos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `fabricante`
@@ -2259,7 +2306,7 @@ ALTER TABLE `proveedor`
 -- AUTO_INCREMENT de la tabla `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria`
@@ -2283,7 +2330,7 @@ ALTER TABLE `tipo_empleado`
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
-  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT de la tabla `venta_credito`
@@ -2432,6 +2479,13 @@ ALTER TABLE `dimensiones`
 --
 ALTER TABLE `empleado`
   ADD CONSTRAINT `empleado_ibfk_1` FOREIGN KEY (`id_almacen`) REFERENCES `almacen` (`id_almacen`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `entradas_salidas_articulos`
+--
+ALTER TABLE `entradas_salidas_articulos`
+  ADD CONSTRAINT `entradas_salidas_articulos_ibfk_1` FOREIGN KEY (`id_almacen`) REFERENCES `almacen` (`id_almacen`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `entradas_salidas_articulos_ibfk_2` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `factura`
