@@ -87,6 +87,7 @@ Route::prefix('articulo')->group(function () {
     Route::get('all', 'ArticuloControlador@getArticulos');
     Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
+    Route::get('stock/{id_articulo}', 'ArticuloControlador@getStock');
     Route::get('stock/query/{nombre}', 'ArticuloControlador@getArticuloStockByName');
     Route::post('precios', 'ArticuloControlador@storePrecios');
     Route::get('precios/{id_articulo}', 'ArticuloControlador@getPreciosArticulo');

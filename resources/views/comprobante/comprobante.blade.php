@@ -5,8 +5,8 @@
             <p class="m-0"><strong>SUCURSAL : @{{ venta.oneVenta.sucursal.nombre }}</strong></p>
             <p class="m-0"><strong>CAJA : @{{ venta.oneVenta.caja }}</strong></p>
             <p class="m-0"><strong>FECHA : @{{ venta.oneVenta.fecha }}</strong></p>
-            <p class="m-0"><strong>CLIENTE : @{{ venta.oneVenta.cliente.razon_social }}</strong></p>
             <p class="m-0"><strong>NIT : @{{ venta.oneVenta.cliente.nit }}</strong></p>
+            <p class="m-0"><strong>CLIENTE : @{{ venta.oneVenta.cliente.razon_social }}</strong></p>
             <p class="m-0"><strong>TIPO DE VENTA : @{{ venta.oneVenta.tipo_pago }}</strong></p>
             {{--<p class="m-0"><strong>SUCRE - BOLIVIA</strong></p>
             <p class="m-0"><strong>FACTURA ORIGINAL</strong></p>--}}
@@ -33,15 +33,20 @@
              </table>
              <hr class="hr-point">
              <div class="d-flex align-items-end flex-column">
-                 <p class="m-0"><strong>TOTAL A PAGAR Bs. : @{{ venta.oneVenta.costo_total }}
-                     <span style="display: inline-block;text-align: right;width: 2cm;"></span>
-                 </strong></p>
-                 <p class="m-0"><strong>IMPORTE Bs. : @{{ venta.oneVenta.costo_total }}
-                     <span style="display: inline-block;text-align: right;width: 2cm;"></span>
-                 </strong></p>
-                 <p class="m-0"><strong>CAMBIO Bs. : @{{ venta.oneVenta.costo_total }}
-                     <span style="display: inline-block;text-align: right;width: 2cm;"></span>
-                 </strong></p>
+                 <p class="m-0">
+                     <strong>TOTAL A PAGAR Bs. : <span style="display: inline-block;text-align: right;width: 5rem;">@{{ venta.oneVenta.costo_total }}</span></strong>
+
+                 </p>
+                 <p class="m-0">
+                     <strong>DESCUENTO Bs. : <span style="display: inline-block;text-align: right;width: 5rem;">@{{ venta.oneVenta.descuento }}</span></strong>
+                 </p>
+                 <p class="m-0">
+                     <strong>IMPORTE Bs. : <span style="display: inline-block;text-align: right;width: 5rem;">@{{ venta.oneVenta.importe }}</span></strong>
+                 </p>
+                 <p class="m-0">
+                     <strong>CAMBIO Bs. : <span style="display: inline-block;text-align: right;width: 5rem;"
+                         >@{{ Number(venta.oneVenta.importe) - Number(venta.oneVenta.costo_total) + Number(venta.oneVenta.descuento)}}</span></strong>
+                 </p>
              </div>
              {{--<p class="m-0"><strong>SON:</strong>{{ (invoice.total - invoice.descuento) | numbersToLettersPipe }}
                  CON {{ (invoice.efectivo - invoice.descuento)| centavos }}/100 BOLIVIANOS</p>--}}

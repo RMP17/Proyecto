@@ -71,6 +71,10 @@ var appArticulo = new Vue({
             modeEdit:false,
             errors: [],
             data: [],
+            oneArticulo:null,
+            stock:{
+                data:[],
+            },
             attributes: {
                 id_articulo:null,
                 nombre: '',
@@ -118,6 +122,28 @@ var appArticulo = new Vue({
                 pageNumber: 0,
             },
         },
+        entradaSalidaArticulos:{
+            modeEdit:false,
+            modeCreate:false,
+            attributes:{
+                id:null,
+                id_almacen:null,
+                id_articulo:null,
+                cantidad:null,
+                // producctos que entran y salen
+                // entrada=e; s=salida
+                actividad:null
+            },
+            model:{
+                id:null,
+                id_almacen:null,
+                id_articulo:null,
+                cantidad:null,
+                // producctos que entran y salen
+                // entrada=e; s=salida
+                actividad:null
+            }
+        },
         articulosSucursales:{
             modeEdit:false,
             modeCreate:false,
@@ -151,7 +177,8 @@ var appArticulo = new Vue({
                 precio_4:null,
                 precio_5:null,
             }
-        }
+        },
+        almacenes:[],
         // ============================
 
     },
@@ -162,6 +189,7 @@ var appArticulo = new Vue({
             this.getAllCategorias();
             this.getSucursales();
             this.getAllFabricantes();
+            this.almacenes=almacenes_php;
         });
     },
     computed: {
@@ -236,6 +264,18 @@ var appArticulo = new Vue({
                 console.log(errors);
             });
         },
+        selectArticuloForStock(articulo){
+            this.articulo.one= articulo;
+            this.getStockBySucursal(articulo.id_articulo);
+        },
+        getStockBySucursal(id_articulo){
+            axios.get(urlGlobal.getStock+id_articulo)
+                .then((response)=>{
+                    this.articulo.stock.data=response.data;
+                }).catch((errors)=>{
+                console.log(errors);
+            });
+        },
         submitFormPrecios(){
             let inputs = this.articulosSucursales.attributes;
             axios.post(urlGlobal.postArticuPrecios, inputs
@@ -250,7 +290,8 @@ var appArticulo = new Vue({
                 this.notificationSuccess();
                 this.getPreciosArticulo(this.articulosSucursales.attributes.id_articulo)
             }).catch(errors => {
-                console.log(errors);
+                console.log('errors');
+                this.notificationErrors2(errors);
             });
         },
         changeEditModePrecios(precios){
@@ -638,6 +679,13 @@ var appArticulo = new Vue({
                 }).catch(errors => {
                     console.log(errors);
                 });
+            }
+        },
+        selectArticuloForEntradaSalida(articulo){
+            if (articulo && articulo.id_articulo){
+                this.entradaSalidaArticulos.attributes.id_articulo=articulo.id_articulo;
+            } else {
+                this.entradaSalidaArticulos.attributes.id_articulo=null;
             }
         },
         changeToEditModeArticulo(articulo){

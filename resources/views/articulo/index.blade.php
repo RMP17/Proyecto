@@ -1,18 +1,27 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
-
+    {{--todo: aqui te quedaste, asignar almacenes_php a vue --}}
+    <script type="text/javascript">
+        let almacenes_php = @json($almacenes);
+    </script>
     <div id="app-articulo">
         <!-- ============================================================== -->
         <!-- Bread crumb and right sidebar toggle -->
         <!-- ============================================================== -->
         <div class="page-breadcrumb pb-2">
             <div class="row">
-                <div class="col-12 d-flex no-block align-items-center">
+                <div class="d-flex no-block align-items-center">
                     <h4 class="page-title">Artículos</h4>
-                    <div class="col-auto">
+                    <div class="col">
                         <a href="javascript:void(0);" v-if="!articulo.modeEdit"  class="btn btn-outline-dark w-10em" @click="articulo.modeCreate=!articulo.modeCreate">
                             <span  v-if="!articulo.modeCreate">Nuevo Artículo</span>
                             <span v-else>Lista de Artículos</span>
+                        </a>
+                        <a v-if="!articulo.modeEdit"
+                           title="Entradas y Salidas de Árticulos"
+                           href
+                           data-target="#modal-entrada-salida"
+                           data-toggle="modal" class="btn btn-outline-dark w-10em">E/S
                         </a>
                         <a v-if="!articulo.modeEdit" href data-target="#modal-articulo" data-toggle="modal" class="btn btn-outline-dark w-10em">
                             Categorías
@@ -91,7 +100,7 @@
                                         <th>Codigo de barra</th>
                                         <th>Características</th>
                                         <th title="Precio de Compra">P. Comp.</th>
-                                        <th title="Precio de Producción">P. Prod.</th>
+                                        {{--<th title="Precio de Producción">P. Prod.</th>--}}
                                         <th>Categoría</th>
                                         <th>Fabricante</th>
                                         {{--<th>Registrado en fecha</th>--}}
@@ -113,7 +122,7 @@
                                             <td>@{{ articulo.codigo_barra }}</td>
                                             <td>@{{ articulo.caracteristicas}}</td>
                                             <td>@{{ articulo.precio_compra }}</td>
-                                            <td>@{{ articulo.precio_produccion }}</td>
+                                            {{--<td>@{{ articulo.precio_produccion }}</td>--}}
                                             <td><span v-if="articulo.categoria">@{{ articulo.categoria.categoria }}</span></td>
                                             <td><span v-if="articulo.fabricante">@{{ articulo.fabricante.nombre }}</span></td>
                                             {{--<td>@{{ articulo.fecha_registro }}</td>--}}
@@ -140,6 +149,16 @@
                                                        data-toggle="modal"
                                                        @click="selectArticulo(articulo)"
                                                        class="btn btn-info btn-sm"><i class="far fa-money-bill-alt"></i>
+                                                    </a>
+                                                    <a type="button"
+                                                       title="Stock"
+                                                       href="javascript:void(0);"
+                                                       data-backdrop="static"
+                                                       data-keyboad="false"
+                                                       data-target="#modal-stock"
+                                                       data-toggle="modal"
+                                                       @click="selectArticuloForStock(articulo)"
+                                                       class="btn btn-info btn-sm lh-1"><i class="mdi mdi-cube mdi-18px"></i>
                                                     </a>
                                                     <a v-if="!!articulo.estatus" type="button" href="javascript:void(0);"
                                                        title="Dar de baja"
@@ -188,7 +207,7 @@
         <!--  Container fluid de articulo create -->
         <!-- ============================================================== -->
 
-        {{--===============================================Modal Articulos======================================--}}
+        {{--===============================================Modal Categoria======================================--}}
         <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-articulo">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -212,6 +231,38 @@
                         </div>
                         <template v-else>
                             @include('categoria.create')
+                        </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--===============================================Modal Entrada y salida de articulos======================================--}}
+        <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-entrada-salida">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title pt-1 pr-1">Entrada/Salida de Árticulos</h4>
+                        <a v-show="!entradaSalidaArticulos.modeEdit" href data-target="#modal-create-categoria"
+                           data-toggle="modal"
+                           class="btn btn-outline-dark w-10em"
+                           @click="entradaSalidaArticulos.modeCreate=!entradaSalidaArticulos.modeCreate"
+                        >
+                            <span v-show="!entradaSalidaArticulos.modeCreate">Nueva</span>
+                            <span v-show="entradaSalidaArticulos.modeCreate">Ver</span>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pt-0 pb-0">
+                        <div v-if="entradaSalidaArticulos.modeCreate">
+                            @include('categoria.index')
+                        </div>
+                        <template v-else>
+                            @include('articulo.entrada_salida.create')
                         </template>
                     </div>
                     <div class="modal-footer">
@@ -317,6 +368,49 @@
                         <template v-else>
                             @include('categoria.create')
                         </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--===============================================Modal Stock======================================--}}
+        <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-stock">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title pt-1 pr-1" v-if="articulo.one">Stock del árticulo: @{{ articulo.one.nombre }}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                            <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+                        </button>
+                    </div>
+                    <div class="modal-body pt-0 pb-0">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                            <tr>
+                                <th scope="col">Álmacen</th>
+                                <th scope="col">Cantidad</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="_stock in articulo.stock.data">
+                                <td>@{{ _stock.almacen }}</td>
+                                <td>@{{ _stock.cantidad }}</td>
+                                {{--<td>
+                                    <a title="Editar" href="#" type="button" class="btn btn-warning btn-sm"
+                                       @click="changeToEditModeCategoria(categoria)"
+                                    >
+                                        <i class="mdi mdi-pencil"></i>
+                                    </a>
+                                    <a title="Eliminar" href="#" type="button" class="btn btn-danger btn-sm"
+                                       @click="deleteCategorias(categoria.id_categoria, index)">
+                                        <i class="mdi mdi-delete-forever"></i>
+                                    </a>
+                                </td>--}}
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>

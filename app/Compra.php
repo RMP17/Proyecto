@@ -87,7 +87,7 @@ class Compra extends Model
     public static function getComprasByRageDate($date1, $date2) {
 
         $compras = Compra::whereBetween('fecha', [$date1.' 00:00:00',$date2.' 23:59:59'])
-            ->orderBy('fecha', 'desc')->get();
+            ->orderBy('id_compra', 'desc')->get();
         foreach ($compras as $compra) {
             if (isset($compra->proveedor->razon_social)) {
                 $proveedor = $compra->proveedor->razon_social;
@@ -119,7 +119,7 @@ class Compra extends Model
     public static function getPurchasesOnCreditInForce() {
 
         $compras = Compra::where('estatus', 'cv')
-            ->orderBy('fecha', 'desc')->get();
+            ->orderBy('id_compra', 'desc')->get();
         foreach ($compras as $compra) {
             if (isset($compra->proveedor->razon_social)) {
                 $proveedor = $compra->proveedor->razon_social;

@@ -16,7 +16,7 @@ class Venta extends Model
 	protected $fillable = [
 		'fecha',
 		'costo_total',
-        //'importe',
+        'importe',
 		'costo_tarjeta_cheque',
 		'descuento',
 		'id_moneda',

@@ -10,6 +10,7 @@ use Allison\Articulo;
 use Allison\Categoria;
 use Allison\Fabricante;
 use Allison\Dimensiones;
+use Allison\Almacen;
 use Allison\Bitacora;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -24,7 +25,10 @@ class ArticuloControlador extends Controller
 	
 	public function index()
 	{
-        return view('articulo.index');
+        $outputData=[
+            'almacenes' => Almacen::getAlmacenes(),
+        ];
+        return view('articulo.index',$outputData);
 	}
 
 	public function store(/*ArticuloPeticion*/ Request $peticion)
@@ -177,7 +181,17 @@ class ArticuloControlador extends Controller
         return response()->json();
     }
     public function storePrecios(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id_sucursal' => 'required',
+        ]);
+        if($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        };
         Articulo::newsPrecios($request->all());
         return response()->json();
+    }
+    public function getStock($id_articulo){
+        $articulo = Articulo::getStock($id_articulo);
+        return response()->json($articulo);
     }
 }

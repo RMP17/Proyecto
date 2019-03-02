@@ -9,7 +9,6 @@ class Articulo extends Model
     protected $table = 'articulo';
 	protected $primaryKey = 'id_articulo';
 	public $timestamps = false;
-	
 	protected $fillable = [
 		'nombre',
 		'codigo',
@@ -308,6 +307,7 @@ class Articulo extends Model
         return  $precios;
     }
     public static function newsPrecios($parameters){
+
         $articulo = Articulo::find($parameters['id_articulo']);
         $modelPrecios=[
             'precio_1',
@@ -322,5 +322,12 @@ class Articulo extends Model
             $articulo->sucursal()->syncWithoutDetaching($precios);
             Bitacora::insertInBitacora('UPDATE', $parameters);
         }
+    }
+    public static function getStock($id_articulo){
+        $articulo = Articulo::find($id_articulo);
+        foreach ($articulo->stock as $stock) {
+            $stock->almacen= Almacen::find($stock->id_almacen)->codigo;
+        }
+        return $articulo->stock;
     }
 }

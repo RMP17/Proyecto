@@ -51,6 +51,7 @@ var urlGlobal={
     getArticuloForCodigoBarras:url + 'articulo/codigo-barras/',
     getArticuloForName:url + 'articulo/query/',
     getArticuloStockByName:url + 'articulo/stock/query/',
+    getStock:url + 'articulo/stock/',
     changeStatusOfArticulo:url + 'articulo/status/',
     getPaisesByName:url + 'pais/query/',
     getComprasByRageDate:url + 'compra/date_range',

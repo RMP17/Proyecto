@@ -15,14 +15,6 @@
     </div>
 </div>--}}
 <div class="form-group  mb-2">
-    <div class="col-auto">
-        <app-online-suggestions-objects v-if="!produccion.hideSuggestionsClient" :config="configCliente"
-                                        :input-value="produccion.cliente.one.razon_social"
-                                        @selected-suggestion-event="selectCliente">
-        </app-online-suggestions-objects>
-    </div>
-</div>
-<div class="form-group  mb-2">
     <div class="input-group col-auto">
         <input type="text" class="form-control" :class="produccion.attributes.id_cliente ? 'border-success':''"
                id="txtNit"
@@ -40,6 +32,14 @@
             ><i class="fas fa-plus"></i>
             </a>
         </div>
+    </div>
+</div>
+<div class="form-group  mb-2">
+    <div class="col-auto">
+        <app-online-suggestions-objects v-if="!produccion.hideSuggestionsClient" :config="configCliente"
+                                        :input-value="produccion.cliente.one.razon_social"
+                                        @selected-suggestion-event="selectCliente">
+        </app-online-suggestions-objects>
     </div>
 </div>
 
