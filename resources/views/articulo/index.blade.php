@@ -250,20 +250,20 @@
                            class="btn btn-outline-dark w-10em"
                            @click="entradaSalidaArticulos.modeCreate=!entradaSalidaArticulos.modeCreate"
                         >
-                            <span v-show="!entradaSalidaArticulos.modeCreate">Nueva</span>
+                            <span v-show="!entradaSalidaArticulos.modeCreate">Nuevo</span>
                             <span v-show="entradaSalidaArticulos.modeCreate">Ver</span>
                         </a>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                             <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                         </button>
                     </div>
-                    <div class="modal-body pt-0 pb-0">
-                        <div v-if="entradaSalidaArticulos.modeCreate">
-                            @include('categoria.index')
+                    <div class="modal-body pb-0">
+                        <div v-show="!entradaSalidaArticulos.modeCreate">
+                            @include('articulo.entrada_salida.show')
                         </div>
-                        <template v-else>
+                        <div v-show="entradaSalidaArticulos.modeCreate">
                             @include('articulo.entrada_salida.create')
-                        </template>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal"> Cerrar</button>

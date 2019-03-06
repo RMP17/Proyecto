@@ -125,6 +125,19 @@ var appArticulo = new Vue({
         entradaSalidaArticulos:{
             modeEdit:false,
             modeCreate:false,
+            hideSuggestions:false,
+            hideFilters:false,
+            data:[],
+            data_with_filters:[],
+            filters:{
+                empleado:'',
+                almacen:'',
+                actividad:''
+            },
+            paginated:{
+                pageNumber:0,
+                size:10
+            },
             attributes:{
                 id:null,
                 id_almacen:null,
@@ -132,7 +145,8 @@ var appArticulo = new Vue({
                 cantidad:null,
                 // producctos que entran y salen
                 // entrada=e; s=salida
-                actividad:null
+                actividad:null,
+                observaciones:null
             },
             model:{
                 id:null,
@@ -141,7 +155,8 @@ var appArticulo = new Vue({
                 cantidad:null,
                 // producctos que entran y salen
                 // entrada=e; s=salida
-                actividad:null
+                actividad:null,
+                observaciones:null
             }
         },
         articulosSucursales:{
@@ -179,8 +194,12 @@ var appArticulo = new Vue({
             }
         },
         almacenes:[],
-        // ============================
-
+        configEmpleado:{
+            url:urlGlobal.simpleSuggestionsEmpleados,
+            placeholder:'Nombre del Empleado',
+            variableForSuggestions:'nombre',
+            variableForSuggestionsId:'id_empleado'
+        },
     },
     mounted(){
         this.$nextTick(function () {
@@ -202,6 +221,16 @@ var appArticulo = new Vue({
             const start = this.articulo.paginated.pageNumber * this.articulo.paginated.size,
                 end = start + this.articulo.paginated.size;
             return this.articulo.data.slice(start, end);
+        },
+        pageCountEntradasSalidas: function(){
+            let l = this.entradaSalidaArticulos.data_with_filters.length,
+                s = this.entradaSalidaArticulos.paginated.size;
+            return Math.ceil(l/s);
+        },
+        paginatedDataEntradasSalidas: function(){
+            const start = this.entradaSalidaArticulos.paginated.pageNumber * this.entradaSalidaArticulos.paginated.size,
+                end = start + this.entradaSalidaArticulos.paginated.size;
+            return this.entradaSalidaArticulos.data_with_filters.slice(start, end);
         },
         pagesNumberCategoria: function () {
             let pagesArray = [];
@@ -314,6 +343,93 @@ var appArticulo = new Vue({
             this.articulosSucursales.attributes = Object.assign({},this.articulosSucursales.model);
             this.articulosSucursales.tempAttributes = Object.assign({},this.articulosSucursales.model);
         },
+
+
+        //<editor-fold desc="Methods of Entradas y salidas">
+        submitFormEntradaSalidaArticulo(actividad){
+            let inputs = this.entradaSalidaArticulos.attributes;
+            inputs.actividad = actividad;
+            axios.post(urlGlobal.resourcesEntradaSalidaArticulo, inputs
+            ).then(response => {
+                this.entradaSalidaArticulos.attributes= Object.assign({},this.entradaSalidaArticulos.model);
+                this.entradaSalidaArticulos.hideSuggestions=true;
+                setTimeout(()=> this.entradaSalidaArticulos.hideSuggestions=false, 0);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors(errors);
+            });
+        },
+        getEntradaSalidaArticuloByRageDate(event){
+            axios.post(urlGlobal.getEntradaSalidaByRangeDate, event
+            ).then(response => {
+                this.entradaSalidaArticulos.data = response.data;
+                this.entradaSalidaArticulos.data_with_filters = this.entradaSalidaArticulos.data;
+                this.entradaSalidaArticulos.paginated.pageNumber = 0;
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
+        //</editor-fold>
+
+        //<editor-fold desc="Methods of Filters">
+        filterByEmpleado(empleado){
+            if(empleado && empleado.nombre) {
+                this.entradaSalidaArticulos.filters.empleado = empleado.nombre;
+                this.goThroughFilters();
+            }
+        },
+        filterByAlmacen: function(almacen){
+            if(almacen.target.options.selectedIndex > -1) {
+                let index = almacen.target.options.selectedIndex;
+                this.entradaSalidaArticulos.filters.almacen = almacen.target.options[index].text;
+                this.goThroughFilters();
+            }
+        },
+        filterByActividad: function(actividad){
+            this.entradaSalidaArticulos.filters.actividad = actividad.target.value;
+            this.goThroughFilters();
+            //this.entradaSalidaArticulos.filters.actividad = actividad.target.options[index].text;
+            /*if(actividad.target.options.selectedIndex > -1) {
+                let index = actividad.target.options.selectedIndex;
+                this.goThroughFilters();
+            }*/
+        },
+
+        removeFilters(){
+            this.entradaSalidaArticulos.filters.almacen='';
+            this.entradaSalidaArticulos.filters.empleado='';
+            this.entradaSalidaArticulos.filters.actividad='';
+            this.entradaSalidaArticulos.hideFilters = true;
+            this.entradaSalidaArticulos.paginated.pageNumber = 0;
+            setTimeout(()=>this.entradaSalidaArticulos.hideFilters = false,1);
+            this.goThroughFilters();
+        },
+        viewDetallesVenta(detalles){
+            this.venta.detallesVenta = detalles.detalles_venta;
+        },
+        goThroughFilters(){
+            let filtered_data = this.entradaSalidaArticulos.data;
+            if(this.entradaSalidaArticulos.filters.empleado.length>0){
+                filtered_data = filtered_data.filter( _empleado =>{
+                    return _empleado.empleado === this.entradaSalidaArticulos.filters.empleado;
+                });
+            }
+            if(this.entradaSalidaArticulos.filters.almacen.length>0){
+                filtered_data = filtered_data.filter( _almacen =>{
+                    return _almacen.almacen === this.entradaSalidaArticulos.filters.almacen;
+                });
+            }
+            if(this.entradaSalidaArticulos.filters.actividad.length>0){
+                filtered_data = filtered_data.filter( _actividad =>{
+                    return _actividad.actividad === this.entradaSalidaArticulos.filters.actividad;
+                });
+            }
+            this.entradaSalidaArticulos.paginated.pageNumber = 0;
+            this.entradaSalidaArticulos.data_with_filters=filtered_data;
+        },
+
+        //</editor-fold>
         //<editor-fold desc="Methods of Categorias">
         submitFormCategoria(){
 
@@ -787,6 +903,12 @@ var appArticulo = new Vue({
         },
         prevPage(){
             this.articulo.paginated.pageNumber--;
+        },
+        nextPageEntradasSalidas(){
+            this.entradaSalidaArticulos.paginated.pageNumber++;
+        },
+        prevPageEntradasSalidas(){
+            this.entradaSalidaArticulos.paginated.pageNumber--;
         },
         //</editor-fold>
 

@@ -55,8 +55,8 @@
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="imgImagen"
                                        accept="image/jpg,image/jpeg,image/png" @change="handleFileUpload($event)">
-                                <label class="custom-file-label" for="validatedCustomFile">Carga una imagen del artículo en
-                                    formato .jpeg aquí</label>
+                                <label class="custom-file-label" for="validatedCustomFile">Imagen del artículo en
+                                    formato jpeg </label>
                                 <div class="invalid-feedback">Archivo inválido</div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                             <input type="text" class="custom-select" list="FabricantesNames" ref="inputFabricante"
                                    @change="handleDatalistFabricante($event)">
                             <datalist id="FabricantesNames">
-                                <option v-for="fabricante in fabricante" :value="fabricante.nombre">
+                                <option v-for="fabricante in fabricantes" :value="fabricante.nombre">
                             </datalist>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Dimensiones del artículo (Unidades en centímetros)</h4>
+                    <h4 class="card-title">Dimensiones del artículo [cm]</h4>
                     <fieldset :disabled="!articulo.attributes.divisible">
                         <div class="form-group row mb-2">
                             <label for="txtLargo"
@@ -184,7 +184,7 @@
                         </div>--}}
                     </fieldset>
 
-                    <h4 class="card-title">Precio de compra y venta de producción del artículo (Bs.)</h4>
+                    <h4 class="card-title">Precio de compra del ártículo [Bs]</h4>
                     <div class="form-group row mb-2">
                         <label for="txtPrecioCompra"
                                class="col-sm-4 text-right control-label col-form-label">Precio de Compra:</label>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row mb-2">
+                    {{--<div class="form-group row mb-2">
                         <label for="txtPrecioVenta"
                                class="col-sm-4 text-right control-label col-form-label">Precio de venta
                             (producción):</label>
@@ -216,7 +216,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
             </div>
         </div>

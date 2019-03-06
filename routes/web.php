@@ -49,6 +49,9 @@ Route::prefix('movimientos-almacen')->group(function () {
 Route::prefix('medicion')->group(function () {
     Route::post('date_range', 'MedicionController@getMedicionByRangeDate');
 });
+Route::prefix('entrada-salida-articulo')->group(function () {
+    Route::post('date-range', 'EntradaSalidaArticuloController@getEntradaSalidaByRangeDate');
+});
 Route::prefix('produccion')->group(function () {
     Route::get('creditos', 'ProduccionController@forceGetProductionCredits');
     Route::post('date_range', 'ProduccionController@getProduccionesByRangeDate');
@@ -113,6 +116,7 @@ Route::group(['middleware' => ['auth','checkstatus']], function () {
         'acceso' => 'AccesoController',
         'caja' => 'CajaControlador',
         'movimientos-almacen' => 'MovimientosAlmacenController',
+        'entrada-salida-articulo' => 'EntradaSalidaArticuloController',
         /*'cajachica' => 'CajaChicaControlador',*/
         'cargo' => 'CargoControlador',
         'categoria' => 'CategoriaControlador',

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-03-2019 a las 13:46:30
--- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.7
+-- Tiempo de generación: 06-03-2019 a las 17:43:57
+-- Versión del servidor: 10.1.25-MariaDB
+-- Versión de PHP: 7.1.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -109,7 +109,8 @@ INSERT INTO `articulo` (`id_articulo`, `nombre`, `codigo`, `codigo_barra`, `cara
 (21, 'Articulo 2 Modificado', '4654', '45', '', '10.00', '0.00', '1', NULL, '2019-01-23', 1, NULL, NULL),
 (22, 'Articulo 3', '45', '455', '', '445.00', '0.00', '1', NULL, '2019-01-23', 0, NULL, NULL),
 (23, 'Melaminico', '23533', '132524521352', '', '300.00', '500.00', '1', NULL, '2019-02-08', 1, NULL, NULL),
-(24, 'Articulo de prueba', '4694654', '5465465', '', '200.00', '0.00', '1', NULL, '2019-02-17', 0, NULL, NULL);
+(24, 'Articulo de prueba', '4694654', '5465465', '', '200.00', '0.00', '1', NULL, '2019-02-17', 0, NULL, NULL),
+(25, 'Articulo 3 aux', '10000', '1000', '', '1000.00', NULL, '1', NULL, '2019-03-04', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -275,7 +276,10 @@ INSERT INTO `bitacora` (`id`, `id_empleado`, `descripcion`, `accion`, `fecha`) V
 (122, 18, 'previusData={\"id_empleado\":18,\"usuario\":\"rid\",\"pass\":null,\"permisos_permitidos\":[{\"id_permiso\":14,\"descripcion\":\"Ventas\",\"permitir\":1},{\"id_permiso\":21,\"descripcion\":\"Producciones\",\"permitir\":1},{\"id_permiso\":13,\"descripcion\":\"Panel de Administraci\\u00f3n\",\"permitir\":1},{\"id_permiso\":19,\"descripcion\":\"Movimientos de Art\\u00edculos\",\"permitir\":1},{\"id_permiso\":20,\"descripcion\":\"Mediciones\",\"permitir\":1},{\"id_permiso\":18,\"descripcion\":\"Crear Cajas\",\"permitir\":1},{\"id_permiso\":15,\"descripcion\":\"Compras\",\"permitir\":1},{\"id_permiso\":17,\"descripcion\":\"Caja\",\"permitir\":1},{\"id_permiso\":16,\"descripcion\":\"Art\\u00edculo\",\"permitir\":1}]}', 'UPDATE', '2019-02-24 19:32:13'),
 (123, 18, 'previusData={\"id_articulo\":17,\"id_sucursal\":4,\"precio_1\":null,\"precio_2\":\"200\",\"precio_3\":null,\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 18:58:08'),
 (124, 18, 'previusData={\"id_articulo\":20,\"id_sucursal\":1,\"precio_1\":null,\"precio_2\":null,\"precio_3\":\"100\",\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 18:58:46'),
-(125, 18, 'previusData={\"id_articulo\":22,\"id_sucursal\":1,\"precio_1\":null,\"precio_2\":null,\"precio_3\":\"150\",\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 19:04:47');
+(125, 18, 'previusData={\"id_articulo\":22,\"id_sucursal\":1,\"precio_1\":null,\"precio_2\":null,\"precio_3\":\"150\",\"precio_4\":null,\"precio_5\":null}', 'UPDATE', '2019-02-27 19:04:47'),
+(126, 18, '', 'LOGIN', '2019-03-03 07:10:56'),
+(127, 18, '', 'LOGIN', '2019-03-03 18:03:08'),
+(128, 18, '', 'LOGIN', '2019-03-04 16:26:52');
 
 -- --------------------------------------------------------
 
@@ -908,11 +912,23 @@ INSERT INTO `empresa` (`id_empresa`, `razon_social`, `nit`, `propietario`, `acti
 
 CREATE TABLE `entradas_salidas_articulos` (
   `id` int(11) NOT NULL,
+  `id_empleado` int(11) NOT NULL,
   `id_almacen` int(11) NOT NULL,
   `id_articulo` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `actividad` char(1) NOT NULL
+  `actividad` char(1) NOT NULL,
+  `observaciones` text,
+  `fecha` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf32;
+
+--
+-- Volcado de datos para la tabla `entradas_salidas_articulos`
+--
+
+INSERT INTO `entradas_salidas_articulos` (`id`, `id_empleado`, `id_almacen`, `id_articulo`, `cantidad`, `actividad`, `observaciones`, `fecha`) VALUES
+(25, 18, 3, 16, 1, 'e', NULL, '2019-03-04 16:57:46'),
+(26, 18, 6, 16, 1, 'e', NULL, '2019-03-04 16:57:57'),
+(27, 18, 6, 16, 2, 's', NULL, '2019-03-04 16:58:04');
 
 -- --------------------------------------------------------
 
@@ -1499,9 +1515,9 @@ INSERT INTO `stock` (`id_stock`, `id_articulo`, `id_almacen`, `cantidad`) VALUES
 (11, 21, 5, 21),
 (12, 16, 1, 12),
 (13, 20, 6, 100),
-(14, 16, 6, 100),
+(14, 16, 6, 119),
 (15, 19, 4, 10),
-(16, 16, 3, 10),
+(16, 16, 3, 11),
 (17, 16, 2, 6);
 
 -- --------------------------------------------------------
@@ -1828,7 +1844,8 @@ ALTER TABLE `empresa`
 ALTER TABLE `entradas_salidas_articulos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_almacen` (`id_almacen`),
-  ADD KEY `id_articulo` (`id_articulo`);
+  ADD KEY `id_articulo` (`id_articulo`),
+  ADD KEY `id_empleado` (`id_empleado`);
 
 --
 -- Indices de la tabla `fabricante`
@@ -2049,295 +2066,246 @@ ALTER TABLE `venta_credito`
 --
 ALTER TABLE `almacen`
   MODIFY `id_almacen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
 --
 -- AUTO_INCREMENT de la tabla `articulo`
 --
 ALTER TABLE `articulo`
-  MODIFY `id_articulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
+  MODIFY `id_articulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT de la tabla `bitacora`
 --
 ALTER TABLE `bitacora`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 --
 -- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
   MODIFY `id_caja` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT de la tabla `caja_chica`
 --
 ALTER TABLE `caja_chica`
   MODIFY `id_caja_chica` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
 --
 -- AUTO_INCREMENT de la tabla `caja_chica_detalle`
 --
 ALTER TABLE `caja_chica_detalle`
   MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `cambio`
 --
 ALTER TABLE `cambio`
   MODIFY `id_cambio` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `cargo`
 --
 ALTER TABLE `cargo`
   MODIFY `id_cargo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
 --
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
-
 --
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
   MODIFY `id_ciudad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
-
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
   MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
 --
 -- AUTO_INCREMENT de la tabla `compra`
 --
 ALTER TABLE `compra`
   MODIFY `id_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
-
 --
 -- AUTO_INCREMENT de la tabla `compra_credito`
 --
 ALTER TABLE `compra_credito`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
-
 --
 -- AUTO_INCREMENT de la tabla `contacto`
 --
 ALTER TABLE `contacto`
   MODIFY `id_contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
 --
 -- AUTO_INCREMENT de la tabla `cuenta`
 --
 ALTER TABLE `cuenta`
   MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `cuenta_proveedor`
 --
 ALTER TABLE `cuenta_proveedor`
   MODIFY `id_cuenta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT de la tabla `detalle_compra`
 --
 ALTER TABLE `detalle_compra`
   MODIFY `id_detalle_compra` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
-
 --
 -- AUTO_INCREMENT de la tabla `detalle_produccion`
 --
 ALTER TABLE `detalle_produccion`
   MODIFY `id_detalle_produccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
-
 --
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
   MODIFY `id_detalle_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
-
 --
 -- AUTO_INCREMENT de la tabla `dosificacion`
 --
 ALTER TABLE `dosificacion`
   MODIFY `id_dosificacion` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
   MODIFY `id_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
-
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
   MODIFY `id_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT de la tabla `entradas_salidas_articulos`
 --
 ALTER TABLE `entradas_salidas_articulos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT de la tabla `fabricante`
 --
 ALTER TABLE `fabricante`
   MODIFY `id_fabricante` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
   MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `gasto`
 --
 ALTER TABLE `gasto`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `impuesto`
 --
 ALTER TABLE `impuesto`
   MODIFY `id_impuesto` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `impuesto_articulo`
 --
 ALTER TABLE `impuesto_articulo`
   MODIFY `id_impuesto_articulo` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `kardex`
 --
 ALTER TABLE `kardex`
   MODIFY `id_kardex` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT de la tabla `kardex_observaciones`
 --
 ALTER TABLE `kardex_observaciones`
   MODIFY `id_kardex_observaciones` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `mediciones`
 --
 ALTER TABLE `mediciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
 --
 -- AUTO_INCREMENT de la tabla `mediciones_detalle`
 --
 ALTER TABLE `mediciones_detalle`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT de la tabla `moneda`
 --
 ALTER TABLE `moneda`
   MODIFY `id_moneda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
-
 --
 -- AUTO_INCREMENT de la tabla `movimientos_almacen`
 --
 ALTER TABLE `movimientos_almacen`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
-
 --
 -- AUTO_INCREMENT de la tabla `movimientos_almacen_detalle`
 --
 ALTER TABLE `movimientos_almacen_detalle`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT de la tabla `pais`
 --
 ALTER TABLE `pais`
   MODIFY `id_pais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
 --
 -- AUTO_INCREMENT de la tabla `permiso`
 --
 ALTER TABLE `permiso`
   MODIFY `id_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT de la tabla `permiso_usuario`
 --
 ALTER TABLE `permiso_usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
-
 --
 -- AUTO_INCREMENT de la tabla `pieza`
 --
 ALTER TABLE `pieza`
   MODIFY `id_pieza` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `produccion`
 --
 ALTER TABLE `produccion`
   MODIFY `id_produccion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
-
 --
 -- AUTO_INCREMENT de la tabla `produccion_credito`
 --
 ALTER TABLE `produccion_credito`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
 --
 -- AUTO_INCREMENT de la tabla `produccion_entrega`
 --
 ALTER TABLE `produccion_entrega`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
 --
 -- AUTO_INCREMENT de la tabla `proveedor`
 --
 ALTER TABLE `proveedor`
   MODIFY `id_proveedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 --
 -- AUTO_INCREMENT de la tabla `stock`
 --
 ALTER TABLE `stock`
   MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
 --
 -- AUTO_INCREMENT de la tabla `subcategoria`
 --
 ALTER TABLE `subcategoria`
   MODIFY `id_subcategoria` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT de la tabla `sucursal`
 --
 ALTER TABLE `sucursal`
   MODIFY `id_sucursal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT de la tabla `tipo_empleado`
 --
 ALTER TABLE `tipo_empleado`
   MODIFY `id_tipo_empleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 --
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
   MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
-
 --
 -- AUTO_INCREMENT de la tabla `venta_credito`
 --
 ALTER TABLE `venta_credito`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
-
 --
 -- Restricciones para tablas volcadas
 --
@@ -2485,7 +2453,8 @@ ALTER TABLE `empleado`
 --
 ALTER TABLE `entradas_salidas_articulos`
   ADD CONSTRAINT `entradas_salidas_articulos_ibfk_1` FOREIGN KEY (`id_almacen`) REFERENCES `almacen` (`id_almacen`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `entradas_salidas_articulos_ibfk_2` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `entradas_salidas_articulos_ibfk_2` FOREIGN KEY (`id_articulo`) REFERENCES `articulo` (`id_articulo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `entradas_salidas_articulos_ibfk_3` FOREIGN KEY (`id_empleado`) REFERENCES `empleado` (`id_empleado`);
 
 --
 -- Filtros para la tabla `factura`
