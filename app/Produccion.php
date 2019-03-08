@@ -386,8 +386,8 @@ class Produccion extends Model
 
     public static function newProduccionEntrega($parameters)
     {
-       /* DB::beginTransaction();
-        try {*/
+        DB::beginTransaction();
+        try {
             $empleado = $empleado = Empleado::find(auth()->user()->id_empleado);
             $_produccion = Produccion::find($parameters['id_produccion']);
             $_produccion_entrega = new ProduccionEntrega();
@@ -395,14 +395,15 @@ class Produccion extends Model
             $_produccion_entrega->id_almacen = $empleado->id_almacen;
             $_produccion_entrega->fecha = Carbon::now()->toDateTimeString();
             $_produccion->produccionEntregas()->save($_produccion_entrega);
-            $productoInsuficiente = Articulo::find($parameters['id_articulo'])->nombre;
+        $articulo = Articulo::find($parameters['id_articulo']);
+        $dimension= $articulo->dimension;
             $stock = Stock::where('id_articulo', $parameters['id_articulo'])
                 ->where('id_almacen', $empleado->id_almacen)->lockForUpdate()->first();
             if (!is_null($stock)) {
                 /**
                  * Controla el stock
                  **/
-                if ($stock->cantidad - $parameters['cantidad'] < 0) {
+                /*if ($stock->cantidad - $parameters['cantidad'] < 0) {
                     DB::rollback();
                     return [
                         'message' => [
@@ -414,15 +415,19 @@ class Produccion extends Model
                         ],
                         'code' => 400
                     ];
+                }*/
+                if ($articulo->divisible){
+                    $stock->cantidad -= (int)$parameters['cantidad'] * $dimension->ancho * $dimension->largo;
+                }else {
+                    $stock->cantidad = $stock->cantidad - (int)$parameters['cantidad'];
                 }
-                $stock->cantidad = $stock->cantidad -(int)$parameters['cantidad'];
                 $stock->update();
             } else {
                 return [
                     'message' => [
                         'errors' => [
                             'stock' => [
-                                'El articulo no existe en este almacen ' . $productoInsuficiente
+                                'El articulo no existe en este almacen ' . $articulo->nombre
                             ]
                         ]
                     ],
@@ -430,7 +435,7 @@ class Produccion extends Model
                 ];
             }
             DB::commit();
-        /*} catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return [
                 'message' => [
@@ -442,7 +447,7 @@ class Produccion extends Model
                 ],
                 'code' => 400
             ];
-        }*/
+        }
     }
     public static function getEntregasByProduccion($id_produccion){
         $_produccion = Produccion::find($id_produccion);

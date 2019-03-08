@@ -121,7 +121,7 @@
                     <div class="input-group-prepend col-md-3 p-0">
                         <span class="input-group-text w-100" id="basic-addon1">Cambio</span>
                     </div>
-                    <div class="form-control text-right">@{{ venta.attributes.importe-Number(venta.totalDetallesVenta)}}</div>
+                    <div class="form-control text-right">@{{ Number(venta.attributes.importe)-Number(venta.totalDetallesVenta)}}</div>
                 </div>
             </div>
             <div class="modal-footer">

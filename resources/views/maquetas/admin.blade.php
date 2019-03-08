@@ -107,9 +107,14 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">{{ auth()->user()->usuario  }}:
                                 @php
-                                    $caja = Allison\Caja::where('id_empleado',auth()->user()->id_empleado)->first();
+                                $empleado=Allison\Empleado::find(auth()->user()->id_empleado);
+                                    $caja = Allison\Caja::where('id_empleado',$empleado->id_empleado)->first();
                                     if (!is_null($caja)){
                                        echo $caja->nombre;
+                                    }
+                                  $almacen = Allison\Almacen::find($empleado->id_almacen);
+                                    if (!is_null($almacen)){
+                                       echo ' - '.$almacen->codigo;
                                     }
                                 @endphp
                                 <i class="fa fa-angle-down"></i>

@@ -62,16 +62,26 @@ class Compra extends Model
             $_compra->detallesCompra()->createMany($parameters_compra['detalles_compra']);
 
             foreach ($parameters_compra['detalles_compra'] as $detalle) {
+                $articulo = Articulo::find($detalle['id_articulo']);
+                $dimension= $articulo->dimension;
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
                     ->where('id_almacen', $detalle['id_almacen'])->lockForUpdate()->first();
                 if (is_null($stock)) {
                     $_stock = new Stock();
                     $_stock->id_articulo = $detalle['id_articulo'];
                     $_stock->id_almacen = $detalle['id_almacen'];
-                    $_stock->cantidad = $detalle['cantidad'];
+                    if ($articulo->divisible){
+                        $_stock->cantidad = $detalle['cantidad'] * $dimension->ancho * $dimension->largo;
+                    }else {
+                        $_stock->cantidad = $detalle['cantidad'];
+                    }
                     $_stock->save();
                 } else {
-                    $stock->cantidad += (int)$detalle['cantidad'];
+                    if ($articulo->divisible){
+                        $stock->cantidad += (int)$detalle['cantidad'] * $dimension->ancho * $dimension->largo;
+                    }else {
+                        $stock->cantidad += (int)$detalle['cantidad'];
+                    }
                     $stock->update();
                 }
             }

@@ -149,7 +149,7 @@ class Venta extends Model
             $_venta->detallesVenta()->createMany($parameters['detalles_venta']);
 
             foreach ($parameters['detalles_venta'] as $detalle) {
-                $productoInsuficiente = Articulo::find($detalle['id_articulo'])->nombre;
+                $articulo = Articulo::find($detalle['id_articulo']);
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
                     ->where('id_almacen', $empleado->id_almacen)->lockForUpdate()->first();
                 if (!is_null($stock)) {
@@ -166,14 +166,31 @@ class Venta extends Model
                             'code' => 400
                         ];
                     }*/
-                    $stock->cantidad = $stock->cantidad -(int)$detalle['cantidad'];
+                    if ($articulo->divisible){
+                        if(!$detalle['ancho'] || !$detalle['largo']){
+                            return [
+                                'message' => [
+                                    'errors' => [
+                                        'articulo' => [
+                                            'El articulo '.$articulo->nombre.' debe tener ancho y largo'
+                                        ]
+                                    ]
+                                ],
+                                'code' => 400
+                            ];
+                        }
+                        $stock->cantidad = $stock->cantidad -
+                            ((float)$detalle['ancho']*(float)$detalle['largo'])*(int)$detalle['cantidad'];
+                    } else {
+                        $stock->cantidad = $stock->cantidad -(int)$detalle['cantidad'];
+                    }
                     $stock->update();
                 } else {
                     return [
                         'message' => [
                             'errors' => [
                                 'stock' => [
-                                    'El articulo no existe en este almacen ' . $productoInsuficiente
+                                    'El articulo no existe en este almacen ' . $articulo->nombre
                                 ]
                             ]
                         ],
@@ -202,7 +219,11 @@ class Venta extends Model
             $_venta->sucursal = $sucursal;
             $_venta->detallesVenta;
             foreach ($_venta->detallesVenta as $detalle) {
-                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                if ($detalle->ancho && $detalle->largo) {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre.' '.$detalle->ancho.'x'.$detalle->largo;
+                } else {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                }
             }
             return [
                 'data' => $_venta,
@@ -234,7 +255,7 @@ class Venta extends Model
     public static function getVentasByRageDate($date1, $date2) {
 
         $ventas = Venta::whereBetween('fecha', [$date1.' 00:00:00',$date2.' 23:59:59'])
-            ->orderBy('fecha', 'desc')->get();
+            ->orderBy('id_venta', 'desc')->get();
         foreach ($ventas as $venta) {
             if (isset($venta->cliente->razon_social)) {
                 $cliente = $venta->cliente->razon_social;
@@ -259,7 +280,11 @@ class Venta extends Model
             $venta->almacen= $almacen->codigo;
             $venta->detallesVenta;
             foreach ($venta->detallesVenta as $detalle) {
-                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                if ($detalle->ancho && $detalle->largo) {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre.' '.$detalle->ancho.'x'.$detalle->largo;
+                } else {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                }
             }
         }
         return $ventas;
@@ -286,14 +311,18 @@ class Venta extends Model
         $venta->sucursal = $sucursal;
         $venta->detallesVenta;
         foreach ($venta->detallesVenta as $detalle) {
-            $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+            if ($detalle->ancho && $detalle->largo) {
+                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre.' '.$detalle->ancho.'x'.$detalle->largo;
+            } else {
+                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+            }
         }
         return $venta;
     }
     public static function getSalesOnCreditInForce() {
 
         $ventas = Venta::where('estatus', 'cv')
-            ->orderBy('fecha', 'desc')->get();
+            ->orderBy('id_venta', 'desc')->get();
         foreach ($ventas as $venta) {
             if (isset($venta->cliente->razon_social)) {
                 $cliente = $venta->cliente->razon_social;
@@ -319,7 +348,11 @@ class Venta extends Model
             $venta->almacen= $almacen->codigo;
             $venta->detallesVenta;
             foreach ($venta->detallesVenta as $detalle) {
-                $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                if ($detalle->ancho && $detalle->largo) {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre.' '.$detalle->ancho.'x'.$detalle->largo;
+                } else {
+                    $detalle->articulo = Articulo::find($detalle->id_articulo)->nombre;
+                }
             }
         }
         return $ventas;

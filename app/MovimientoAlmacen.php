@@ -42,24 +42,29 @@ class MovimientoAlmacen extends Model
             $movimiento_almacen->save();
             $movimiento_almacen->movimientosAlmacenDetalle()->createMany($parameters['detalles']);
             foreach ($parameters['detalles'] as $detalle) {
-                $productoInsuficiente = Articulo::find($detalle['id_articulo'])->nombre;
+                $articulo = Articulo::find($detalle['id_articulo']);
+                $dimension= $articulo->dimension;
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
                     ->where('id_almacen', $parameters['id_almacen_origen'])->lockForUpdate()->first();
                 if (!is_null($stock)) {
-                    if ($stock->cantidad - $detalle['cantidad'] < 0) {
+                    /*if ($stock->cantidad - $detalle['cantidad'] < 0) {
                         DB::rollback();
                         return [
                             'message' => [
                                 'errors' => [
                                     'stock' => [
-                                        'Stock insuficiente del articulo ' . $productoInsuficiente
+                                        'Stock insuficiente del articulo ' . $articulo->nombre
                                     ]
                                 ]
                             ],
                             'code' => 400
                         ];
+                    }*/
+                    if ($articulo->divisible){
+                        $stock->cantidad -= $detalle['cantidad'] * $dimension->ancho * $dimension->largo;
+                    }else {
+                        $stock->cantidad = $stock->cantidad - (int)$detalle['cantidad'];
                     }
-                    $stock->cantidad = $stock->cantidad - (int)$detalle['cantidad'];
                     $stock->update();
                     $stockDestino = Stock::where('id_articulo', $detalle['id_articulo'])
                         ->where('id_almacen', $parameters['id_almacen_destino'])->lockForUpdate()->first();
@@ -67,10 +72,10 @@ class MovimientoAlmacen extends Model
                         $_stock = new Stock();
                         $_stock->id_articulo = $detalle['id_articulo'];
                         $_stock->id_almacen = $parameters['id_almacen_destino'];
-                        $_stock->cantidad = $detalle['cantidad'];
+                        $_stock->cantidad = $detalle['cantidad'] * $dimension->ancho * $dimension->largo;
                         $_stock->save();
                     } else {
-                        $stockDestino->cantidad = $stockDestino->cantidad + (int)$detalle['cantidad'];
+                        $stockDestino->cantidad += $detalle['cantidad'] * $dimension->ancho * $dimension->largo;
                         $stockDestino->update();
                     }
                 } else {
@@ -78,7 +83,7 @@ class MovimientoAlmacen extends Model
                         'message' => [
                             'errors' => [
                                 'stock' => [
-                                    'El articulo no existe en este almacen ' . $productoInsuficiente
+                                    'El articulo no existe en este almacen ' . $articulo->nombre
                                 ]
                             ]
                         ],

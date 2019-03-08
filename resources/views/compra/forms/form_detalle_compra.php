@@ -18,18 +18,19 @@
 </div>
 <div class="d-flex justify-content-center mb-2">
     <div class="col-lg-4 pr-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+        <div class="form-control border border-info border-right-0 border-left-0">
             Categoria: {{ compra.articulo.categoria? compra.articulo.categoria.categoria:'' }}
         </div>
     </div>
     <div class="col-lg-4 pr-0 pl-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+        <div class="form-control border border-info border-right-0 border-left-0">
             Fabricante: {{ compra.articulo.fabricante ? compra.articulo.fabricante.nombre:'' }}
         </div>
     </div>
     <div class="col-lg-4 pl-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
-            Stock de Sucursal Asignado: {{ compra.articulo.stock }}
+        <div class="form-control border border-info border-right-0 border-left-0"
+             title="Stock del almacen que se te asigno ">
+            Stock: {{ compra.articulo.stock }}
         </div>
     </div>
 </div>

@@ -102,6 +102,8 @@ var appVenta = new Vue({
                 id_articulo:null,
                 id_almacen:null,
                 id_sucursal:null,
+                ancho: null,
+                largo: null,
                 subtotal:null,
                 nombre: '',
             },
@@ -111,6 +113,8 @@ var appVenta = new Vue({
                 id_articulo:null,
                 id_almacen:null,
                 id_sucursal:null,
+                ancho: null,
+                largo: null,
                 subtotal:null,
                 nombre: '',
             },
@@ -120,7 +124,7 @@ var appVenta = new Vue({
                 id_venta: null,
                 descuento: null,
                 costo_total: 0,
-                importe: 0,
+                importe: null,
                 codigo_tarjeta_cheque: '',
                 estatus: '',
                 id_moneda: null,
@@ -133,7 +137,7 @@ var appVenta = new Vue({
                 id_venta: null,
                 descuento: null,
                 costo_total: null,
-                importe: 0,
+                importe: null,
                 codigo_tarjeta_cheque: '',
                 estatus: '',
                 id_moneda: null,
@@ -403,13 +407,12 @@ var appVenta = new Vue({
                 let index = this.venta.attributes.detalles_venta.findIndex(detalle => {
                     return detalle.id_articulo === this.venta.detalleVenta.id_articulo;
                 });
-                if (index === -1) {
+                if (index === -1 || (this.venta.detalleVenta.ancho && this.venta.detalleVenta.largo)) {
                     this.venta.attributes.detalles_venta.push(this.venta.detalleVenta);
                 } else {
                     let detalles_venta = this.venta.attributes.detalles_venta[index];
                     detalles_venta.cantidad += this.venta.detalleVenta.cantidad;
                 }
-
                 this.calcularTotale();
                 this.venta.articulo.categoria.categoria ='';
                 this.venta.articulo.fabricante.nombre ='';
@@ -446,7 +449,7 @@ var appVenta = new Vue({
             ).then(response => {
                 this.venta.attributes.detalles_venta = [];
                 this.venta.totalDetallesVenta = 0;
-                this.venta.attributes.importe = 0;
+                this.venta.attributes.importe = null;
                 this.venta.oneVenta = response.data;
                 this.$nextTick(function () {
                     this.printVenta(this.$refs.print_venta);
@@ -472,6 +475,26 @@ var appVenta = new Vue({
             }).catch(errors => {
                 console.log(errors);
             });
+        },
+        addToList() {
+            if (this.venta.detalleVenta.id_articulo
+                && this.venta.detalleVenta.cantidad
+                && this.venta.detalleVenta.precio_unitario
+            ) {
+                this.venta.attributes.detalles_venta.push(this.venta.detalleVenta);
+                this.calcularTotale();
+                let detalle = Object.assign({}, this.venta.detalleVenta);
+                this.venta.detalleVenta = detalle;
+                this.venta.detalleVenta.largo = null;
+                this.venta.detalleVenta.ancho = null;
+            } else {
+                let errors = [
+                    '<li>El artículo es requerido</li>',
+                    '<li>La cantidad es requerida</li>',
+                    '<li>El precio unitario es requerida</li>',
+                ];
+                toastr.error(errors, 'Revice los campos', {timeOut: 10000});
+            }
         },
         //</editor-fold>
 

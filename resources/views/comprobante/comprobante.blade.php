@@ -24,7 +24,9 @@
                  </thead>
                  <tbody>
                     <tr v-for="_detalle in venta.oneVenta.detalles_venta">
-                        <td>@{{ _detalle.articulo }}</td>
+                        <td>
+                            <span >@{{ _detalle.articulo}}</span>
+                        </td>
                         <td class="text-right ">@{{ _detalle.cantidad }}</td>
                         <td class="text-right ">@{{ _detalle.precio_unitario }}</td>
                         <td class="text-right ">@{{ _detalle.cantidad*_detalle.precio_unitario }}</td>

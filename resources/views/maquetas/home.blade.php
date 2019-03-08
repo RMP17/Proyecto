@@ -28,10 +28,10 @@
                             <div class="d-flex flex-wrap justify-content-center">
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">
-                                        <a href="{{url('caja')}}">
+                                        <a href="{{url('config')}}">
                                             <div class="box bg-secondary text-center">
                                                 <h1 class="font-light text-white"><i class="mdi mdi-wrench"></i></h1>
-                                                <h6 class="text-white">Panel de Administración</h6>
+                                                <h6 class="text-white text-truncate">Panel de Administración</h6>
                                             </div>
                                         </a>
                                     </div>
@@ -94,7 +94,7 @@
                                         <a href="{{url('movimientos-almacen')}}">
                                         <div class="box bg-indigo text-center">
                                             <h1 class="font-light text-white"><i class="mdi mdi-transfer"></i></h1>
-                                            <h6 class="text-white">Movimientos de Artìculos</h6>
+                                            <h6 class="text-white text-truncate">Movimientos de Artìculos</h6>
                                         </div>
                                         </a>
                                     </div>

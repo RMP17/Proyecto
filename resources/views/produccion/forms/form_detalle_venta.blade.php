@@ -25,17 +25,17 @@
 </div>
 <div class="d-flex justify-content-center mb-2">
     <div class="col-lg-4 pr-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+        <div class="form-control border border-info border-right-0 border-left-0">
             Categoria: @{{ produccion.articulo.attributes.categoria ? produccion.articulo.attributes.categoria.categoria:'' }}
         </div>
     </div>
     <div class="col-lg-4 pr-0 pl-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+        <div class="form-control border border-info border-right-0 border-left-0">
             Fabricante: @{{ produccion.articulo.attributes.fabricante ? produccion.articulo.attributes.fabricante.nombre:'' }}
         </div>
     </div>
     <div class="col-lg-4 pl-0">
-        <div class="form-control border border-info border-top-0 border-right-0 border-bottom-0">
+        <div class="form-control border border-info border-right-0 border-left-0">
             {{--todo:stock muestra los articulos del almacen asignado--}}
             Stock: @{{ produccion.articulo.attributes.stock }}
         </div>

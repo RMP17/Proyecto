@@ -799,8 +799,10 @@ var appArticulo = new Vue({
         },
         selectArticuloForEntradaSalida(articulo){
             if (articulo && articulo.id_articulo){
+                this.articulo.oneArticulo=articulo;
                 this.entradaSalidaArticulos.attributes.id_articulo=articulo.id_articulo;
             } else {
+                this.articulo.oneArticulo=null;
                 this.entradaSalidaArticulos.attributes.id_articulo=null;
             }
         },
