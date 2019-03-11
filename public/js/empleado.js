@@ -50,6 +50,7 @@ var appEmpleado = new Vue({
                 id_sucursal: null,
             }
         },
+
         toggleEmpleadoKardex: true,
         toggleEmpleadoCreate: true,
         errorsKardex: [],

@@ -10,17 +10,10 @@
                 @keydown.enter="getArticuloByCodigoBarras($event)"
                 placeholder="Código de Barras del Artículo" type="text"></div>
     <div class="col-lg-4 pl-0" >
-        <div v-if="produccion.articulo.attributes.nombre">
-            <app-online-suggestions-objects :config="configArticulo"
-                                            @selected-suggestion-event="selectArticuloOfSuggestions">
-            </app-online-suggestions-objects>
-        </div>
-        <div v-else>
-            <app-online-suggestions-objects :config="configArticulo"
-                                            :input-value="produccion.articulo.attributes.nombre"
-                                            @selected-suggestion-event="selectArticuloOfSuggestions">
-            </app-online-suggestions-objects>
-        </div>
+        <app-online-suggestions-objects :config="configArticulo"
+                                        :input-value="this.produccion.articulo.name"
+                                        @selected-suggestion-event="selectArticuloOfSuggestions">
+        </app-online-suggestions-objects>
     </div>
 </div>
 <div class="d-flex justify-content-center mb-2">

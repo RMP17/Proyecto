@@ -2,16 +2,8 @@
 
 namespace Allison\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Allison\Http\Requests\KardexPeticion;
+use Allison\Http\Requests\KardexRequest;
 use Allison\Kardex;
-use Allison\Empleado;
-use Allison\Cargo;
-use Allison\TipoEmpleado;
-use Allison\Salario;
-use Allison\Moneda;
-use DB;
 
 class KardexControlador extends Controller
 {
@@ -19,5 +11,15 @@ class KardexControlador extends Controller
 	{
         $kardex = Kardex::getKardexEmpleado($id_empleado);
         return response()->json($kardex);
+	}
+	public function store(KardexRequest $request)
+	{
+        Kardex::newKardex($request->all());
+        return response()->json();
+	}
+	public function update(KardexRequest $request,$id_kardex)
+	{
+        Kardex::updateKardex($request->all());
+        return response()->json();
 	}
 }

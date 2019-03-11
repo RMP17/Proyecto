@@ -6,14 +6,23 @@
     <div id="app-config">
         <div class="page-breadcrumb mb-2">
             <div class="row">
-                <div class="col-12 d-flex no-block align-items-center">
+
+                <div class="col d-flex no-block align-items-center">
                     <h4 class="page-title">Configuraciones</h4>
-                    <div class="col-auto">
+                    <button class="navbar-toggler navbar-light d-block d-md-none"
+                            type="button" data-toggle="collapse"
+                            data-target="#navbarTogglerDemo03"
+                            aria-controls="navbarTogglerDemo03"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="col">
                         {{--<a type="button" class="btn btn-outline-purple" href="{{url ('compra/create')}}">Registrar nuevo</a>
                         <a href="#" type="button" class="btn btn-outline-dark w-10em">
                             <span>Proveedores</span>
                         </a>--}}
-                        <nav>
+                        <nav class="collapse navbar-collapse d-lg-block" id="navbarTogglerDemo03">
                             <div class="nav nav-tabs show active" id="nav-tab" role="tablist">
                                 <a class="nav-item nav-link w-10em active"
                                    id="nav-profile-tab"

@@ -27,6 +27,7 @@ var urlGlobal={
     postArticuPrecios:url + 'articulo/precios',
     getAllCiudades:url + 'ciudades',
     getKardex:url + 'kardex/',
+    resourcesKardex:url + 'kardex',
     getCajas:url + 'cajas',
     closedAndOpenCashier:url + 'caja/closedAndOpenCashier',
     getCaja:url + 'caja/one',

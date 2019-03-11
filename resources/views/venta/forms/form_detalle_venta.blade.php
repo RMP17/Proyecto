@@ -7,11 +7,11 @@
     <div class="col-lg-4 pr-0 pl-0"><input
                 class="form-control"
                 ref="input_articulo_codigo_barra"
-                @keydown.enter="getArticuloByCodigoBarras($event)"
+                @keypress.enter="getArticuloByCodigoBarras($event)"
                 placeholder="Código de Barras del Artículo" type="text"></div>
     <div class="col-lg-4 pl-0">
         <app-online-suggestions-objects :config="configArticulo"
-                                        :input-value="venta.tempDetalleVenta.nombre"
+                                        :input-value="venta.nameArticulo"
                                         @selected-suggestion-event="assignAnIdentificationOfArticuloToDetalleVenta">
         </app-online-suggestions-objects>
     </div>

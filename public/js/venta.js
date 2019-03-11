@@ -75,6 +75,7 @@ var appVenta = new Vue({
             hideSuggestionsArticulo:false,
             data: [],
             data_with_filters: [],
+            nameArticulo:'',
             articulo:{
                 categoria:{
                     categoria:''
@@ -83,7 +84,8 @@ var appVenta = new Vue({
                     nombre:''
                 },
                 precios: {},
-                stock:null
+                stock:null,
+                nombre:''
             },
             tempArticulo:{
                 categoria:{
@@ -93,7 +95,8 @@ var appVenta = new Vue({
                     nombre:''
                 },
                 precios: {},
-                stock:null
+                stock:null,
+                nombre:''
             },
             detallesVenta:[],
             detalleVenta:{
@@ -260,6 +263,7 @@ var appVenta = new Vue({
             if (response && response.id_articulo) {
                 this.venta.detalleVenta.id_articulo = response.id_articulo;
                 this.venta.detalleVenta.nombre = response.nombre;
+                this.venta.nameArticulo = response.nombre;
                 this.venta.articulo = response;
                 this.$refs.input_articulo_codigo.value = response.codigo;
                 this.$refs.input_articulo_codigo_barra.value = response.codigo_barra;
@@ -292,13 +296,13 @@ var appVenta = new Vue({
                     if( Object.keys(response.data).length === 0){
                         this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
                         this.venta.articulo = Object.assign({},this.venta.tempArticulo);
-                        this.venta.tempDetalleVenta.nombre = '';
+                        this.venta.nameArticulo = '';
                         this.$refs.input_articulo_codigo.value = '';
                     } else {
                         this.venta.detalleVenta.id_articulo = response.data[0].id_articulo;
                         this.venta.detalleVenta.nombre = response.data[0].nombre;
-                        this.venta.articulo = response.data;
-                        this.venta.tempDetalleVenta.nombre = response.data[0].nombre;
+                        this.venta.nameArticulo = response.data[0].nombre;
+                        this.venta.articulo = response.data[0];
                         this.$refs.input_articulo_codigo.value = response.data[0].codigo;
                         this.$refs.txtCantidad.select();
                     }
@@ -315,12 +319,12 @@ var appVenta = new Vue({
                     if( Object.keys(response.data).length === 0){
                         this.venta.detalleVenta = Object.assign({},this.venta.tempDetalleVenta);
                         this.venta.articulo = Object.assign({},this.venta.tempArticulo);
-                        this.venta.tempDetalleVenta.nombre = '';
-                        this.$refs.input_articulo_codigo.value = '';
+                        this.venta.nameArticulo = '';
+                        this.$refs.input_articulo_codigo_barra.value = '';
                     } else {
                         this.venta.detalleVenta.id_articulo = response.data[0].id_articulo;
                         this.venta.detalleVenta.nombre = response.data[0].nombre;
-                        this.venta.tempDetalleVenta.nombre = response.data[0].nombre;
+                        this.venta.nameArticulo = response.data[0].nombre;
                         this.venta.articulo = response.data[0];
                         this.$refs.input_articulo_codigo_barra.value = response.data[0].codigo_barra;
                         this.$refs.txtCantidad.select();

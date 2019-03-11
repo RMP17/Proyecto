@@ -60,7 +60,12 @@ class Articulo extends Model
                     $stock = Stock::where('id_almacen',$almacen->id_almacen)
                         ->where('id_articulo',$articulo->id_articulo)->first();
                     if(!is_null($stock)) {
-                        $totalStock+=$stock->cantidad;
+                        $dimension =$articulo->dimension;
+                        if($articulo->divisible){
+                            $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                        } else {
+                            $totalStock+=$stock->cantidad;
+                        }
                     }
                 }
                 $articulo->stock = $totalStock;
@@ -114,7 +119,12 @@ class Articulo extends Model
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
                     ->where('id_articulo',$articulo->id_articulo)->first();
                 if(!is_null($stock)) {
-                    $totalStock+=$stock->cantidad;
+                    $dimension =$articulo->dimension;
+                    if($articulo->divisible){
+                        $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                    } else {
+                        $totalStock+=$stock->cantidad;
+                    }
                 }
             }
             $articulo->stock = $totalStock;
@@ -160,7 +170,7 @@ class Articulo extends Model
                 $articulo->fabricante = ['nombre'=>''];
             }
             $articulo->stock;
-            foreach ($articulo->stock as $stock){
+            foreach ($articulo->stock as &$stock){
                 $stock->almacen=Almacen::find($stock->id_almacen)->codigo;
             }
             unset($articulo->id_categoria);
@@ -197,7 +207,12 @@ class Articulo extends Model
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
                     ->where('id_articulo',$articulo->id_articulo)->first();
                 if(!is_null($stock)) {
-                    $totalStock+=$stock->cantidad;
+                    $dimension =$articulo->dimension;
+                    if($articulo->divisible){
+                        $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                    } else {
+                        $totalStock+=$stock->cantidad;
+                    }
                 }
             }
             $articulo->stock = $totalStock;
@@ -216,7 +231,7 @@ class Articulo extends Model
 
         return $articulos;
     }
-    public static function getArticuloStockByName($nombre){
+    public static function getArticuloStockByName($nombre){ // se usa para movimiento de almacen
 
         $articulos = Articulo::where('nombre', 'like','%'.$nombre.'%')
             ->orderBy('nombre','desc')->take(10)->get();
@@ -243,6 +258,10 @@ class Articulo extends Model
             $articulo->stock;
             foreach ($articulo->stock as $stock){
                 $stock->almacen=Almacen::find($stock->id_almacen)->codigo;
+                if($articulo->divisible){
+                    $dimension =$articulo->dimension;
+                    $stock->cantidad= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),5);
+                }
             }
 
         }
@@ -276,7 +295,12 @@ class Articulo extends Model
                 $stock = Stock::where('id_almacen',$almacen->id_almacen)
                     ->where('id_articulo',$articulo->id_articulo)->first();
                 if(!is_null($stock)) {
-                    $totalStock+=$stock->cantidad;
+                    $dimension =$articulo->dimension;
+                    if($articulo->divisible){
+                        $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                    } else {
+                        $totalStock+=$stock->cantidad;
+                    }
                 }
             }
             $articulo->stock = $totalStock;
@@ -327,6 +351,10 @@ class Articulo extends Model
         $articulo = Articulo::find($id_articulo);
         foreach ($articulo->stock as $stock) {
             $stock->almacen= Almacen::find($stock->id_almacen)->codigo;
+            if($articulo->divisible){
+                $dimension =$articulo->dimension;
+                $stock->cantidad= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),5);
+            }
         }
         return $articulo->stock;
     }

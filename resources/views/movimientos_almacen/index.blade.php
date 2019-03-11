@@ -1,8 +1,8 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
-    <script type="text/javascript">
+    {{--<script type="text/javascript">
         var movimientos_almacenes_php = JSON.parse('<?/*= $var; */?>');
-    </script>
+    </script>--}}
     <div id="app-movimiento-almacen">
         <div class="page-breadcrumb mb-2">
             <div class="row">

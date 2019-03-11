@@ -220,26 +220,22 @@ var appConfig = new Vue({
         kardex: {
             currentTab:10,
             data: [],
-            empleado:{
-                id_empleado:null,
-                nombre:''
-            },
-            /*attributes: {
-                empleado:{
-                    id_empleado:null,
-                    nombre:''
-                },
+            one:null,
+            empleado:null,
+            attributes:{
                 fecha_inicio:null,
-                fecha_baja:'',
-                cargo:{
-                    id_cargo:null,
-                    nombre:2''
-                },
-                salario:{
-                    monto:0,
-                    moneda:null
-                },
-            },*/
+                id_moneda:null,
+                id_cargo:null,
+                id_empleado:null,
+                salario:null,
+            },
+            model:{
+                fecha_inicio:null,
+                id_moneda:null,
+                id_cargo:null,
+                id_empleado:null,
+                salario:null,
+            },
             kardex_observaciones:{
                 data:[],
                 attributes:{
@@ -253,12 +249,6 @@ var appConfig = new Vue({
                     observacion:''
                 }
             },
-            /*tempAttributes: {
-                id_almacen:null,
-                codigo: null,
-                direccion: '',
-                id_sucursal: null,
-            }*/
         },
         acceso: {
             currentTab:10,
@@ -1112,13 +1102,16 @@ var appConfig = new Vue({
             });
         },
         changeStatusEmpleado(empleado){
-            axios.patch(urlGlobal.changeStatusEmpleado+empleado.id_empleado
-            ).then(response => {
-                empleado.estatus= Number(empleado.estatus)===1 ? 0:1;
-                this.notificationSuccess();
-            }).catch(errors => {
-                this.notificationErrors(errors);
-            });
+            let confirmResponse = confirm('¿Está seguro?');
+            if(confirmResponse){
+                axios.patch(urlGlobal.changeStatusEmpleado+empleado.id_empleado
+                ).then(response => {
+                    empleado.estatus= Number(empleado.estatus)===1 ? 0:1;
+                    this.notificationSuccess();
+                }).catch(errors => {
+                    this.notificationErrors(errors);
+                });
+            }
         },
 
         modeEditEmpleado(empleado) {
@@ -1183,10 +1176,57 @@ var appConfig = new Vue({
         //</editor-fold>
 
         //<editor-fold desc="Methods of Kardex and Observaciones">
-        getKardex(empleado) {
-            this.kardex.empleado.nombre=empleado.nombre;
-            this.kardex.empleado.id_empleado=empleado.id_empleado;
-            axios.get(urlGlobal.getKardex+empleado.id_empleado
+        getKardexOfEmpleado(empleado) {
+            this.kardex.empleado=empleado;
+            this.kardex.attributes = Object.assign({}, this.kardex.model);
+            this.kardex.attributes.id_empleado = empleado.id_empleado;
+            this.getKardex(empleado.id_empleado);
+        },
+        registerKardex(){
+            axios.post(urlGlobal.resourcesKardex,this.kardex.attributes
+            ).then(response => {
+                let id_empleado=this.kardex.attributes.id_empleado;
+                this.kardex.attributes=Object.assign({},this.kardex.model);
+                this.kardex.attributes.id_empleado=id_empleado;
+                this.kardex.empleado.estatus=1;
+                this.getKardex(id_empleado);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors();
+            });
+        },
+        submitFormKardex(){
+            if (!this.kardex.attributes.id_kardex) {
+                this.registerKardex();
+            } else {
+                this.updateKardex();
+            }
+        },
+        updateKardex(){
+            axios.put(urlGlobal.resourcesKardex+'/'+this.kardex.attributes.id_kardex,this.kardex.attributes
+            ).then(response => {
+                let id_empleado=this.kardex.attributes.id_empleado;
+                this.kardex.attributes=Object.assign({},this.kardex.model);
+                this.kardex.attributes.id_empleado=id_empleado;
+                this.getKardex(id_empleado);
+                this.notificationSuccess();
+            }).catch(errors => {
+                console.log('errors');
+                this.notificationErrors();
+            });
+        },
+        editKardex(kardex){
+            Object.assign(this.kardex.attributes, kardex);
+            this.kardex.attributes.salario=kardex.salario.monto;
+        },
+        cancelEditKardex(){
+            let id_empleado=this.kardex.attributes.id_empleado;
+            this.kardex.attributes=Object.assign({},this.kardex.model);
+            this.kardex.attributes.id_empleado=id_empleado;
+        },
+        getKardex(id_empleado){
+            axios.get(urlGlobal.getKardex+id_empleado
             ).then(response => {
                 this.kardex.data = response.data;
             }).catch(errors => {

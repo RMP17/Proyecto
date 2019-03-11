@@ -147,7 +147,6 @@ var appMovimientoAlmacen = new Vue({
         },
         //<editor-fold desc="Methods of movimientos">
         selectStockAlmacen(id_almacen){
-            console.log(id_almacen);
             let stocks= this.movimiento_almacen.articulo.one.stocks;
             for(stock in stocks) {
                 if (stocks[stock].id_almacen===id_almacen){

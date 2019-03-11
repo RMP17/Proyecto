@@ -1,7 +1,7 @@
 <div class="form-group col mb-2">
     <select class="custom-select"
             v-model="movimiento_almacen.attributes.id_almacen_origen"
-            @change="selectStockAlmacen(movimiento_almacen.attributes.id_almacen_origen)"
+            @change="selectStockAlmacen($event.target.value)"
             name="selectIdAlmacenOrigen">
         <option :value="null" disabled>Seleccione el almacén origen</option>
         <option v-for="_almacen in almacenes" :value="_almacen.id_almacen">@{{_almacen.codigo}}</option>

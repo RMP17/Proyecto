@@ -27,9 +27,7 @@
                     <span v-if="Number(_empleado.estatus)"
                           title="Dar de baja"
                           class="waves-effect waves-light btn btn-success btn-sm" @click="changeStatusEmpleado(_empleado)">Activo</span>
-                    <span v-else
-                          title="Habilitar"
-                          class="waves-effect waves-light btn btn-secondary btn-sm" @click="changeStatusEmpleado(_empleado)">Inactivo</span>
+                    <span v-else class="badge badge-secondary" style="font-size: inherit;">Inactivo</span>
                 </div>
             </td>
             <td>@{{ _empleado.ci }}</td>
@@ -62,7 +60,7 @@
                     </a>
                     <a href="javascript:void(0)"
                        title="Ver Kardex"
-                       @click="getKardex(_empleado)"
+                       @click="getKardexOfEmpleado(_empleado)"
                        data-backdrop="static"
                        data-keyboad="false"
                        data-target="#modal-kardex"
@@ -137,7 +135,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title pt-1 pr-1">Kardex de @{{kardex.empleado.nombre}}</h4>
+                <h4 class="modal-title pt-1 pr-1">Kardex de @{{kardex.empleado? kardex.empleado.nombre:''}}</h4>
                 <button v-if="kardex.currentTab===10" type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                 </button>

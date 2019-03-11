@@ -20,6 +20,7 @@ var appProduccion = new Vue({
             totalDetalles: 0,
             oneProduccion: null,
             articulo: {
+                name:'',
                 attributes: {
                     categoria: {
                         categoria: ''
@@ -28,7 +29,8 @@ var appProduccion = new Vue({
                         nombre: ''
                     },
                     precios: [],
-                    stock: null
+                    stock: null,
+                    nombre:'',
                 },
                 model: {
                     categoria: {
@@ -38,7 +40,8 @@ var appProduccion = new Vue({
                         nombre: ''
                     },
                     precios: [],
-                    stock: null
+                    stock: null,
+                    nombre:'',
                 }
             },
             cliente: {
@@ -213,6 +216,7 @@ var appProduccion = new Vue({
             if (response && response.id_articulo) {
                 this.produccion.detalle.attributes.id_articulo = response.id_articulo;
                 this.produccion.articulo.attributes = response;
+                this.produccion.articulo.name = response.nombre;
                 this.$refs.input_articulo_codigo_pro.value = response.codigo;
                 this.$refs.input_articulo_codigo_barra_pro.value = response.codigo_barra;
                 this.$refs.txtCantidadProduccion.select();
@@ -386,6 +390,50 @@ var appProduccion = new Vue({
             });
         },
 
+        getArticuloByCodigoBarras: function(codigoBarras) {
+            if (!codigoBarras.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigoBarras + codigoBarras.target.value
+                ).then(response => {
+                    // this.venta.detalleVenta.precio_unitario=null;
+                    if( Object.keys(response.data).length === 0){
+                        this.produccion.detalle.attributes = Object.assign({}, this.produccion.detalle.model);
+                        this.produccion.articulo.attributes = Object.assign({}, this.produccion.articulo.model);
+                        this.produccion.articulo.name = '';
+                        this.$refs.input_articulo_codigo_pro.value = '';
+                    } else {
+                        this.produccion.detalle.attributes.id_articulo = response.data[0].id_articulo;
+                        this.produccion.articulo.attributes = response.data[0];
+                        this.produccion.articulo.name = response.data[0].nombre;
+                        this.$refs.input_articulo_codigo_pro.value = response.data[0].codigo;
+                        //this.$refs.input_articulo_codigo_barra_pro.value = response.codigo_barra;
+                        this.$refs.txtCantidadProduccion.select();
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
+        getArticuloByCodigo: function(codigo) {
+            if (!codigo.target.value.length <= 0) {
+                axios.get(urlGlobal.getArticuloForCodigo + codigo.target.value
+                ).then(response => {
+                    if( Object.keys(response.data).length === 0){
+                        this.produccion.detalle.attributes = Object.assign({}, this.produccion.detalle.model);
+                        this.produccion.articulo.attributes = Object.assign({}, this.produccion.articulo.model);
+                        this.produccion.articulo.name = '';
+                        this.$refs.input_articulo_codigo_barra_pro.value = '';
+                    } else {
+                        this.produccion.detalle.attributes.id_articulo = response.data[0].id_articulo;
+                        this.produccion.articulo.attributes = response.data[0];
+                        this.produccion.articulo.name = response.data[0].nombre;
+                        this.$refs.input_articulo_codigo_barra_pro.value = response.data[0].codigo_barra;
+                        this.$refs.txtCantidadProduccion.select();
+                    }
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
         forceGetProductionCredits(){
             axios.get(urlGlobal.forceGetProductionCredits
             ).then(response => {

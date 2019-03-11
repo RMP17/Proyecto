@@ -139,7 +139,7 @@ Route::group(['middleware' => ['auth','checkstatus']], function () {
         'proveedor' => 'ProveedorControlador',
         'subcategoria' => 'SubcategoriaControlador',
         'sucursal' => 'SucursalControlador',
-        /*'kardex' => 'KardexControlador',*/
+        'kardex' => 'KardexControlador',
         'compra' => 'CompraControlador',
         'kardexObservaciones' => 'KardexObservacionesControlador',
     ]);

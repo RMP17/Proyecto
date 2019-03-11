@@ -237,7 +237,7 @@
 <script src="{{asset('js/toastr.min.js')}}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{{asset('assets/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
+{{--<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>--}}
 {{--<script src="{{asset('assets/extra-libs/sparkline/sparkline.js')}}"></script>--}}
 <script src="{{asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
 <!--Wave Effects -->
