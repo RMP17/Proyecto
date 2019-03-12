@@ -345,6 +345,10 @@ var appArticulo = new Vue({
         },
 
 
+        cleanDivisible(){
+            this.articulo.attributes.dimensiones=Object.assign({},this.articulo.tempAttributes.dimensiones);
+        },
+
         //<editor-fold desc="Methods of Entradas y salidas">
         submitFormEntradaSalidaArticulo(actividad){
             let inputs = this.entradaSalidaArticulos.attributes;

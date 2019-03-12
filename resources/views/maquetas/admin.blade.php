@@ -174,8 +174,14 @@
                                                 href="{{ url('caja')}}" aria-expanded="false"><i
                                     class="mdi mdi-square-inc-cash"></i><span class="hide-menu">Cajas</span></a>
                     </li>
-                    <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
+                    {{--<li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
                                                 href="{{ url('cortes')}}" aria-expanded="false"><i
+                                    class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>--}}
+                    <li class="sidebar-item"><a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                                onclick="
+                                                window.open('http://cutlistoptimizer.com','Open','directories=1,fullscreen=1,titlebar=0,toolbar=no,location=1,status=no,menubar=no,height=full,width=full');
+                                                window.moveTo(0,0);"
+                                                href="javascript:void(0);"><i
                                     class="mdi mdi-crop"></i><span class="hide-menu">Cortes</span></a>
                     </li>
                     <li class="sidebar-item">

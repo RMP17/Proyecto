@@ -111,6 +111,7 @@
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" class="custom-control-input" id="rbtDivisible1"
                                        name="rbtDivisible" required checked
+                                       @click="cleanDivisible"
                                        :value=0
                                        v-model="articulo.attributes.divisible">
                                 <label class="custom-control-label" for="rbtDivisible1">No</label>

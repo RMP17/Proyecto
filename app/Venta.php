@@ -112,6 +112,7 @@ class Venta extends Model
             $_venta->costo_total = self::calcularTotal($parameters['detalles_venta']);
             if(is_null($parameters['importe']) || $parameters['importe'] == 0 ){
                 $parameters['importe'] = $_venta->costo_total;
+                $_venta->importe = $_venta->costo_total;
             } else if( $parameters['importe'] < $_venta->costo_total ){
                 return [
                     'message' => [
@@ -363,10 +364,16 @@ class Venta extends Model
         $venta->estatus='vc';
         $venta->detallesVenta;
         foreach ($venta->detallesVenta as $detalle) {
+            $articulo=Articulo::find($detalle['id_articulo']);
             $stock = Stock::where('id_articulo', $detalle['id_articulo'])
                 ->where('id_almacen', $venta->id_almacen)->lockForUpdate()->first();
             if (!is_null($stock)) {
-                $stock->cantidad = $stock->cantidad +(int)$detalle['cantidad'];
+                if ($articulo->divisible){
+                    $stock->cantidad = $stock->cantidad +
+                        ((float)$detalle['ancho']*(float)$detalle['largo'])*(int)$detalle['cantidad'];
+                } else {
+                    $stock->cantidad = $stock->cantidad +(int)$detalle['cantidad'];
+                }
                 $stock->update();
             }
         }
