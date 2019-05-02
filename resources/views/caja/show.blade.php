@@ -20,7 +20,7 @@
 				<a href="javascript:void(0)"
 				   @click="modeEditCaja(_caja)"
 				   data-backdrop="static"
-				   data-keyboad="false"
+				   data-keyboard="false"
 				   data-target="#modal-edit-caja"
 				   data-toggle="modal"
 				   type="button" class="btn btn-warning btn-sm">
@@ -53,7 +53,6 @@
 </div>
 {{--===============================================Modal Mode Edit======================================--}}
 <div class="modal fade modal-slide-in-right"
-	 @keydown.esc="cancelModeEditCaja"
 	 aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-caja">
 	<div class="modal-dialog">
 		<div class="modal-content">

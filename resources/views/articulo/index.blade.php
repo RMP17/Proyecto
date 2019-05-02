@@ -1,6 +1,5 @@
 @extends('maquetas.admin')
 @section('page_wrapper')
-    {{--todo: aqui te quedaste, asignar almacenes_php a vue --}}
     <script type="text/javascript">
         let almacenes_php = @json($almacenes);
     </script>
@@ -65,11 +64,33 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-outline-secondary" @click="getArticulos">Mostrar todo</button>
                             </div>
                             <div class="d-md-flex flex-row">
+                                <div>
+                                    <select class="custom-select"
+                                            v-model="filter.id_categoria"
+                                            @change="getArticuloByFilters"
+                                            name="cbxGetCategoria">
+                                        <option :value="null" selected>Seleccione Categoría</option>
+                                        <option v-for="_categoria in categoria.data" :value="_categoria.id_categoria">
+                                            @{{ _categoria.categoria }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <select class="custom-select"
+                                            v-model="filter.id_fabricante"
+                                            @change="getArticuloByFilters"
+                                            name="cbxGetFabricante">
+                                        <option :value="null" selected>Seleccione Fabricante</option>
+                                        <option v-for="_fabricante in fabricante.data" :value="_fabricante.id_fabricante">
+                                            @{{ _fabricante.nombre }}
+                                        </option>
+                                    </select>
+                                </div>
                                 <div class="ml-auto">
                                     <div class="input-group">
+                                        <button class="btn btn-outline-secondary" @click="getArticulos">Mostrar todo</button>
                                         <a href="javascript:void(0);" type="button"
                                            title="Átras"
                                            class="btn btn-outline-secondary"
@@ -109,7 +130,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="articulo in paginatedData">
+                                        <tr v-for="articulo in paginatedData" :class="articulo.stock_bajo ? 'bg-warning':''">
                                             {{--articulo.data.estatus: Verde => Respresnta articulo activo; Gris => Respresnta articulo inactivo --}}
                                             {{--<td :class="articulo.data.estatus>0 ? 'bg-success text-white': 'bg-secondary text-white'" >--}}
                                             <td>
@@ -144,7 +165,7 @@
                                                        title="Agregar precios de venta"
                                                        href="javascript:void(0);"
                                                        data-backdrop="static"
-                                                       data-keyboad="false"
+                                                       data-keyboard="false"
                                                        data-target="#modal-add-precio"
                                                        data-toggle="modal"
                                                        @click="selectArticulo(articulo)"
@@ -154,7 +175,7 @@
                                                        title="Stock"
                                                        href="javascript:void(0);"
                                                        data-backdrop="static"
-                                                       data-keyboad="false"
+                                                       data-keyboard="false"
                                                        data-target="#modal-stock"
                                                        data-toggle="modal"
                                                        @click="selectArticuloForStock(articulo)"
@@ -305,7 +326,6 @@
         </div>
         {{--===============================================Modal Add Precios======================================--}}
         <div class="modal fade modal-slide-in-right"
-             @keydown.esc="cancelModeEditPrecios"
              aria-hidden="true" role="dialog" tabindex="-1" id="modal-add-precio">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

@@ -25,7 +25,7 @@
                    title="Editar Empresa"
                    @click="modeEditEmpresa(_empresa)"
                    data-backdrop="static"
-                   data-keyboad="false"
+                   data-keyboard="false"
                    data-target="#modal-edit-empresa"
                    data-toggle="modal"
                    type="button" class="btn btn-warning btn-sm">
@@ -35,7 +35,7 @@
                    title="Ver Sucursales"
                    @click="seeSucursalesOfEmpresa(_empresa)"
                    data-backdrop="static"
-                   data-keyboad="false"
+                   data-keyboard="false"
                    data-target="#modal-sucursales"
                    data-toggle="modal"
                    type="button" class="btn btn-info btn-sm">
@@ -75,7 +75,6 @@
 </div>
 {{--===============================================Modal Edit Empresa======================================--}}
 <div class="modal fade modal-slide-in-right" aria-hidden="true"
-     @keydown.esc="cancelModeEditEmpresa"
      role="dialog" tabindex="-1" id="modal-edit-empresa">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -99,7 +98,6 @@
 
 {{--===============================================Modal Sucursales ======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditEmpresaSucursal"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-sucursales">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

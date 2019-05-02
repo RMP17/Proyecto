@@ -1,5 +1,4 @@
 let mix = require('laravel-mix');
-require('laravel-mix-purgecss');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,10 +10,13 @@ require('laravel-mix-purgecss');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.options({
+    purifyCss: true
+});
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   // .sass('resources/assets/sass/app.scss', 'public/css').purgeCss();
-   .sass('resources/assets/sass/style.css', 'public/css').purgeCss();
+   .sass('resources/assets/sass/app.scss', 'public/css');
+   // .sass('resources/assets/sass/style2.scss', 'public/css');
 
 mix.browserSync({
     proxy:'127.0.0.1/Proyecto/public',

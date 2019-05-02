@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css"
           href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">--}}
     {{--<link rel="stylesheet" type="text/css" href="{{asset('assets/libs/quill/dist/quill.snow.css')}}">--}}
-    <title>Sistema de administración de ferretería</title>
+    <title>Sistema de Administracion Integrado</title>
     <!-- Custom CSS -->
     {{--<link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">--}}
     <link rel="stylesheet" type="text/css" href="{{asset('dist/css/style.min.css')}}">
@@ -152,6 +152,11 @@
                                     class="mdi mdi-settings"></i><span
                                     class="hide-menu">Panel de Administración </span></a>
 
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                           href="{{ url('cliente')  }}"
+                           aria-expanded="false"><i class="mdi mdi-account"></i><span class="hide-menu">Clientes</span></a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link"

@@ -539,7 +539,7 @@ var appConfig = new Vue({
             this.moneda.attributes = Object.assign({}, moneda);
         },
         cancelModeEditMoneda() {
-            this.moneda.attributes = new Object({
+            this.moneda.attributes = {
                 id_moneda:null,
                 nombre: '',
                 codigo: '',
@@ -547,8 +547,8 @@ var appConfig = new Vue({
                     id_pais:null,
                     nombre:''
                 },
-            });
-            this.moneda.tempAttributes = new Object({
+            };
+            this.moneda.tempAttributes = {
                 id_moneda:null,
                 nombre: '',
                 codigo: '',
@@ -556,7 +556,11 @@ var appConfig = new Vue({
                     id_pais:null,
                     nombre:''
                 },
-            });
+            };
+            this.moneda.hideSuggestions= true;
+            setTimeout(()=>{
+                this.moneda.hideSuggestions = false;
+            },1);
         },
         //</editor-fold>
 
@@ -1193,7 +1197,7 @@ var appConfig = new Vue({
                 this.notificationSuccess();
             }).catch(errors => {
                 console.log('errors');
-                this.notificationErrors();
+                this.notificationErrors(errors);
             });
         },
         submitFormKardex(){

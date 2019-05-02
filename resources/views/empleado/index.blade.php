@@ -1,6 +1,6 @@
 <a href data-target="#modal-registrar-empleado" data-toggle="modal"
    title="Nuevo Empleado">
-    <button type="button" class="btn btn-outline-success btn-sm"><i
+    <button type="button" @click="cancelModeEditEmpleado" class="btn btn-outline-success btn-sm"><i
                 class="fas fa-plus"></i></button>
 </a>
 <div class="table-responsive">
@@ -52,7 +52,7 @@
                        title="Editar Empleado"
                        @click="modeEditEmpleado(_empleado)"
                        data-backdrop="static"
-                       data-keyboad="false"
+                       data-keyboard="false"
                        data-target="#modal-edit-empleado"
                        data-toggle="modal"
                        type="button" class="btn btn-warning btn-sm">
@@ -62,7 +62,7 @@
                        title="Ver Kardex"
                        @click="getKardexOfEmpleado(_empleado)"
                        data-backdrop="static"
-                       data-keyboad="false"
+                       data-keyboard="false"
                        data-target="#modal-kardex"
                        data-toggle="modal"
                        type="button" class="btn btn-info btn-sm ">
@@ -72,7 +72,7 @@
                        title="Cuenta de Usuario"
                        @click="getAccesoOf(_empleado)"
                        data-backdrop="static"
-                       data-keyboad="false"
+                       data-keyboard="false"
                        data-target="#modal-add-acceso"
                        data-toggle="modal"
                        type="button" class="btn btn-info btn-sm">
@@ -107,7 +107,6 @@
 
 {{--===============================================Modal Edit Empleado======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditEmpleado"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-empleado">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">

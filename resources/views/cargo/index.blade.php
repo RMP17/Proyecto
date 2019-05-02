@@ -1,6 +1,8 @@
 <a href data-target="#modal-register-cargo" data-toggle="modal"
    title="Nuevo Cargo">
-	<button type="button" class="btn btn-outline-success btn-sm"><i
+	<button type="button"
+			@click="cancelModeEditCargo"
+			class="btn btn-outline-success btn-sm"><i
 				class="fas fa-plus"></i></button>
 </a>
 <table class="table table-sm">

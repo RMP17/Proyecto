@@ -1,4 +1,5 @@
 <a href data-target="#modal-registro-monedas" data-toggle="modal"
+   @click="cancelModeEditMoneda"
    title="Nueva Moneda">
 	<button type="button" class="btn btn-outline-success btn-sm"><i
 				class="fas fa-plus"></i></button>
@@ -41,7 +42,7 @@
 
 
 {{--===============================================Modal Nueva Moneda======================================--}}
-<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-registro-monedas">
+<div class="modal fade modal-slide-in-right"aria-hidden="true" role="dialog" tabindex="-1" id="modal-registro-monedas">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -60,13 +61,16 @@
 	</div>
 </div>
 {{--===============================================Modal Edit Moneda======================================--}}
-<div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-moneda">
-	<div class="modal-dialog">
+<div class="modal fade modal-slide-in-right"
+	 aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-moneda">
+	<div class="modal-dialog" >
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title pt-1 pr-1">Actualizar Moneda</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-					<span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
+				<button type="button"
+						@click="cancelModeEditMoneda"
+						class="close" data-dismiss="modal" aria-label="Cerrar">
+					<span aria-hidden="true"> <i class="mdi mdi-close"></i> </span>
 				</button>
 			</div>
 			<div class="modal-body pb-0">

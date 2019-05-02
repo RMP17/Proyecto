@@ -6,12 +6,7 @@
             <button type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-user"></i></button>
         </a>
     </div>
-    <div>
-        <a href data-target="#modal-registro-proveedor" data-toggle="modal"
-           title="Nueva Moneda">
-            <button type="button" class="btn btn-outline-success btn-sm"><i class="fas fa-user"></i></button>
-        </a>
-    </div>
+
 </div>
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
@@ -55,7 +50,7 @@
                    title="Editar Proveedor"
                    @click="modeEditProveedor(_proveedor)"
                    data-backdrop="static"
-                   data-keyboad="false"
+                   data-keyboard="false"
                    data-target="#modal-edit-proveedor"
                    data-toggle="modal"
                    type="button" class="btn btn-warning btn-sm">
@@ -64,7 +59,7 @@
                 <a href="javascript:void(0)"
                    title="Ver Cuentas"
                    data-backdrop="static"
-                   data-keyboad="false"
+                   data-keyboard="false"
                    @click="assignProveedor(_proveedor)"
                    data-target="#modal-add-cuenta-banco"
                    data-toggle="modal"
@@ -74,7 +69,7 @@
                 <a href="javascript:void(0)"
                    title="Ver Contactos"
                    data-backdrop="static"
-                   data-keyboad="false"
+                   data-keyboard="false"
                    @click="getContactoProveedor(_proveedor)"
                    data-target="#modal-contacto"
                    data-toggle="modal"
@@ -117,7 +112,6 @@
 
 {{--===============================================Modal Edit Proveedor======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditProveedor"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-proveedor">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -140,7 +134,6 @@
 </div>
 {{--===============================================Modal Add Cuenta de Banco======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditCuentaProveedor"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-add-cuenta-banco">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -177,7 +170,6 @@
 </div>
 {{--===============================================Modal Add Contacto======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc_="cancelModeEditCuentaProveedor"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-contacto">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">

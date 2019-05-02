@@ -43,7 +43,6 @@ class ArticuloControlador extends Controller
         $validator = Validator::make($data, [
             'nombre' => 'required|max:50',
             'codigo' => 'required|unique:articulo,codigo|max:50',
-            'codigo_barra' => 'required|max:50',
             'precio_compra' => 'required',
         ]);
         if($validator->fails()) {
@@ -98,7 +97,6 @@ class ArticuloControlador extends Controller
         $validator = Validator::make($data, [
             'nombre' => 'required|max:50',
             'codigo' => ['required','max:50', Rule::unique('articulo')->ignore($articulo->codigo, 'codigo')],
-            'codigo_barra' => 'required|max:50',
             'precio_compra' => 'required',
         ]);
         if($validator->fails()) {
@@ -193,5 +191,9 @@ class ArticuloControlador extends Controller
     public function getStock($id_articulo){
         $articulo = Articulo::getStock($id_articulo);
         return response()->json($articulo);
+    }
+    public function getArticuloByFilters(Request $request){
+        $articulos= Articulo::getArticuloByFilters($request->id_categoria, $request->id_fabricante);
+        return response()->json($articulos);
     }
 }

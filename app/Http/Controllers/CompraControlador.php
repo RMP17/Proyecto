@@ -85,5 +85,10 @@ class CompraControlador extends Controller
         $compras = Compra::getPurchasesOnCreditInForce();
         return response()->json($compras);
     }
+    public function purchaseArrived($id_compra)
+    {
+        Compra::purchaseArrived($id_compra);
+        return response()->json();
+    }
 }
 

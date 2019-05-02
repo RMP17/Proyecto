@@ -25,7 +25,6 @@
             <a href="javascript:void(0)"
                title="Nuevo Cliente"
                data-backdrop="static"
-               data-keyboad="false"
                data-target="#modal-new-client"
                data-toggle="modal"
                class="btn btn-outline-success"

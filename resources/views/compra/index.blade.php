@@ -146,6 +146,7 @@
                                                 <th>Código</th>
                                                 <th>Almacen</th>
                                                 <th>Observaciones</th>
+                                                <th>Fecha Llegada</th>
                                                 <th>Acciones</th>
                                             </tr>
                                             </thead>
@@ -167,6 +168,7 @@
                                                 <td>@{{ _compra.codigo_tarjeta_cheque }}</td>
                                                 <td>@{{ _compra.almacen }}</td>
                                                 <td>@{{ _compra.observaciones}}</td>
+                                                <td>@{{ _compra.fecha_llegada}}</td>
                                                 <td>
                                                     <a href="javascript:void(0)"
                                                        title="Ver detalle"
@@ -175,6 +177,17 @@
                                                        data-toggle="modal"
                                                        type="button" class="btn btn-outline-info btn-sm">
                                                         <i class="fas fa-eye fa-lg"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)"
+                                                       title="Imprimir"
+                                                       @click="printDetalleOfCompra(_compra)" type="button" class="btn btn-outline-info btn-sm lh-1">
+                                                        <i class="mdi mdi-printer mdi-18px"></i>
+                                                    </a>
+                                                    <a href="javascript:void(0)"
+                                                       v-if="!_compra.llego"
+                                                       title="Confirmar llegada de compra"
+                                                       @click="purchaseArrived(_compra)" type="button" class="btn btn-outline-info btn-sm lh-1">
+                                                        <i class="mdi mdi-briefcase-check mdi-18px"></i>
                                                     </a>
                                                     <a href="javascript:void(0)"
                                                        v-if="_compra.tipo_pago==='cr'"
@@ -298,8 +311,8 @@
                 </div>
             </div>
         </div>
+        @include('compra.print_detalle')
     </div>
-
 @endsection
 @section('scripts')
     <script src="{{asset('js/compra.js')}}"></script>

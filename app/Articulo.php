@@ -40,6 +40,7 @@ class Articulo extends Model
         $array = [];
         $articulos = Articulo::select('*')->orderBy('nombre')->get();
         if(count($articulos)>0){
+            $articulos->stock_bajo= 0;
             foreach ($articulos as &$articulo){
                 $categoria = Categoria::find($articulo['id_categoria']);
                 if(!is_null($categoria)){
@@ -56,19 +57,25 @@ class Articulo extends Model
                 $empleado = Empleado::find(auth()->user()->id_empleado);
                 $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
                 $totalStock = 0;
+                $totalStockDivisibles = 0;
                 foreach ($almacenes as $almacen) {
                     $stock = Stock::where('id_almacen',$almacen->id_almacen)
                         ->where('id_articulo',$articulo->id_articulo)->first();
                     if(!is_null($stock)) {
                         $dimension =$articulo->dimension;
                         if($articulo->divisible){
-                            $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                            $totalStockDivisibles+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                            if(($stock->cantidad)/($dimension->ancho*$dimension->largo)<50) {
+                                $articulo->stock_bajo = 1;
+                            }
                         } else {
                             $totalStock+=$stock->cantidad;
+                            if($stock->cantidad<20) {
+                                $articulo->stock_bajo = 1;
+                            }
                         }
                     }
                 }
-                $articulo->stock = $totalStock;
                 unset($articulo->id_categoria);
                 unset($articulo->id_fabricante);
                 if(is_null($articulo->dimension)) {
@@ -357,5 +364,64 @@ class Articulo extends Model
             }
         }
         return $articulo->stock;
+    }
+    public static function getArticuloByFilters($categoria, $fabricante){
+        $articulos = Articulo::select();
+        if($categoria!='null'){
+            $articulos = $articulos->where('id_categoria',$categoria);
+        }
+        if($fabricante!='null'){
+            $articulos = $articulos->where('id_fabricante',$fabricante);
+        }
+        $articulos= $articulos->orderBy('nombre','asc')->get();
+        if(count($articulos) > 0){
+            foreach ($articulos as $articulo) {
+                $categoria = Categoria::find($articulo['id_categoria']);
+                $articulo->precios=(Object)[];
+                if(count($articulo->sucursal)>0){
+                    $sucursal= $articulo->sucursal->first();
+                    $articulo->precios = $sucursal->pivot;
+                }
+                if(!is_null($categoria)){
+                    $articulo->categoria = $categoria;
+                } else {
+                    $articulo->categoria = ['categoria'=>''];
+                }
+                $fabricante = Fabricante::find($articulo['id_fabricante']);
+                if(!is_null($fabricante)) {
+                    $articulo->fabricante = $fabricante;
+                } else {
+                    $articulo->fabricante = ['nombre'=>''];
+                }
+                $empleado = Empleado::find(auth()->user()->id_empleado);
+                $almacenes = Almacen::where('id_almacen', $empleado->id_almacen)->get();
+                $totalStock = 0;
+                foreach ($almacenes as $almacen) {
+                    $stock = Stock::where('id_almacen',$almacen->id_almacen)
+                        ->where('id_articulo',$articulo->id_articulo)->first();
+                    if(!is_null($stock)) {
+                        $dimension =$articulo->dimension;
+                        if($articulo->divisible){
+                            $totalStock+= round(($stock->cantidad)/($dimension->ancho*$dimension->largo),1);
+                        } else {
+                            $totalStock+=$stock->cantidad;
+                        }
+                    }
+                }
+                $articulo->stock = $totalStock;
+                if(is_null($articulo->dimension)) {
+                    $articulo->dimensiones=[
+                        'largo' => null,
+                        'ancho' => null,
+                        'espesor' => null,
+                        'volumen' => null
+                    ];
+                } else {
+                    $articulo->dimensiones=$articulo->dimension;
+                    unset($articulo->dimension);
+                }
+            }
+        }
+        return $articulos;
     }
 }

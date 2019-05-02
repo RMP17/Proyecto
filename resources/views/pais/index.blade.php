@@ -35,7 +35,7 @@
                                     <a href="javascript:void(0)"
                                        @click="modeEditPais(_pais)"
                                        data-backdrop="static"
-                                       data-keyboad="false"
+                                       data-keyboard="false"
                                        data-target="#modal-pais"
                                        data-toggle="modal"
                                        type="button" class="btn btn-warning btn-sm">
@@ -44,7 +44,7 @@
                                     <a href="javascript:void(0)"
                                        @click="showCities(_pais)"
                                        data-backdrop="static"
-                                       data-keyboad="false"
+                                       data-keyboard="false"
                                        data-target="#modal-cities"
                                        data-toggle="modal"
                                        type="button" class="btn btn-info btn-sm lh-1">
@@ -67,7 +67,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title pt-1 pr-1">Actualizar País</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close" @click="cancelModeEdit" data-dismiss="modal" aria-label="Cerrar">
                         <span aria-hideen="true"> <i class="mdi mdi-close"></i> </span>
                     </button>
                 </div>
@@ -83,7 +83,6 @@
     {{--===============================================Modal Show Cities======================================--}}
     <div class="modal fade modal-slide-in-right" aria-hidden="true" role="dialog"
          tabindex="-1"
-         @keydown.esc="cancelModeEditCiudad"
          id="modal-cities">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

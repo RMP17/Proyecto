@@ -26,6 +26,10 @@ class Compra extends Model
         // ef=Efectivo; cr=al credito; ch=cheque; tc=Tarjeta de crédito o débito.
         'tipo_pago'
 	];
+	protected $guarded = [
+	    'llego',
+        'fecha_llegada'
+    ];
     public function detallesCompra(){
         return $this->hasMany(DetalleCompra::class,'id_compra', 'id_compra');
     }
@@ -61,7 +65,8 @@ class Compra extends Model
             $_compra->save();
             $_compra->detallesCompra()->createMany($parameters_compra['detalles_compra']);
 
-            foreach ($parameters_compra['detalles_compra'] as $detalle) {
+//            todo: este foreach aumenta el stock, si se desea cambiar solo descomentar
+            /*foreach ($parameters_compra['detalles_compra'] as $detalle) {
                 $articulo = Articulo::find($detalle['id_articulo']);
                 $dimension= $articulo->dimension;
                 $stock = Stock::where('id_articulo', $detalle['id_articulo'])
@@ -84,7 +89,7 @@ class Compra extends Model
                     }
                     $stock->update();
                 }
-            }
+            }*/
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -166,5 +171,45 @@ class Compra extends Model
             $costo_total+= $subtotal;
         }
         return $costo_total;
+    }
+    public static function purchaseArrived($id_compra){
+//        TODO: falta el aumento de stock
+        DB::beginTransaction();
+        try {
+        $compra = Compra::find($id_compra);
+        $compra->llego = 1;
+        $compra->fecha_llegada = Carbon::now()->toDateTimeString();
+        $compra->update();
+
+        foreach ($compra->detallesCompra as $detalle) {
+            $articulo = Articulo::find($detalle->id_articulo);
+            $dimension = $articulo->dimension;
+            $stock = Stock::where('id_articulo', $detalle->id_articulo)
+                ->where('id_almacen', $detalle->id_almacen)->lockForUpdate()->first();
+            if (is_null($stock)) {
+                $_stock = new Stock();
+                $_stock->id_articulo = $detalle->id_articulo;
+                $_stock->id_almacen = $detalle->id_almacen;
+                if ($articulo->divisible) {
+                    $_stock->cantidad = $detalle->cantidad * $dimension->ancho * $dimension->largo;
+                } else {
+                    $_stock->cantidad = $detalle->cantidad;
+                }
+                $_stock->save();
+            } else {
+                if ($articulo->divisible) {
+                    $stock->cantidad += (int)$detalle->cantidad * $dimension->ancho * $dimension->largo;
+                } else {
+                    $stock->cantidad += (int)$detalle->cantidad;
+                }
+                $stock->update();
+            }
+        }
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false;
+        }
     }
 }

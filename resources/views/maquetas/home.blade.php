@@ -36,6 +36,16 @@
                                         </a>
                                     </div>
                                 </div>
+                                <div class="col-md-6 col-lg-2 col-xlg-3">
+                                    <div class="card card-hover">
+                                        <a href="{{url('cliente')}}">
+                                            <div class="box bg-megna text-center">
+                                                <h1 class="font-light text-white"><i class="mdi mdi-account"></i></h1>
+                                                <h6 class="text-white text-truncate">Clientes</h6>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
                                 <!-- Column -->
                                 <div class="col-md-6 col-lg-2 col-xlg-3">
                                     <div class="card card-hover">

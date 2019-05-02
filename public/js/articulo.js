@@ -45,7 +45,6 @@ var appArticulo = new Vue({
                 current_page: 1
             },
             data: [],
-            allData: [],
             attributes: {
                 id_fabricante:null,
                 nombre: '',
@@ -121,6 +120,10 @@ var appArticulo = new Vue({
                 size: 15,
                 pageNumber: 0,
             },
+        },
+        filter:{
+            id_fabricante:null,
+            id_categoria:null,
         },
         entradaSalidaArticulos:{
             modeEdit:false,
@@ -730,7 +733,7 @@ var appArticulo = new Vue({
                     id_fabricante:null,
                     id_categoria:null
                 });
-                this.articulo.attributes = {
+                this.articulo.attributes =  new Object({
                     id_articulo:null,
                     nombre: '',
                     codigo: '',
@@ -750,7 +753,7 @@ var appArticulo = new Vue({
                     },
                     id_fabricante:null,
                     id_categoria:null
-                };
+                });
                 this.articulo.errors = [];
                 this.$refs.inputCategoria.value = '';
                 this.$refs.inputFabricante.value = '';
@@ -814,15 +817,15 @@ var appArticulo = new Vue({
             this.articulo.modeCreate = true;
             this.articulo.modeEdit = true;
             this.articulo.attributes = articulo;
-            if(articulo.categoria) {
+            if(articulo.categoria && articulo.categoria.id_categoria) {
                 setTimeout(() => {
                     this.$refs.inputCategoria.value = articulo.categoria.categoria;
                 }, 500);
                 this.articulo.attributes.id_categoria = articulo.categoria.id_categoria;
             }
-            if(articulo.fabricante){
+            if(articulo.fabricante && articulo.fabricante.id_fabricante){
                 setTimeout(() => {
-                    this.$refs.inputFabricante.value = articulo.fabricante.nombre;;
+                    this.$refs.inputFabricante.value = articulo.fabricante.nombre;
                 }, 500);
                 this.articulo.attributes.id_fabricante = articulo.fabricante.id_fabricante;
             }
@@ -831,7 +834,7 @@ var appArticulo = new Vue({
         cancelEditModeAriculo(){
             this.articulo.modeCreate = false;
             this.articulo.modeEdit = false;
-            Object.assign(this.fabricante.attributes, this.articulo.tempAttributes);
+            Object.assign(this.articulo.attributes, this.articulo.tempAttributes);
             this.articulo.attributes = new Object({
                 id_articulo:null,
                 nombre: '',
@@ -875,6 +878,16 @@ var appArticulo = new Vue({
                 id_categoria:null
             });
         },
+        getArticuloByFilters(){
+            let params = `?id_categoria=${this.filter.id_categoria}&id_fabricante=${this.filter.id_fabricante}`;
+            axios.get(urlGlobal.getArticuloByFilters+params
+            ).then(response => {
+                this.articulo.paginated.pageNumber=0;
+                this.articulo.data = response.data;
+            }).catch(errors => {
+                console.log(errors);
+            });
+        },
         //</editor-fold>
 
         //<editor-fold desc="Manejadores">
@@ -882,22 +895,28 @@ var appArticulo = new Vue({
             this.articulo.attributes.imagen = event.target.files[0];
         },
         handleDatalistFabricante(event){
-            for (let fabricante in this.fabricante.allData ){
-                if(this.fabricante.allData[fabricante].nombre === event.target.value.toString()) {
-                    this.articulo.attributes.id_fabricante = this.fabricante.allData[fabricante].id_fabricante;
+            for (let fabricante in this.fabricante.data ){
+                if(this.fabricante.data[fabricante].nombre === event.target.value.toString()) {
+                    this.articulo.attributes.id_fabricante = this.fabricante.data[fabricante].id_fabricante;
+                    this.articulo.attributes.fabricante.nombre = this.fabricante.data[fabricante].nombre;
+                    this.articulo.attributes.fabricante.id_fabricante = this.fabricante.data[fabricante].id_fabricante;
                     break;
                 } else {
                     this.articulo.attributes.id_fabricante = null;
+                    this.articulo.attributes.fabricante = Object.assign({}, this.fabricantes.tempAttributes);
                 }
             }
         },
         handleDatalistCategoria(event){
-            for (let categoria in this.categoria.allData ){
-                if(this.categoria.allData[categoria].categoria === event.target.value.toString()) {
-                    this.articulo.attributes.id_categoria = this.categoria.allData[categoria].id_categoria;
+            for (let _categoria in this.categoria.data ){
+                if(this.categoria.data[_categoria].categoria === event.target.value.toString()) {
+                    this.articulo.attributes.id_categoria = this.categoria.data[_categoria].id_categoria;
+                    this.articulo.attributes.categoria.categoria = this.categoria.data[_categoria].categoria;
+                    this.articulo.attributes.categoria.id_categoria = this.categoria.data[_categoria].id_categoria;
                     break;
                 } else {
                     this.articulo.attributes.id_categoria = null;
+                    this.articulo.attributes.categoria = Object.assign({}, this.categoria.tempAttributes);
                 }
             }
 

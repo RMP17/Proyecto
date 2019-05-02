@@ -66,6 +66,7 @@ Route::prefix('empresa')->group(function () {
 });
 Route::prefix('compra')->group(function () {
     Route::get('creditos', 'CompraControlador@getPurchasesOnCreditInForce');
+    Route::patch('purchase-arrived/{id_compra}', 'CompraControlador@purchaseArrived');
     Route::get('creditos/{id_compra}', 'CompraCreditoController@getCreditoCompra');
     Route::post('credito', 'CompraCreditoController@store');
     Route::post('date_range', 'CompraControlador@getComprasByRageDate');
@@ -88,6 +89,7 @@ Route::prefix('pais')->group(function () {
 });
 Route::prefix('articulo')->group(function () {
     Route::get('all', 'ArticuloControlador@getArticulos');
+    Route::get('filters', 'ArticuloControlador@getArticuloByFilters');
     Route::put('update/{nombre}', 'ArticuloControlador@updateArticulo');
     Route::get('query/{nombre}', 'ArticuloControlador@getArticuloByName');
     Route::get('stock/{id_articulo}', 'ArticuloControlador@getStock');

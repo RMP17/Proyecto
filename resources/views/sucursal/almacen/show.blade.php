@@ -23,7 +23,7 @@
                title="Editar Almacén"
                @click="modeEditAlmacen(_almacen)"
                data-backdrop="static"
-               data-keyboad="false"
+               data-keyboard="false"
                data-target="#modal-edit-almacen"
                data-toggle="modal"
                type="button" class="btn btn-warning btn-sm">
@@ -63,7 +63,6 @@
 
 {{--===============================================Modal Edit Almacen======================================--}}
 <div class="modal fade modal-slide-in-right"
-     @keydown.esc="cancelModeEditAlmacen"
      aria-hidden="true" role="dialog" tabindex="-1" id="modal-edit-almacen">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

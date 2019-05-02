@@ -170,6 +170,7 @@ var appCompra = new Vue({
                 nombre: '',
             },
             detallesCompra:[],
+            one:null,
             tempDetalleCompra:{
                 cantidad:number=null,
                 precio_unitario:null,
@@ -870,6 +871,18 @@ var appCompra = new Vue({
                 this.$refs.btnSi.focus();
             },350);
         },
+        purchaseArrived(compra){
+            let _confirm = confirm('¿Está seguro?');
+            if(_confirm){
+                axios.patch(urlGlobal.purchaseArrived+compra.id_compra
+                ).then(response => {
+                    compra.llego=1;
+                    compra.fecha_llegada=this.toDateTimeLocal(new Date());
+                }).catch(errors => {
+                    console.log(errors);
+                });
+            }
+        },
         getPurchasesOnCreditInForce(){
             axios.get(urlGlobal.getPurchasesOnCreditInForce
             ).then(response => {
@@ -956,6 +969,12 @@ var appCompra = new Vue({
         viewDetallesCompra(detalle){
             this.compra.detallesCompra = detalle.detalle_compra;
         },
+        printDetalleOfCompra(compra){
+            this.compra.one=compra;
+            this.$nextTick(function () {
+                this.print(this.$refs.print_compra);
+            });
+        },
         goThroughFilters(){
             let filtered_data = this.compra.data;
             if(this.compra.filters.empleado.length>0){
@@ -1013,6 +1032,20 @@ var appCompra = new Vue({
             }
             return true;
         },
+        toDateTimeLocal(datetime) {
+            let _datetime = datetime;
+            ten = function (i) {
+                return (i < 10 ? '0' : '') + i;
+            };
+            let YYYY = _datetime.getFullYear();
+            let MM = ten(_datetime.getMonth() + 1);
+            let DD = ten(_datetime.getDate());
+            let HH = ten(_datetime.getHours());
+            let II = ten(_datetime.getMinutes());
+            let SS = ten(_datetime.getSeconds());
+            return YYYY + '-' + MM + '-' + DD + ' ' +
+                HH + ':' + II + ':' + SS;
+        },
         dateNow(){
             let today = new Date();
             console.log(today);
@@ -1030,7 +1063,18 @@ var appCompra = new Vue({
 
             return today = yyyy + '-' + mm + '-' + dd;
         },
-
+        print(element) {
+            let domClone = element.cloneNode(true);
+            let printSection = document.getElementById("printSection");
+            if (!printSection) {
+                let printSection = document.createElement("div");
+                printSection.class = "printSection";
+                document.body.appendChild(printSection);
+            }
+            printSection.innerHTML = "";
+            printSection.appendChild(domClone);
+            window.print();
+        },
         exportPdf() {
             const doc = new jsPDF('l','mm', 'letter', true);
             doc.autoTable({html: '#content'});
