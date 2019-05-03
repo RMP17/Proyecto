@@ -863,7 +863,7 @@ var appConfig = new Vue({
 
         //<editor-fold desc="Methods of Almacen">
         submitFormAlmacen() {
-            if (!this.almacen.attributes.id_sucursal) {
+            if (!this.almacen.attributes.id_almacen) {
                 this.registerAlmacen();
             } else {
                 this.updateAlmacen();
